@@ -31,5 +31,11 @@ jobs:
             - name: Check TypeScript
               run: bun run typecheck
 
+            - name: Lint source and tooling
+              run: bun run lint
+
+            - name: Test
+              run: bun run test
+
             - name: Check formatting
               run: bun run format:check
