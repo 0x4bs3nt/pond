@@ -7,8 +7,11 @@
         "start": "bun run src/app/bootstrap.tsx",
         "dev": "bun --watch run src/app/bootstrap.tsx",
         "typecheck": "tsc --noEmit",
+        "test": "bun test",
+        "lint": "bun --bun eslint src tools eslint.config.js --max-warnings 0",
         "format": "prettier . --write",
-        "format:check": "prettier . --check"
+        "format:check": "prettier . --check",
+        "check": "bun run typecheck && bun run lint && bun run format && bun run test"
     },
     "engines": {
         "bun": ">=1.3.14"
@@ -16,11 +19,17 @@
     "dependencies": {
         "@opentui/core": "^0.6.8",
         "@opentui/react": "^0.6.8",
-        "react": "^19.3.1"
+        "react": "^19.3.1",
+        "zustand": "^5.0.16"
     },
     "devDependencies": {
+        "@babel/core": "^8.0.9",
+        "@babel/eslint-parser": "^8.0.7",
         "@types/bun": "^1.4.4",
         "@types/react": "^19.3.0",
+        "eslint": "^10.13.0",
+        "eslint-import-resolver-typescript": "^4.4.5",
+        "eslint-plugin-boundaries": "^7.4.0",
         "prettier": "3.9.10",
         "typescript": "^7.0.2"
     }
