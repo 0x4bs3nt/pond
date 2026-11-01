@@ -1,0 +1,7 @@
+{
+    "version": "0.1.0",
+    "previousTag": null,
+    "pullRequest": 7,
+    "title": "feat: introduce Pond's terminal workspace prototype",
+    "notes": "feat: introduce Pond's terminal workspace prototype (#7)\n\nInitial Pond terminal workspace prototype.\n\n- Browse mock tables through a schema explorer.\n- Navigate cells with the keyboard and mouse.\n- Scroll tables with fixed column headers.\n- Inspect column types and selected values.\n- Resize the workspace with the terminal.\n\nThis version uses mock data. PostgreSQL connections and cell editing\nare not available yet."
+}
