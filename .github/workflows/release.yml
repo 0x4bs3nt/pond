@@ -14,11 +14,17 @@ concurrency:
     cancel-in-progress: false
 
 jobs:
-    publish:
+    packages:
         if: >-
             github.event.workflow_run.conclusion == 'success' &&
             github.event.workflow_run.event == 'push' &&
             github.event.workflow_run.head_repository.full_name == github.repository
+        uses: ./.github/workflows/package.yml
+        with:
+            ref: ${{ github.event.workflow_run.head_sha }}
+
+    publish:
+        needs: packages
         runs-on: ubuntu-latest
         timeout-minutes: 10
         permissions:
@@ -34,6 +40,12 @@ jobs:
             - uses: oven-sh/setup-bun@v2
               with:
                   bun-version: '1.4.2'
+
+            - uses: actions/download-artifact@v4
+              with:
+                  pattern: package-*
+                  path: dist/release
+                  merge-multiple: true
 
             - name: Publish the checked commit
               run: bun tools/release/publish.ts

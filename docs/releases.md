@@ -4,19 +4,19 @@ Track work and completion in the [Pond GitHub Project](https://github.com/users/
 
 ## Release criteria
 
-Release at meaningful, usable milestones rather than after each feature PR. The next planned release is after phase 1 is complete. Version numbers below are targets; calculate the actual next version from the latest release when preparing the promotion PR.
+Release at meaningful, usable milestones rather than after each feature PR. Phase 1 shipped in 0.2.0. Packaging is the next workstream, before PostgreSQL browsing. Version numbers below are targets; calculate the actual next version from the latest release when preparing the promotion PR.
 
-| Target version | Milestone                        | Completion criteria                                                                                                                                                                                    | Status            |
-| -------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- |
-| `0.1.0`        | Initial workspace prototype      | Read-only mock workspace and working release automation.                                                                                                                                               | Released          |
-| `0.2.0`        | Phase 1: polished grid prototype | Complete the phase 1 scope, including mock cell editing, visible pending changes, multiline/JSON editing, a tab bar, and validation of navigation, resizing, and edge cases.                           | Ready after merge |
-| `0.3.0`        | Phase 2: PostgreSQL browsing     | Connect to PostgreSQL, discover schemas and table metadata, and browse bounded pages of real rows asynchronously in a read-only view.                                                                  | Pending           |
-| `0.4.0`        | Phase 3: reliable staged editing | Apply and discard edits, inserts, and deletions with the transaction, identity, conflict, and failure-handling guarantees described in [architecture.md](architecture.md#database-editing-guarantees). | Pending           |
-| `0.5.0` onward | Phase 4: comfortable browsing    | Release coherent, validated sets of browsing improvements; this phase can span multiple minor releases.                                                                                                | Pending           |
+| Target version | Milestone                        | Completion criteria                                                                                                                                                                                    | Status   |
+| -------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- |
+| `0.1.0`        | Initial workspace prototype      | Read-only mock workspace and working release automation.                                                                                                                                               | Released |
+| `0.2.0`        | Phase 1: polished grid prototype | Complete the phase 1 scope, including mock cell editing, visible pending changes, multiline/JSON editing, a tab bar, and validation of navigation, resizing, and edge cases.                           | Released |
+| `0.3.0`        | Phase 2: PostgreSQL browsing     | Connect to PostgreSQL, discover schemas and table metadata, and browse bounded pages of real rows asynchronously in a read-only view.                                                                  | Pending  |
+| `0.4.0`        | Phase 3: reliable staged editing | Apply and discard edits, inserts, and deletions with the transaction, identity, conflict, and failure-handling guarantees described in [architecture.md](architecture.md#database-editing-guarantees). | Pending  |
+| `0.5.0` onward | Phase 4: comfortable browsing    | Release coherent, validated sets of browsing improvements; this phase can span multiple minor releases.                                                                                                | Pending  |
 
 Bug fixes to an existing release can ship as patch releases, such as `0.2.1`, without waiting for a phase to finish. Treat `1.0.0` as a separate readiness decision once real-world browsing and editing are dependable, rather than an automatic consequence of finishing a phase. Use the supported `Release-As: 1.0.0` footer when that decision is made.
 
-Phase 1 validation is complete on Linux; see [the grid measurements and interaction results](grid-performance.md). After the #14 changes are reviewed and merged into `dev`, prepare the release promotion. Other platforms and terminal/font combinations remain unvalidated.
+Phase 1 validation is complete on Linux; see [the grid measurements and interaction results](grid-performance.md). Phase 1 was released as 0.2.0. Other platforms and terminal/font combinations remain unvalidated.
 
 ### Milestone completion reminders
 

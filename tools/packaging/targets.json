@@ -1,0 +1,29 @@
+{
+    "linux-x64": {
+        "platform": "linux",
+        "arch": "x64",
+        "runtime": "bun-linux-x64-baseline",
+        "compile": "bun-linux-x64-baseline",
+        "extension": "tar.gz",
+        "url": "https://registry.npmjs.org/@oven/bun-linux-x64-baseline/-/bun-linux-x64-baseline-1.4.2.tgz",
+        "integrity": "sha512-OKKzX/SOVIUVARCzTg+2r4Rcc4fPyWnQmBsd3K08buxeu7DAof4iwW9zSb6Lt1NhTCu4Uhi8k9UeI6f7GEE4Zg=="
+    },
+    "darwin-arm64": {
+        "platform": "darwin",
+        "arch": "arm64",
+        "runtime": "bun-darwin-aarch64",
+        "compile": "bun-darwin-arm64",
+        "extension": "tar.gz",
+        "url": "https://registry.npmjs.org/@oven/bun-darwin-aarch64/-/bun-darwin-aarch64-1.4.2.tgz",
+        "integrity": "sha512-MXdZkP1featqxZ+/VTXWG1BVjM4OGBehVY2Q88EeUj/7L0UMeCGItmyPYTN+wxvlGJ6F66JEtzsw+GvQWewnag=="
+    },
+    "windows-x64": {
+        "platform": "win32",
+        "arch": "x64",
+        "runtime": "bun-windows-x64-baseline",
+        "compile": "bun-windows-x64-baseline",
+        "extension": "zip",
+        "url": "https://registry.npmjs.org/@oven/bun-windows-x64-baseline/-/bun-windows-x64-baseline-1.4.2.tgz",
+        "integrity": "sha512-lq82LqVjSXAx9gNUcibCdfQdtrelh86FxQqlhpOdiV4SZQAP8HHUxWhnfbjx2fqz+jzglwBvjmlEs7xFyONBZw=="
+    }
+}

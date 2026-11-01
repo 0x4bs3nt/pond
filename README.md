@@ -88,3 +88,5 @@ Use `bun run gallery:bench` for repeatable headless grid measurements. Large-dat
 ## Releases
 
 Development happens on `dev`. Stable releases are prepared on `dev → main` PRs and published after the squash merge passes CI. Versions start at `0.1.0`; there are no nightly releases. See [the release workflow](CONTRIBUTING.md#stable-releases). Releases currently provide source code and release notes, not packaged executables.
+
+See [building and packaging](docs/packaging.md) for native executable builds, platform validation, and release artifacts.

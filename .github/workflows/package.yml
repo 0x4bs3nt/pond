@@ -1,0 +1,48 @@
+name: Package executables
+
+on:
+    workflow_call:
+        inputs:
+            ref:
+                required: true
+                type: string
+
+permissions:
+    contents: read
+
+jobs:
+    package:
+        name: Package ${{ matrix.target }}
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - target: linux-x64
+                      runner: ubuntu-24.04
+                    - target: darwin-arm64
+                      runner: macos-15
+                    - target: windows-x64
+                      runner: windows-2025
+        runs-on: ${{ matrix.runner }}
+        timeout-minutes: 20
+        steps:
+            - uses: actions/checkout@v7
+              with:
+                  ref: ${{ inputs.ref }}
+                  persist-credentials: false
+            - uses: oven-sh/setup-bun@v2
+              with:
+                  bun-version: '1.4.2'
+            - run: bun install --frozen-lockfile
+            - run: bun run build
+            - run: bun run package:check
+            - uses: actions/upload-artifact@v4
+              with:
+                  name: package-${{ matrix.target }}
+                  path: |
+                      dist/${{ matrix.target }}/*.tar.gz
+                      dist/${{ matrix.target }}/*.zip
+                      dist/${{ matrix.target }}/${{ matrix.target }}.json
+                  if-no-files-found: error
+                  compression-level: 0
+                  retention-days: 14

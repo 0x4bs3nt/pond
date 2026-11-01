@@ -11,6 +11,11 @@ permissions:
     contents: read
 
 jobs:
+    packages:
+        uses: ./.github/workflows/package.yml
+        with:
+            ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+
     release-metadata:
         name: Release metadata
         if: github.event_name == 'pull_request' && github.base_ref == 'main'
