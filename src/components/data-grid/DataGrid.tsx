@@ -1,10 +1,9 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { useKeyboard } from '@opentui/react';
 
 import { GridHeader } from './rendering/GridHeader';
 import { GridBody } from './rendering/GridBody';
 import { clamp, layoutColumns, revealCell, visibleColumns } from './layout';
-import { moveSelection } from './navigation/move-selection';
+import { useGridKeyboard } from './use-grid-keyboard';
 import type { CellPosition, DataGridProps, GridViewport } from './types';
 
 export const DataGrid = ({
@@ -46,22 +45,14 @@ export const DataGrid = ({
         setViewport((current) => revealCell(current, selection, positioned, rows.length, contentWidth, bodyHeight));
     }, [selection, positioned, rows.length, contentWidth, bodyHeight]);
 
-    useKeyboard((key) => {
-        if (getInteraction() !== 'focused' || rows.length === 0 || key.meta || key.defaultPrevented) return;
-
-        if (key.name === 'return' && !key.ctrl && onEdit) {
-            key.preventDefault();
-            onEdit(selectionRef.current);
-
-            return;
-        }
-
-        const next = moveSelection(selectionRef.current, key.name, key.ctrl, rows.length, columns.length, bodyHeight);
-
-        if (next) {
-            key.preventDefault();
-            selectCell(next);
-        }
+    useGridKeyboard({
+        getInteraction,
+        getSelection: () => selectionRef.current,
+        rowCount: rows.length,
+        columnCount: columns.length,
+        pageSize: bodyHeight,
+        onSelect: selectCell,
+        onEdit,
     });
 
     return (
