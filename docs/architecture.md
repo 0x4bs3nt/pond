@@ -193,7 +193,11 @@ Protect state from stale asynchronous results. A response from an older request 
 components/data-grid/
 ├── index.ts
 ├── DataGrid.tsx                 # Grid composition
-├── types.ts                     # Public component contract
+├── types.ts                     # Grid contracts, props, and hook options
+├── tests/
+│   ├── layout.test.ts
+│   └── navigation/
+│       └── move-selection.test.ts
 ├── rendering/
 │   ├── GridHeader.tsx
 │   ├── GridBody.tsx
@@ -215,6 +219,8 @@ The component gallery provides independent scenarios for wide grids, empty state
 ```text
 features/table-browser/
 ├── index.ts
+├── types.ts                     # Feature contracts, props, and hook options
+├── tests/                       # Meaningful behavior tests, when needed
 ├── TableBrowser.tsx
 ├── TableToolbar.tsx
 ├── TableStatus.tsx
@@ -260,6 +266,16 @@ Enforce these boundaries:
 
 Each meaningful module exposes its public API through `index.ts`. Other modules use that entry point; internal files can use direct relative imports. Avoid a root barrel exporting the entire application. Enforce dependency directions with lint rules.
 
+## Types and test organization
+
+Keep named types and interfaces in a module-local `types.ts`. This includes component props, hook options, store contracts, and operation inputs/results. A substantial nested subsystem can own a separate `types.ts`; do not collect unrelated types in a global directory. Keep primitive annotations and useful inference inline rather than inventing aliases for every value.
+
+Use `import type` for type dependencies. Re-export only the types needed by other modules through the owning `index.ts`; internal types remain accessible directly within the module. Type imports obey the same layer boundaries as runtime imports. Inferred contracts may reference factories with type-only imports, without introducing runtime dependencies.
+
+Group tests in the owning module's `tests/` directory, mirroring nested responsibilities when useful. For example, grid navigation tests live in `src/components/data-grid/tests/navigation/`, while application lifecycle tests live in `src/app/tests/`. Keep test helpers and fixtures inside those directories. ESLint prevents production imports of test files and everything under `tests/`, including helpers without a test suffix.
+
+Tooling uses `tools/tests/` and `tools/release/tests/`. Reserve the proposed root `tests/` directory for cross-module integration, adapter-contract, and performance suites when those are implemented. Bun discovers module-local tests with `bun run test`; moving tests does not change the validation commands.
+
 ## Database editing guarantees
 
 Stage inserts, updates, and deletions separately from fetched data. Distinguish NULL, empty text, and use-default values. Initially enable writes only for base tables with primary keys, including composite keys. Identify changed rows by their original keys, parameterize values, quote identifiers correctly, and detect concurrent-change conflicts.
@@ -270,7 +286,7 @@ Start with structured column/operator/value filters. Arbitrary SQL query results
 
 ## Validation
 
-- Colocate unit tests with domain rules, state transitions, and focused operations.
+- Keep tests for domain rules, state transitions, and focused operations in the owning module’s `tests/` directory. Test meaningful behavior and regressions rather than file structure or trivial wiring.
 - Use a disposable PostgreSQL instance for integration tests covering composite keys, defaults, NULL, exact numeric values, constraint failures, rollback, and concurrent edits.
 - Maintain shared adapter contract tests for future engines, with capability-aware expectations.
 - Measure grid responsiveness and memory use during sustained navigation, resizing, and background queries.

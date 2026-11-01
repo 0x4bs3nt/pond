@@ -1,19 +1,9 @@
 import { useState } from 'react';
 import { DataGrid, type CellPosition, type GridInteraction } from '../../components/data-grid';
 import { CellEditor } from '../../components/editors';
-import type { TableSessionsStore } from '../../state/table-sessions';
 import { theme } from '../../theme';
-import type { TableView } from './types';
+import type { TableBrowserProps } from './types';
 import { useTableEditing } from './use-table-editing';
-
-type TableBrowserProps = {
-    table: TableView;
-    sessions: TableSessionsStore;
-    width: number;
-    height: number;
-    focused: boolean;
-    onFocus: () => void;
-};
 
 export const TableBrowser = ({ table, sessions, width, height, focused, onFocus }: TableBrowserProps) => {
     const [selection, setSelection] = useState<CellPosition>({ row: 0, column: 0 });

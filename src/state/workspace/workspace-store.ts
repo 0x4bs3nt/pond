@@ -1,17 +1,5 @@
 import { createStore } from 'zustand/vanilla';
-
-export type WorkspaceFocus = 'explorer' | 'grid';
-
-export type WorkspaceState = {
-    activeTableId: string | null;
-    focus: WorkspaceFocus;
-    editing: boolean;
-    isEditing: () => boolean;
-    setEditing: (editing: boolean) => void;
-    openTable: (tableId: string) => void;
-    focusPanel: (panel: WorkspaceFocus) => void;
-    toggleFocus: () => void;
-};
+import type { WorkspaceState } from './types';
 
 // Create one store per workspace; importing this module never creates shared state.
 export const createWorkspaceStore = (initialTableId: string | null = null) =>
@@ -31,5 +19,3 @@ export const createWorkspaceStore = (initialTableId: string | null = null) =>
             if (!get().editing) set((state) => ({ focus: state.focus === 'grid' ? 'explorer' : 'grid' }));
         },
     }));
-
-export type WorkspaceStore = ReturnType<typeof createWorkspaceStore>;

@@ -1,4 +1,4 @@
-import type { CellPosition, GridColumn, GridViewport } from './types';
+import type { CellPosition, GridColumn, GridViewport, PositionedColumn } from './types';
 
 export const clamp = (value: number, max: number) => Math.max(0, Math.min(value, Math.max(0, max)));
 
@@ -37,8 +37,6 @@ export const revealCell = (
         left: clamp(left, (last ? last.left + last.width : 0) - width),
     };
 };
-
-export type PositionedColumn = ReturnType<typeof layoutColumns>[number];
 
 export const visibleColumns = (columns: readonly PositionedColumn[], left: number, width: number) =>
     columns.filter((column) => column.left + column.width > left && column.left < left + width);

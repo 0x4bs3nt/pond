@@ -1,7 +1,6 @@
 import { api, assertPromotion, git, latestTag, repository, run } from './io';
-import type { PullRequest } from './io';
 import { createPlan } from './policy';
-import type { ReleasePlan } from './policy';
+import type { PullRequest, ReleasePlan } from './types';
 
 const sha = git('rev-parse', 'HEAD');
 const parents = git('rev-list', '--parents', '-n', '1', 'HEAD').split(' ');

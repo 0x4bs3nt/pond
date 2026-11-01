@@ -1,3 +1,4 @@
+import type { SafeError } from './types';
 const errorNames = new Set([
     'Error',
     'TypeError',
@@ -19,8 +20,6 @@ const errorCodes = new Set([
     'ECONNRESET',
     'ECONNREFUSED',
 ]);
-
-type SafeError = { name: string; code?: string; frames?: string[]; cause?: SafeError };
 
 // Messages, arbitrary properties, function names, and thrown strings may contain database values.
 // Keep only known classifications and source locations, including a bounded cause chain.

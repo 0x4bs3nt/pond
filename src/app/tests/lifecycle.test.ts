@@ -2,8 +2,8 @@ import { expect, test } from 'bun:test';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { createLogger } from '../platform/logging';
-import { createLifecycle } from './lifecycle';
+import { createLogger } from '../../platform/logging';
+import { createLifecycle } from '../lifecycle';
 
 const run = async (scenario: (directory: string) => Promise<void>) => {
     const directory = await mkdtemp(join(tmpdir(), 'pond-lifecycle-'));

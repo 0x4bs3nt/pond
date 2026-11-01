@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 
-import { createWorkspaceStore } from './workspace-store';
+import { createWorkspaceStore } from '../workspace-store';
 
 describe('workspace store', () => {
     test('opens a table and focuses its grid in one notification', () => {

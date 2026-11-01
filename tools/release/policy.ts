@@ -1,3 +1,4 @@
+import type { ReleasePlan } from './types';
 export const initialVersion = '0.1.0';
 
 export const parseVersion = (version: string): [number, number, number] => {
@@ -36,14 +37,6 @@ export const nextVersion = (previous: string | null, title: string, body: string
     if (match[1] === 'feat') return `${major}.${minor + 1}.0`;
 
     return `${major}.${minor}.${patch + 1}`;
-};
-
-export type ReleasePlan = {
-    version: string;
-    previousTag: string | null;
-    pullRequest: number;
-    title: string;
-    notes: string;
 };
 
 export const createPlan = (previousTag: string | null, number: number, title: string, body: string): ReleasePlan => ({

@@ -1,9 +1,9 @@
+import { testRender } from '@opentui/react/test-utils';
 import { expect, test } from 'bun:test';
 import { act } from 'react';
-import { testRender } from '@opentui/react/test-utils';
 
-import { createWorkspaceStore } from '../../state/workspace';
-import { WorkspaceProvider, useWorkspace } from './WorkspaceProvider';
+import { createWorkspaceStore } from '../../../state/workspace';
+import { WorkspaceProvider, useWorkspace } from '../WorkspaceProvider';
 
 test('subscribers only render when their selected state changes', async () => {
     const store = createWorkspaceStore('members');

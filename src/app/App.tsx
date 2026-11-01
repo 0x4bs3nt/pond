@@ -1,13 +1,14 @@
 import { useState } from 'react';
+import type { AppProps } from './types';
 
 import { mockTables } from '../features/table-browser';
 import { WorkspaceProvider } from '../features/workspace';
-import { createWorkspaceStore } from '../state/workspace';
 import { createTableSessionsStore } from '../state/table-sessions';
-import { Workspace } from './Workspace';
+import { createWorkspaceStore } from '../state/workspace';
 import { ErrorBoundary } from './ErrorBoundary';
+import { Workspace } from './Workspace';
 
-export const App = ({ onError, logPath }: { onError?: (error: unknown) => void; logPath?: string }) => {
+export const App = ({ onError, logPath }: AppProps) => {
     const [store] = useState(() => createWorkspaceStore(mockTables[0]?.id ?? null));
     const [sessions] = useState(createTableSessionsStore);
 

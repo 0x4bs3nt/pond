@@ -1,15 +1,8 @@
 import { createStore } from 'zustand/vanilla';
+import type { PendingChanges, TableSessionsState } from './types';
 
-export type PendingCell = { rowId: string; columnId: string; original: string | null; value: string | null };
-export type PendingChanges = Readonly<Record<string, PendingCell>>;
 export const cellKey = (rowId: string, columnId: string) => JSON.stringify([rowId, columnId]);
 export const emptyChanges: PendingChanges = Object.freeze({});
-
-type TableSessionsState = {
-    changes: Record<string, PendingChanges>;
-    stage: (tableId: string, cell: PendingCell) => void;
-    discard: (tableId: string) => void;
-};
 
 // Fetched rows never enter this store; each entry is an overlay keyed by stable identities.
 export const createTableSessionsStore = () =>
@@ -28,5 +21,3 @@ export const createTableSessionsStore = () =>
             }),
         discard: (tableId) => set((state) => ({ changes: { ...state.changes, [tableId]: emptyChanges } })),
     }));
-
-export type TableSessionsStore = ReturnType<typeof createTableSessionsStore>;

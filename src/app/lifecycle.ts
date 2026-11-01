@@ -1,12 +1,5 @@
-import type { ErrorSource, Logger } from '../platform/logging';
-
-type Renderer = { destroy: () => void; readonly isDestroyed: boolean; readonly closed: Promise<void> };
-type LifecycleOptions = {
-    logger: Logger;
-    writeError: (message: string) => void;
-    exit: (code: number) => void;
-    timeoutMs?: number;
-};
+import type { ErrorSource } from '../platform/logging';
+import type { LifecycleOptions, Renderer } from './types';
 
 export const createLifecycle = ({ logger, writeError, exit, timeoutMs = 1500 }: LifecycleOptions) => {
     let renderer: Renderer | undefined;

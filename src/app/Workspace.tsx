@@ -1,13 +1,13 @@
-import { useCallback } from 'react';
 import { useTerminalDimensions } from '@opentui/react';
+import { useCallback } from 'react';
+import type { WorkspaceProps } from './types';
 
 import { SchemaExplorer } from '../features/schema-explorer';
 import { TableBrowser, mockTables } from '../features/table-browser';
 import { WorkspaceStatusBar, useWorkspace, useWorkspaceKeyboard } from '../features/workspace';
-import type { TableSessionsStore } from '../state/table-sessions';
 import { theme } from '../theme';
 
-export const Workspace = ({ sessions }: { sessions: TableSessionsStore }) => {
+export const Workspace = ({ sessions }: WorkspaceProps) => {
     const { width, height } = useTerminalDimensions();
 
     const activeTableId = useWorkspace((state) => state.activeTableId);
