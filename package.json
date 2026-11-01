@@ -6,6 +6,7 @@
     "scripts": {
         "start": "bun run src/app/bootstrap.tsx",
         "dev": "bun run tools/dev.ts",
+        "profile:cpu": "mkdir -p .profiles && bun --cpu-prof --cpu-prof-dir=.profiles src/app/bootstrap.tsx",
         "typecheck": "tsc --noEmit",
         "test": "bun test",
         "lint": "bun --bun eslint src tools eslint.config.js --max-warnings 0",
