@@ -29,9 +29,12 @@ const config = await Bun.file('.prettierrc').json();
 const packageJson = await Bun.file('package.json').json();
 packageJson.version = plan.version;
 const files = {
-    'package.json': await format(JSON.stringify(packageJson), { ...config, parser: 'json' }),
-    '.release.json': await format(JSON.stringify(plan), { ...config, parser: 'json' }),
-    'CHANGELOG.md': await format(renderChangelog(plan, changelogAt('origin/main')), { ...config, parser: 'markdown' }),
+    'package.json': await format(JSON.stringify(packageJson), { ...config, filepath: 'package.json' }),
+    '.release.json': await format(JSON.stringify(plan), { ...config, filepath: '.release.json' }),
+    'CHANGELOG.md': await format(renderChangelog(plan, changelogAt('origin/main')), {
+        ...config,
+        filepath: 'CHANGELOG.md',
+    }),
 };
 
 for (const [path, expected] of Object.entries(files)) {

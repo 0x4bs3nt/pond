@@ -4,6 +4,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
 const script = resolve('tools/release/prepare.ts');
+const prettier = resolve('node_modules/prettier/bin/prettier.cjs');
 
 test('preparation is repeatable, validates committed files, and rejects stale metadata or a foreign PR', async () => {
     const root = await mkdtemp(join(tmpdir(), 'pond-release-'));
@@ -58,6 +59,12 @@ test('preparation is repeatable, validates committed files, and rejects stale me
         const prepared = run('prepare');
         expect(prepared.stderr.toString()).toBe('');
         expect(prepared.exitCode).toBe(0);
+        const formatting = Bun.spawnSync(
+            [process.execPath, prettier, 'package.json', '.release.json', 'CHANGELOG.md', '--check'],
+            { cwd, stdout: 'pipe', stderr: 'pipe' }
+        );
+        expect(formatting.stderr.toString()).toBe('');
+        expect(formatting.exitCode).toBe(0);
         expect((await Bun.file(join(cwd, 'package.json')).json()).version).toBe('0.2.0');
         const first = await Bun.file(join(cwd, 'CHANGELOG.md')).text();
         expect(run('prepare').exitCode).toBe(0);
