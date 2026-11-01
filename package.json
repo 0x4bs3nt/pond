@@ -6,6 +6,7 @@
     "scripts": {
         "start": "bun run src/app/bootstrap.tsx",
         "dev": "bun run tools/dev.ts",
+        "logs": "bun run src/app/bootstrap.tsx logs",
         "profile:cpu": "mkdir -p .profiles && bun --cpu-prof --cpu-prof-dir=.profiles src/app/bootstrap.tsx",
         "typecheck": "tsc --noEmit",
         "test": "bun test",
@@ -20,6 +21,7 @@
     "dependencies": {
         "@opentui/core": "^0.6.8",
         "@opentui/react": "^0.6.8",
+        "commander": "^15.0.0",
         "react": "^19.3.1",
         "zustand": "^5.0.16"
     },
