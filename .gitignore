@@ -1,6 +1,7 @@
 node_modules/
 .direnv/
 dist/
+/.profiles/
 *.tsbuildinfo
 .env
 .env.*
