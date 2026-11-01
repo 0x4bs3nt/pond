@@ -1,7 +1,8 @@
 import { setTimeout as delay } from 'node:timers/promises';
 import { createLogReader, logDirectory } from '../platform/logging';
+import type { LogsCommandOptions } from './types';
 
-export const runLogsCommand = async ({ follow }: { follow: boolean }) => {
+export const runLogsCommand = async ({ follow }: LogsCommandOptions) => {
     const directory = logDirectory();
 
     const abort = new AbortController();

@@ -1,15 +1,6 @@
 import { theme } from '../../../theme';
 import { formatCellValue } from '../formatting/format-cell-value';
-
-type GridCellProps = {
-    value: string | null | undefined;
-    left: number;
-    width: number;
-    selected: boolean;
-    focused: boolean;
-    modified?: boolean;
-    onSelect: () => void;
-};
+import type { GridCellProps } from '../types';
 
 export const GridCell = ({ value, left, width, selected, focused, modified, onSelect }: GridCellProps) => (
     <box

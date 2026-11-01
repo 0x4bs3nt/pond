@@ -1,10 +1,8 @@
 import { Component } from 'react';
-import type { ReactNode } from 'react';
+import type { ErrorBoundaryProps, ErrorBoundaryState, ErrorScreenProps } from './types';
 import { useErrorKeyboard } from './use-error-keyboard';
 
-type Props = { children: ReactNode; onError?: (error: unknown) => void; logPath?: string };
-
-const ErrorScreen = ({ logPath }: { logPath?: string }) => {
+const ErrorScreen = ({ logPath }: ErrorScreenProps) => {
     useErrorKeyboard();
 
     return (
@@ -17,7 +15,7 @@ const ErrorScreen = ({ logPath }: { logPath?: string }) => {
     );
 };
 
-export class ErrorBoundary extends Component<Props, { failed: boolean }> {
+export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     override state = { failed: false };
 
     static getDerivedStateFromError() {

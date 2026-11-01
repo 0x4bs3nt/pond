@@ -1,14 +1,9 @@
-import { mkdir, open, readdir, rename, rm, stat } from 'node:fs/promises';
 import { constants } from 'node:fs';
+import { mkdir, open, readdir, rename, rm, stat } from 'node:fs/promises';
 import { join } from 'node:path';
 import { logDirectory } from './log-directory';
 import { safeError } from './safe-error';
-
-export type LogEvent =
-    'app.started' | 'app.stopped' | 'app.fatal' | 'ui.failed' | 'runtime.error' | 'runtime.warning' | 'shutdown.failed';
-export type ErrorSource =
-    'bootstrap' | 'react' | 'renderer' | 'input' | 'uncaughtException' | 'unhandledRejection' | 'console' | 'shutdown';
-export type Logger = ReturnType<typeof createLogger>;
+import type { ErrorSource, LogEvent, LoggerOptions } from './types';
 
 const isRunning = (pid: number) => {
     try {
@@ -25,12 +20,7 @@ export const createLogger = ({
     directory = logDirectory(),
     maxBytes = 256 * 1024,
     maxQueued = 32,
-}: {
-    version: string;
-    directory?: string;
-    maxBytes?: number;
-    maxQueued?: number;
-}) => {
+}: LoggerOptions) => {
     const path = join(directory, `pond-${process.pid}.jsonl`);
     const queue: string[] = [];
     let draining: Promise<void> | undefined;

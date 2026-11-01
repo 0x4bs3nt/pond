@@ -1,20 +1,6 @@
 import { theme } from '../../../theme';
-import type { PositionedColumn } from '../layout';
-import type { CellPosition, GridRow } from '../types';
+import type { GridBodyProps } from '../types';
 import { GridCell } from './GridCell';
-
-type GridBodyProps = {
-    columns: readonly PositionedColumn[];
-    rows: readonly GridRow[];
-    top: number;
-    left: number;
-    width: number;
-    height: number;
-    gutter: number;
-    selection: CellPosition;
-    focused: boolean;
-    onSelect: (position: CellPosition) => void;
-};
 
 export const GridBody = ({
     columns,

@@ -1,14 +1,9 @@
 import { useCallback, useRef, useState } from 'react';
+import type { SchemaExplorerProps } from './types';
 
 import { SchemaExplorer as SchemaExplorerView } from '../../components/navigation';
 import { useWorkspace } from '../workspace';
 import { useExplorerKeyboard } from './use-explorer-keyboard';
-
-type SchemaExplorerProps = {
-    tables: readonly { id: string; name: string }[];
-    width: number;
-    height: number;
-};
 
 export const SchemaExplorer = ({ tables, width, height }: SchemaExplorerProps) => {
     const activeTableId = useWorkspace((state) => state.activeTableId);

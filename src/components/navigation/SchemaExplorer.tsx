@@ -1,16 +1,7 @@
 import { memo } from 'react';
+import type { SchemaExplorerProps } from './types';
 
 import { theme } from '../../theme';
-
-type SchemaExplorerProps = {
-    tables: readonly { id: string; name: string }[];
-    activeId: string;
-    cursor: number;
-    focused: boolean;
-    width: number;
-    height: number;
-    onOpen: (index: number) => void;
-};
 
 export const SchemaExplorer = memo(
     ({ tables, activeId, cursor, focused, width, height, onOpen }: SchemaExplorerProps) => (

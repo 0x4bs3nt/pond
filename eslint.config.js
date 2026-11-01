@@ -74,6 +74,7 @@ export default [
             'boundaries/files': [
                 { pattern: 'package.json', category: 'metadata' },
                 { pattern: testFiles, category: 'test' },
+                { pattern: '**/tests/**', category: 'test' },
                 { pattern: 'eslint.config.js', category: 'tooling' },
             ],
             'boundaries/elements': [

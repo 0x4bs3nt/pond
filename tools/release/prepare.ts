@@ -1,8 +1,8 @@
 import { format } from 'prettier';
 
 import { api, assertPromotion, changelogAt, git, latestTag } from './io';
-import type { PullRequest } from './io';
 import { createPlan, renderChangelog } from './policy';
+import type { PullRequest } from './types';
 
 const mode = process.argv[2];
 if (!['prepare', 'check'].includes(mode ?? '')) throw new Error('Expected prepare or check.');

@@ -1,2 +1,2 @@
+export type { WorkspaceFocus, WorkspaceState, WorkspaceStore } from './types';
 export { createWorkspaceStore } from './workspace-store';
-export type { WorkspaceFocus, WorkspaceState, WorkspaceStore } from './workspace-store';

@@ -1,11 +1,5 @@
 import { theme } from '../../theme';
-
-export type KeyboardHint = { keys: string; action: string };
-
-type KeyboardHintsProps = {
-    label?: string;
-    hints: readonly KeyboardHint[];
-};
+import type { KeyboardHintsProps } from './types';
 
 export const KeyboardHints = ({ label, hints }: KeyboardHintsProps) => (
     <text height={1} flexShrink={0} bg={theme.raised} fg={theme.muted} wrapMode="none">

@@ -1,3 +1,4 @@
+import type { PullRequest } from './types';
 export const run = (...args: string[]): string => {
     const result = Bun.spawnSync(args, { stdout: 'pipe', stderr: 'pipe' });
 
@@ -18,17 +19,6 @@ export const repository = (): string => {
 };
 
 export const api = (path: string): unknown => JSON.parse(run('gh', 'api', `repos/${repository()}/${path}`));
-
-export type PullRequest = {
-    number: number;
-    title: string;
-    body: string | null;
-    state: string;
-    merged: boolean;
-    merge_commit_sha: string | null;
-    base: { ref: string; sha: string };
-    head: { ref: string; sha: string; repo: { full_name: string } | null };
-};
 
 export const assertPromotion = (pr: PullRequest) => {
     if (pr.base.ref !== 'main' || pr.head.ref !== 'dev' || pr.head.repo?.full_name !== repository()) {

@@ -1,17 +1,7 @@
 import { useKeyboard } from '@opentui/react';
+import type { GridKeyboardOptions } from './types';
 
 import { moveSelection } from './navigation/move-selection';
-import type { CellPosition, GridInteraction } from './types';
-
-type GridKeyboardOptions = {
-    getInteraction: () => GridInteraction;
-    getSelection: () => CellPosition;
-    rowCount: number;
-    columnCount: number;
-    pageSize: number;
-    onSelect: (position: CellPosition) => void;
-    onEdit?: (position: CellPosition) => void;
-};
 
 export const useGridKeyboard = ({
     getInteraction,

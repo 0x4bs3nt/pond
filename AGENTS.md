@@ -15,7 +15,7 @@ Pond uses TypeScript, Bun, OpenTUI, React, and Zustand. Organize code by these a
 - `src/theme/`: visual tokens and theme definitions.
 - `src/platform/`: terminal and OS integration, including clipboard, filesystem, and logging.
 - `src/shared/`: small utilities genuinely needed across modules.
-- `tests/`: integration, adapter-contract, and performance scenarios with fixtures; unit tests stay colocated.
+- `tests/`: integration, adapter-contract, and performance scenarios with fixtures; module tests live in a `tests/` directory inside their owning module.
 - `tools/`: development, release, and component-gallery tooling.
 - `.github/`: automation workflows and collaboration templates.
 
@@ -41,9 +41,11 @@ Always run `bun run check` after finishing code changes and before reporting the
 
 Use four-space indentation, single quotes, semicolons, and a 120-column print width, enforced by Prettier. Prefer arrow functions, `const`, and strict equality. Name React components in PascalCase and hooks/utilities in kebab-case. Follow `eslint.config.js` dependency rules; avoid speculative abstractions or empty future modules.
 
+Keep named types and interfaces in the owning module’s `types.ts`, including component props, hook options, and state contracts. Use `import type` and expose types needed by other modules through `export type` in `index.ts`. Larger subsystems may have their own `types.ts`; avoid a global types barrel. Keep simple inline annotations and inferred local values where a named type adds no clarity.
+
 ## Testing Guidelines
 
-Tests use `bun:test` and OpenTUI rendering utilities. Colocate `*.test.ts(x)` or `*.spec.ts(x)` with relevant code. No numeric coverage threshold is configured.
+Tests use `bun:test` and OpenTUI rendering utilities. Place `*.test.ts(x)` or `*.spec.ts(x)` under the owning module’s `tests/` directory, not beside implementation files. Mirror nested responsibilities where helpful, e.g. `src/components/data-grid/tests/navigation/move-selection.test.ts`. Keep test-only helpers and fixtures under `tests/` too; production code must not import them. Tooling follows the same convention (`tools/tests/`, `tools/release/tests/`). Reserve root `tests/` for future cross-module integration, contract, and performance suites. No numeric coverage threshold is configured.
 
 Write tests only when they protect actual business logic, prevent regressions between releases, verify critical behavior, or address a concrete failure risk worth maintaining coverage for. Prioritize data integrity, state transitions, transaction handling, and release correctness. Do not write tests merely because code changed, to increase test counts or coverage percentages, or to mirror implementation details. Avoid routine rendering, styling, trivial wiring, and redundant tests. For each new test, identify the meaningful failure it would catch. Run interface changes locally and report the scenarios checked.
 

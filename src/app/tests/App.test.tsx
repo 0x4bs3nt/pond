@@ -1,10 +1,10 @@
 import { act } from 'react';
 
-import { describe, expect, test } from 'bun:test';
-import { testRender } from '@opentui/react/test-utils';
 import type { BaseRenderable } from '@opentui/core';
+import { testRender } from '@opentui/react/test-utils';
+import { describe, expect, test } from 'bun:test';
 
-import { App } from './App';
+import { App } from '../App';
 
 const countNodes = (node: BaseRenderable): number =>
     1 + node.getChildren().reduce((sum, child) => sum + countNodes(child), 0);

@@ -1,8 +1,7 @@
 import { KeyboardHints, type KeyboardHint } from '../../components/feedback';
+import type { StatusMode } from './types';
 
 import { useWorkspace } from './WorkspaceProvider';
-
-type StatusMode = 'editing' | 'grid' | 'explorer';
 
 const modes: Record<StatusMode, { label?: string; hints: readonly KeyboardHint[] }> = {
     editing: {

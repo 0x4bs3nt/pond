@@ -1,13 +1,13 @@
-import { expect, spyOn, test } from 'bun:test';
-import { act } from 'react';
 import { testRender } from '@opentui/react/test-utils';
+import { expect, spyOn, test } from 'bun:test';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { createLogger } from '../platform/logging';
-import { createTableSessionsStore } from '../state/table-sessions';
-import { ErrorBoundary } from './ErrorBoundary';
-import { createLifecycle } from './lifecycle';
+import { act } from 'react';
+import { createLogger } from '../../platform/logging';
+import { createTableSessionsStore } from '../../state/table-sessions';
+import { ErrorBoundary } from '../ErrorBoundary';
+import { createLifecycle } from '../lifecycle';
 
 test('a real React render failure shows an exit fallback, retains external edits, and logs once', async () => {
     const directory = await mkdtemp(join(tmpdir(), 'pond-boundary-'));

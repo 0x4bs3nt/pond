@@ -1,13 +1,5 @@
 import { theme } from '../../../theme';
-import type { PositionedColumn } from '../layout';
-
-type GridHeaderProps = {
-    columns: readonly PositionedColumn[];
-    left: number;
-    width: number;
-    gutter: number;
-    focused: boolean;
-};
+import type { GridHeaderProps } from '../types';
 
 export const GridHeader = ({ columns, left, width, gutter, focused }: GridHeaderProps) => (
     <box height={2} flexShrink={0} flexDirection="row" backgroundColor={theme.raised}>

@@ -1,19 +1,9 @@
-import { useRef, useState } from 'react';
 import type { InputRenderable, TextareaRenderable } from '@opentui/core';
+import { useRef, useState } from 'react';
+import type { CellEditorProps } from './types';
 
 import { theme } from '../../theme';
 import { useCellEditorKeyboard } from './use-cell-editor-keyboard';
-
-type CellEditorProps = {
-    label: string;
-    value: string | null;
-    multiline: boolean;
-    json: boolean;
-    width: number;
-    height: number;
-    onConfirm: (value: string | null) => void;
-    onCancel: () => void;
-};
 
 export const CellEditor = ({ label, value, multiline, json, width, height, onConfirm, onCancel }: CellEditorProps) => {
     const input = useRef<InputRenderable>(null);

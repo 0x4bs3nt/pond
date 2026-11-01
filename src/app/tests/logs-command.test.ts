@@ -1,9 +1,9 @@
 import { expect, test } from 'bun:test';
 import { mkdtemp, readdir, rm, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
 import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
-const bootstrap = new URL('./bootstrap.tsx', import.meta.url).pathname;
+const bootstrap = new URL('../bootstrap.tsx', import.meta.url).pathname;
 
 test('logs command prints records without starting the TUI or writing its own logs', async () => {
     const directory = await mkdtemp(join(tmpdir(), 'pond-cli-logs-'));
@@ -87,7 +87,7 @@ test('follow waits for the first log, streams it, and shuts down on SIGINT', asy
 
 test('help, version, and invalid commands never start the TUI or create logs', async () => {
     const directory = await mkdtemp(join(tmpdir(), 'pond-cli-routing-'));
-    const { version } = await Bun.file(new URL('../../package.json', import.meta.url)).json();
+    const { version } = await Bun.file(new URL('../../../package.json', import.meta.url)).json();
     try {
         for (const [args, expected, message] of [
             [['--help'], 0, 'Usage: pond'],

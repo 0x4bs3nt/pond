@@ -1,12 +1,5 @@
 import { useKeyboard } from '@opentui/react';
-
-type CellEditorKeyboardOptions = {
-    multiline: boolean;
-    onCancel: () => void;
-    onConfirm: () => void;
-    onSetNull: () => void;
-    onEdit: () => void;
-};
+import type { CellEditorKeyboardOptions } from './types';
 
 export const useCellEditorKeyboard = ({
     multiline,

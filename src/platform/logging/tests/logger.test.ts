@@ -1,9 +1,9 @@
 import { afterEach, expect, test } from 'bun:test';
-import { chmod, mkdtemp, readFile, rm, stat, writeFile, readdir } from 'node:fs/promises';
+import { chmod, mkdtemp, readdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { createLogger } from './logger';
-import { logDirectory } from './log-directory';
+import { logDirectory } from '../log-directory';
+import { createLogger } from '../logger';
 
 const directories: string[] = [];
 const fixture = async () => {

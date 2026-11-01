@@ -1,10 +1,5 @@
 import { useKeyboard } from '@opentui/react';
-
-type TableBrowserKeyboardOptions = {
-    focused: boolean;
-    isEditing: () => boolean;
-    onDiscard: () => void;
-};
+import type { TableBrowserKeyboardOptions } from './types';
 
 export const useTableBrowserKeyboard = ({ focused, isEditing, onDiscard }: TableBrowserKeyboardOptions) => {
     useKeyboard((key) => {
