@@ -23,7 +23,7 @@ export const GridCell = ({ value, left, width, selected, focused, modified, onSe
             selectable={false}
             fg={modified ? theme.modified : value === null ? theme.muted : theme.text}
         >
-            {`${modified ? '* ' : ''}${formatCellValue(value)}`}
+            {`${modified ? '* ' : ''}${formatCellValue(value, width)}`}
         </text>
     </box>
 );

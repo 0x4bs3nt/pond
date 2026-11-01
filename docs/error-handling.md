@@ -57,6 +57,10 @@ Error boundaries do not catch asynchronous work or event-handler errors. Future 
 
 Pending edits remain memory-only and do not survive process termination. Forced termination, native crashes, power loss, or a blocked JavaScript thread can prevent both cleanup and log flushing. Disk writes are not a crash-durable journal. Performance measurements remain a separate opt-in feature.
 
+## Runtime timing retention
+
+Application and gallery startup also consume and discard delivered User Timing measures so React development measurements do not accumulate in Bun. No timing details are logged. Other live performance observers still receive entries, but the process-wide measure history is cleared; future diagnostics must retain their own bounded samples. Marks and CPU profiling are unaffected. Shutdown disconnects the cleanup observer. See [grid performance](grid-performance.md#memory-finding-and-resolution) for the reproduction and measurements.
+
 ## Validation
 
 Run `bun run check`. Logging tests inspect actual on-disk JSON records, ordering, safe error details, rotation, retention, queue limits, and failures. Lifecycle tests cover duplicate errors and bounded shutdown. The React boundary test exercises a real failed render and checks that external pending changes remain intact before exit.

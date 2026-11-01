@@ -1,0 +1,914 @@
+{
+    "before": {
+        "runtime": "1.4.2",
+        "platform": "linux",
+        "arch": "x64",
+        "options": {
+            "rows": 100000,
+            "columns": 256,
+            "steps": 300,
+            "rounds": 3,
+            "valueLength": 32
+        },
+        "terminal": {
+            "width": 120,
+            "height": 36
+        },
+        "initialMs": 57.081,
+        "baselineNodes": 463,
+        "baselineMemory": {
+            "heapMiB": 23.15,
+            "rssMiB": 167.17
+        },
+        "samples": [
+            {
+                "round": 1,
+                "p50Ms": 2.13,
+                "p95Ms": 3.497,
+                "maxMs": 27.329,
+                "peakNodes": 463,
+                "heapMiB": 24.77,
+                "rssMiB": 287.62
+            },
+            {
+                "round": 2,
+                "p50Ms": 2.052,
+                "p95Ms": 3.886,
+                "maxMs": 22.824,
+                "peakNodes": 463,
+                "heapMiB": 24.9,
+                "rssMiB": 373.53
+            },
+            {
+                "round": 3,
+                "p50Ms": 1.963,
+                "p95Ms": 3.854,
+                "maxMs": 20.705,
+                "peakNodes": 463,
+                "heapMiB": 25.22,
+                "rssMiB": 451.21
+            }
+        ],
+        "workload": "original-vertical-v1"
+    },
+    "after": {
+        "runtime": "1.4.2",
+        "platform": "linux",
+        "arch": "x64",
+        "options": {
+            "rows": 100000,
+            "columns": 256,
+            "steps": 300,
+            "rounds": 3,
+            "valueLength": 32
+        },
+        "terminal": {
+            "width": 120,
+            "height": 36
+        },
+        "initialMs": 55.558,
+        "baselineNodes": 463,
+        "baselineMemory": {
+            "heapMiB": 23.2,
+            "rssMiB": 136.37
+        },
+        "samples": [
+            {
+                "round": 1,
+                "p50Ms": 1.245,
+                "p95Ms": 2.455,
+                "maxMs": 15.563,
+                "peakNodes": 463,
+                "retainedMeasures": 0,
+                "heapMiB": 24.27,
+                "rssMiB": 191.95
+            },
+            {
+                "round": 2,
+                "p50Ms": 1.177,
+                "p95Ms": 2.27,
+                "maxMs": 14.942,
+                "peakNodes": 463,
+                "retainedMeasures": 0,
+                "heapMiB": 24.36,
+                "rssMiB": 161.75
+            },
+            {
+                "round": 3,
+                "p50Ms": 1.136,
+                "p95Ms": 1.994,
+                "maxMs": 17.335,
+                "peakNodes": 463,
+                "retainedMeasures": 0,
+                "heapMiB": 24.62,
+                "rssMiB": 168.29
+            }
+        ],
+        "workload": "original-vertical-v1"
+    },
+    "longBefore": {
+        "runtime": "1.4.2",
+        "platform": "linux",
+        "arch": "x64",
+        "options": {
+            "rows": 100000,
+            "columns": 256,
+            "steps": 100,
+            "rounds": 3,
+            "valueLength": 65536
+        },
+        "terminal": {
+            "width": 120,
+            "height": 36
+        },
+        "initialMs": 103.547,
+        "baselineNodes": 463,
+        "baselineMemory": {
+            "heapMiB": 36.04,
+            "rssMiB": 314.73
+        },
+        "samples": [
+            {
+                "round": 1,
+                "p50Ms": 14.022,
+                "p95Ms": 20.129,
+                "maxMs": 77.445,
+                "peakNodes": 463,
+                "heapMiB": 37.39,
+                "rssMiB": 386.58
+            },
+            {
+                "round": 2,
+                "p50Ms": 13.511,
+                "p95Ms": 20.617,
+                "maxMs": 76.242,
+                "peakNodes": 463,
+                "heapMiB": 37.53,
+                "rssMiB": 414.7
+            },
+            {
+                "round": 3,
+                "p50Ms": 13.172,
+                "p95Ms": 19.848,
+                "maxMs": 78.228,
+                "peakNodes": 463,
+                "heapMiB": 37.59,
+                "rssMiB": 445.01
+            }
+        ],
+        "workload": "original-vertical-v1"
+    },
+    "longAfter": {
+        "runtime": "1.4.2",
+        "platform": "linux",
+        "arch": "x64",
+        "options": {
+            "rows": 100000,
+            "columns": 256,
+            "steps": 100,
+            "rounds": 3,
+            "valueLength": 65536
+        },
+        "terminal": {
+            "width": 120,
+            "height": 36
+        },
+        "initialMs": 51.504,
+        "baselineNodes": 463,
+        "baselineMemory": {
+            "heapMiB": 23.28,
+            "rssMiB": 146.68
+        },
+        "samples": [
+            {
+                "round": 1,
+                "p50Ms": 1.918,
+                "p95Ms": 3.649,
+                "maxMs": 16.385,
+                "peakNodes": 463,
+                "retainedMeasures": 0,
+                "heapMiB": 24.07,
+                "rssMiB": 162.71
+            },
+            {
+                "round": 2,
+                "p50Ms": 1.737,
+                "p95Ms": 2.819,
+                "maxMs": 16.708,
+                "peakNodes": 463,
+                "retainedMeasures": 0,
+                "heapMiB": 24.21,
+                "rssMiB": 159.09
+            },
+            {
+                "round": 3,
+                "p50Ms": 1.737,
+                "p95Ms": 3.131,
+                "maxMs": 17.323,
+                "peakNodes": 463,
+                "retainedMeasures": 0,
+                "heapMiB": 24.34,
+                "rssMiB": 165.21
+            }
+        ],
+        "workload": "original-vertical-v1"
+    },
+    "smallAfter": {
+        "runtime": "1.4.2",
+        "platform": "linux",
+        "arch": "x64",
+        "options": {
+            "rows": 250,
+            "columns": 256,
+            "steps": 300,
+            "rounds": 3,
+            "valueLength": 32
+        },
+        "terminal": {
+            "width": 120,
+            "height": 36
+        },
+        "initialMs": 53.475,
+        "baselineNodes": 463,
+        "baselineMemory": {
+            "heapMiB": 14.37,
+            "rssMiB": 126.04
+        },
+        "samples": [
+            {
+                "round": 1,
+                "p50Ms": 1.231,
+                "p95Ms": 2.458,
+                "maxMs": 16.652,
+                "peakNodes": 463,
+                "retainedMeasures": 0,
+                "heapMiB": 15.46,
+                "rssMiB": 149.26
+            },
+            {
+                "round": 2,
+                "p50Ms": 1.204,
+                "p95Ms": 2.169,
+                "maxMs": 18.664,
+                "peakNodes": 463,
+                "retainedMeasures": 0,
+                "heapMiB": 15.55,
+                "rssMiB": 154.1
+            },
+            {
+                "round": 3,
+                "p50Ms": 1.352,
+                "p95Ms": 3.256,
+                "maxMs": 18.443,
+                "peakNodes": 463,
+                "retainedMeasures": 0,
+                "heapMiB": 15.8,
+                "rssMiB": 154.34
+            }
+        ],
+        "workload": "original-vertical-v1"
+    },
+    "soakWithoutTimingCleanup": {
+        "runtime": "1.4.2",
+        "platform": "linux",
+        "arch": "x64",
+        "options": {
+            "rows": 100000,
+            "columns": 256,
+            "steps": 500,
+            "rounds": 8,
+            "valueLength": 32
+        },
+        "terminal": {
+            "width": 120,
+            "height": 36
+        },
+        "initialMs": 53.102,
+        "baselineNodes": 463,
+        "baselineMemory": {
+            "heapMiB": 23.17,
+            "rssMiB": 135.75
+        },
+        "samples": [
+            {
+                "round": 1,
+                "p50Ms": 1.213,
+                "p95Ms": 2.505,
+                "maxMs": 17.666,
+                "peakNodes": 463,
+                "heapMiB": 24.36,
+                "rssMiB": 250.21
+            },
+            {
+                "round": 2,
+                "p50Ms": 1.159,
+                "p95Ms": 2.166,
+                "maxMs": 17.113,
+                "peakNodes": 463,
+                "heapMiB": 24.61,
+                "rssMiB": 331.02
+            },
+            {
+                "round": 3,
+                "p50Ms": 1.127,
+                "p95Ms": 2.079,
+                "maxMs": 18.51,
+                "peakNodes": 463,
+                "heapMiB": 24.68,
+                "rssMiB": 413.74
+            },
+            {
+                "round": 4,
+                "p50Ms": 1.116,
+                "p95Ms": 1.951,
+                "maxMs": 16.919,
+                "peakNodes": 463,
+                "heapMiB": 24.71,
+                "rssMiB": 490.74
+            },
+            {
+                "round": 5,
+                "p50Ms": 1.135,
+                "p95Ms": 2.008,
+                "maxMs": 19.002,
+                "peakNodes": 463,
+                "heapMiB": 24.72,
+                "rssMiB": 601.79
+            },
+            {
+                "round": 6,
+                "p50Ms": 1.116,
+                "p95Ms": 1.921,
+                "maxMs": 18.499,
+                "peakNodes": 463,
+                "heapMiB": 24.72,
+                "rssMiB": 658.21
+            },
+            {
+                "round": 7,
+                "p50Ms": 1.135,
+                "p95Ms": 1.78,
+                "maxMs": 16.742,
+                "peakNodes": 463,
+                "heapMiB": 24.74,
+                "rssMiB": 760.57
+            },
+            {
+                "round": 8,
+                "p50Ms": 1.118,
+                "p95Ms": 1.943,
+                "maxMs": 16.386,
+                "peakNodes": 463,
+                "heapMiB": 24.74,
+                "rssMiB": 832.07
+            }
+        ],
+        "workload": "original-vertical-v1"
+    },
+    "soakAfter": {
+        "runtime": "1.4.2",
+        "platform": "linux",
+        "arch": "x64",
+        "options": {
+            "rows": 100000,
+            "columns": 256,
+            "steps": 500,
+            "rounds": 16,
+            "valueLength": 32
+        },
+        "terminal": {
+            "width": 120,
+            "height": 36
+        },
+        "initialMs": 50.145,
+        "baselineNodes": 463,
+        "baselineMemory": {
+            "heapMiB": 23.21,
+            "rssMiB": 136.54
+        },
+        "samples": [
+            {
+                "round": 1,
+                "p50Ms": 1.343,
+                "p95Ms": 2.751,
+                "maxMs": 18.98,
+                "peakNodes": 463,
+                "retainedMeasures": 0,
+                "heapMiB": 24.4,
+                "rssMiB": 182.05
+            },
+            {
+                "round": 2,
+                "p50Ms": 1.206,
+                "p95Ms": 2.18,
+                "maxMs": 19.061,
+                "peakNodes": 463,
+                "retainedMeasures": 0,
+                "heapMiB": 24.65,
+                "rssMiB": 189.36
+            },
+            {
+                "round": 3,
+                "p50Ms": 1.251,
+                "p95Ms": 2.204,
+                "maxMs": 18.936,
+                "peakNodes": 463,
+                "retainedMeasures": 0,
+                "heapMiB": 24.74,
+                "rssMiB": 191.53
+            },
+            {
+                "round": 4,
+                "p50Ms": 1.182,
+                "p95Ms": 2.484,
+                "maxMs": 19.315,
+                "peakNodes": 463,
+                "retainedMeasures": 0,
+                "heapMiB": 24.77,
+                "rssMiB": 171.21
+            },
+            {
+                "round": 5,
+                "p50Ms": 1.362,
+                "p95Ms": 3.126,
+                "maxMs": 21.566,
+                "peakNodes": 463,
+                "retainedMeasures": 0,
+                "heapMiB": 24.77,
+                "rssMiB": 192.12
+            },
+            {
+                "round": 6,
+                "p50Ms": 1.282,
+                "p95Ms": 2.357,
+                "maxMs": 21.06,
+                "peakNodes": 463,
+                "retainedMeasures": 0,
+                "heapMiB": 24.77,
+                "rssMiB": 170.93
+            },
+            {
+                "round": 7,
+                "p50Ms": 1.14,
+                "p95Ms": 1.812,
+                "maxMs": 16.994,
+                "peakNodes": 463,
+                "retainedMeasures": 0,
+                "heapMiB": 24.79,
+                "rssMiB": 173.3
+            },
+            {
+                "round": 8,
+                "p50Ms": 1.239,
+                "p95Ms": 2.242,
+                "maxMs": 20.161,
+                "peakNodes": 463,
+                "retainedMeasures": 0,
+                "heapMiB": 24.8,
+                "rssMiB": 205.12
+            },
+            {
+                "round": 9,
+                "p50Ms": 1.147,
+                "p95Ms": 2.449,
+                "maxMs": 18.012,
+                "peakNodes": 463,
+                "retainedMeasures": 0,
+                "heapMiB": 24.81,
+                "rssMiB": 205.95
+            },
+            {
+                "round": 10,
+                "p50Ms": 1.156,
+                "p95Ms": 1.777,
+                "maxMs": 18.409,
+                "peakNodes": 463,
+                "retainedMeasures": 0,
+                "heapMiB": 24.78,
+                "rssMiB": 191.2
+            },
+            {
+                "round": 11,
+                "p50Ms": 1.211,
+                "p95Ms": 2.204,
+                "maxMs": 18.303,
+                "peakNodes": 463,
+                "retainedMeasures": 0,
+                "heapMiB": 24.79,
+                "rssMiB": 176.93
+            },
+            {
+                "round": 12,
+                "p50Ms": 1.173,
+                "p95Ms": 2.154,
+                "maxMs": 17.562,
+                "peakNodes": 463,
+                "retainedMeasures": 0,
+                "heapMiB": 24.78,
+                "rssMiB": 176.14
+            },
+            {
+                "round": 13,
+                "p50Ms": 1.122,
+                "p95Ms": 2.139,
+                "maxMs": 16.492,
+                "peakNodes": 463,
+                "retainedMeasures": 0,
+                "heapMiB": 24.8,
+                "rssMiB": 201.08
+            },
+            {
+                "round": 14,
+                "p50Ms": 1.152,
+                "p95Ms": 2.042,
+                "maxMs": 16.794,
+                "peakNodes": 463,
+                "retainedMeasures": 0,
+                "heapMiB": 24.71,
+                "rssMiB": 179.79
+            },
+            {
+                "round": 15,
+                "p50Ms": 1.152,
+                "p95Ms": 2.174,
+                "maxMs": 19.183,
+                "peakNodes": 463,
+                "retainedMeasures": 0,
+                "heapMiB": 22.64,
+                "rssMiB": 191.79
+            },
+            {
+                "round": 16,
+                "p50Ms": 1.16,
+                "p95Ms": 2.139,
+                "maxMs": 19.191,
+                "peakNodes": 463,
+                "retainedMeasures": 0,
+                "heapMiB": 22.61,
+                "rssMiB": 178.9
+            }
+        ],
+        "workload": "original-vertical-v1"
+    },
+    "nativeTextControl": [
+        {
+            "round": 1,
+            "heapMiB": 7.979519844055176,
+            "rssMiB": 90.6484375
+        },
+        {
+            "round": 2,
+            "heapMiB": 8.066594123840332,
+            "rssMiB": 78.4609375
+        },
+        {
+            "round": 3,
+            "heapMiB": 8.106585502624512,
+            "rssMiB": 82.8828125
+        },
+        {
+            "round": 4,
+            "heapMiB": 8.062695503234863,
+            "rssMiB": 78.35546875
+        }
+    ],
+    "mixedAxisNormal": {
+        "workload": "mixed-axis-v2",
+        "runtime": "1.4.2",
+        "platform": "linux",
+        "arch": "x64",
+        "options": {
+            "rows": 100000,
+            "columns": 256,
+            "steps": 300,
+            "rounds": 3,
+            "valueLength": 32
+        },
+        "terminal": {
+            "width": 120,
+            "height": 36
+        },
+        "initialMs": 51.323,
+        "baselineNodes": 463,
+        "baselineMemory": {
+            "heapMiB": 23.2,
+            "rssMiB": 138.2
+        },
+        "samples": [
+            {
+                "round": 1,
+                "p50Ms": 1.6,
+                "p95Ms": 6.222,
+                "maxMs": 16.126,
+                "peakNodes": 463,
+                "minColumn": 0,
+                "maxColumn": 255,
+                "retainedMeasures": 0,
+                "heapMiB": 24.24,
+                "rssMiB": 197.25
+            },
+            {
+                "round": 2,
+                "p50Ms": 1.24,
+                "p95Ms": 5.339,
+                "maxMs": 13.866,
+                "peakNodes": 463,
+                "minColumn": 0,
+                "maxColumn": 255,
+                "retainedMeasures": 0,
+                "heapMiB": 24.39,
+                "rssMiB": 176.6
+            },
+            {
+                "round": 3,
+                "p50Ms": 1.5,
+                "p95Ms": 5.439,
+                "maxMs": 13.309,
+                "peakNodes": 463,
+                "minColumn": 0,
+                "maxColumn": 255,
+                "retainedMeasures": 0,
+                "heapMiB": 24.66,
+                "rssMiB": 170.74
+            }
+        ]
+    },
+    "mixedAxisLong": {
+        "workload": "mixed-axis-v2",
+        "runtime": "1.4.2",
+        "platform": "linux",
+        "arch": "x64",
+        "options": {
+            "rows": 100000,
+            "columns": 256,
+            "steps": 100,
+            "rounds": 3,
+            "valueLength": 65536
+        },
+        "terminal": {
+            "width": 120,
+            "height": 36
+        },
+        "initialMs": 53.233,
+        "baselineNodes": 463,
+        "baselineMemory": {
+            "heapMiB": 23.28,
+            "rssMiB": 145.23
+        },
+        "samples": [
+            {
+                "round": 1,
+                "p50Ms": 2.444,
+                "p95Ms": 6.905,
+                "maxMs": 17.585,
+                "peakNodes": 463,
+                "minColumn": 0,
+                "maxColumn": 255,
+                "retainedMeasures": 0,
+                "heapMiB": 24.16,
+                "rssMiB": 190.45
+            },
+            {
+                "round": 2,
+                "p50Ms": 2.056,
+                "p95Ms": 8.75,
+                "maxMs": 16.779,
+                "peakNodes": 463,
+                "minColumn": 0,
+                "maxColumn": 255,
+                "retainedMeasures": 0,
+                "heapMiB": 24.23,
+                "rssMiB": 197.16
+            },
+            {
+                "round": 3,
+                "p50Ms": 2.178,
+                "p95Ms": 9.015,
+                "maxMs": 15.215,
+                "peakNodes": 463,
+                "minColumn": 0,
+                "maxColumn": 255,
+                "retainedMeasures": 0,
+                "heapMiB": 24.3,
+                "rssMiB": 181.13
+            }
+        ]
+    },
+    "mixedAxisSoak": {
+        "workload": "mixed-axis-v2",
+        "runtime": "1.4.2",
+        "platform": "linux",
+        "arch": "x64",
+        "options": {
+            "rows": 100000,
+            "columns": 256,
+            "steps": 500,
+            "rounds": 16,
+            "valueLength": 32
+        },
+        "terminal": {
+            "width": 120,
+            "height": 36
+        },
+        "initialMs": 48.582,
+        "baselineNodes": 463,
+        "baselineMemory": {
+            "heapMiB": 23.22,
+            "rssMiB": 138.73
+        },
+        "samples": [
+            {
+                "round": 1,
+                "p50Ms": 1.481,
+                "p95Ms": 5.709,
+                "maxMs": 14.355,
+                "peakNodes": 463,
+                "minColumn": 0,
+                "maxColumn": 255,
+                "retainedMeasures": 0,
+                "heapMiB": 24.43,
+                "rssMiB": 205.31
+            },
+            {
+                "round": 2,
+                "p50Ms": 1.405,
+                "p95Ms": 5.534,
+                "maxMs": 14.845,
+                "peakNodes": 463,
+                "minColumn": 0,
+                "maxColumn": 255,
+                "retainedMeasures": 0,
+                "heapMiB": 24.67,
+                "rssMiB": 212.47
+            },
+            {
+                "round": 3,
+                "p50Ms": 1.426,
+                "p95Ms": 6.254,
+                "maxMs": 15.211,
+                "peakNodes": 463,
+                "minColumn": 0,
+                "maxColumn": 255,
+                "retainedMeasures": 0,
+                "heapMiB": 24.77,
+                "rssMiB": 203.8
+            },
+            {
+                "round": 4,
+                "p50Ms": 1.441,
+                "p95Ms": 5.51,
+                "maxMs": 13.318,
+                "peakNodes": 463,
+                "minColumn": 0,
+                "maxColumn": 255,
+                "retainedMeasures": 0,
+                "heapMiB": 24.8,
+                "rssMiB": 195.43
+            },
+            {
+                "round": 5,
+                "p50Ms": 1.324,
+                "p95Ms": 6.629,
+                "maxMs": 14.465,
+                "peakNodes": 463,
+                "minColumn": 0,
+                "maxColumn": 255,
+                "retainedMeasures": 0,
+                "heapMiB": 24.82,
+                "rssMiB": 180.77
+            },
+            {
+                "round": 6,
+                "p50Ms": 1.339,
+                "p95Ms": 5.635,
+                "maxMs": 14.522,
+                "peakNodes": 463,
+                "minColumn": 0,
+                "maxColumn": 255,
+                "retainedMeasures": 0,
+                "heapMiB": 24.82,
+                "rssMiB": 182.71
+            },
+            {
+                "round": 7,
+                "p50Ms": 1.453,
+                "p95Ms": 6.331,
+                "maxMs": 15.091,
+                "peakNodes": 463,
+                "minColumn": 0,
+                "maxColumn": 255,
+                "retainedMeasures": 0,
+                "heapMiB": 24.82,
+                "rssMiB": 181.72
+            },
+            {
+                "round": 8,
+                "p50Ms": 1.418,
+                "p95Ms": 5.331,
+                "maxMs": 14.196,
+                "peakNodes": 463,
+                "minColumn": 0,
+                "maxColumn": 255,
+                "retainedMeasures": 0,
+                "heapMiB": 24.81,
+                "rssMiB": 180.89
+            },
+            {
+                "round": 9,
+                "p50Ms": 1.392,
+                "p95Ms": 6.324,
+                "maxMs": 13.587,
+                "peakNodes": 463,
+                "minColumn": 0,
+                "maxColumn": 255,
+                "retainedMeasures": 0,
+                "heapMiB": 24.82,
+                "rssMiB": 199.43
+            },
+            {
+                "round": 10,
+                "p50Ms": 1.447,
+                "p95Ms": 5.5,
+                "maxMs": 14.843,
+                "peakNodes": 463,
+                "minColumn": 0,
+                "maxColumn": 255,
+                "retainedMeasures": 0,
+                "heapMiB": 24.74,
+                "rssMiB": 183.66
+            },
+            {
+                "round": 11,
+                "p50Ms": 1.432,
+                "p95Ms": 6.31,
+                "maxMs": 18.168,
+                "peakNodes": 463,
+                "minColumn": 0,
+                "maxColumn": 255,
+                "retainedMeasures": 0,
+                "heapMiB": 22.64,
+                "rssMiB": 182.51
+            },
+            {
+                "round": 12,
+                "p50Ms": 1.297,
+                "p95Ms": 5.265,
+                "maxMs": 15.685,
+                "peakNodes": 463,
+                "minColumn": 0,
+                "maxColumn": 255,
+                "retainedMeasures": 0,
+                "heapMiB": 22.59,
+                "rssMiB": 202.88
+            },
+            {
+                "round": 13,
+                "p50Ms": 1.348,
+                "p95Ms": 5.331,
+                "maxMs": 17.267,
+                "peakNodes": 463,
+                "minColumn": 0,
+                "maxColumn": 255,
+                "retainedMeasures": 0,
+                "heapMiB": 22.6,
+                "rssMiB": 180.71
+            },
+            {
+                "round": 14,
+                "p50Ms": 1.423,
+                "p95Ms": 6.366,
+                "maxMs": 13.544,
+                "peakNodes": 463,
+                "minColumn": 0,
+                "maxColumn": 255,
+                "retainedMeasures": 0,
+                "heapMiB": 22.68,
+                "rssMiB": 192.82
+            },
+            {
+                "round": 15,
+                "p50Ms": 1.484,
+                "p95Ms": 5.353,
+                "maxMs": 14.382,
+                "peakNodes": 463,
+                "minColumn": 0,
+                "maxColumn": 255,
+                "retainedMeasures": 0,
+                "heapMiB": 22.69,
+                "rssMiB": 186.76
+            },
+            {
+                "round": 16,
+                "p50Ms": 1.416,
+                "p95Ms": 6.473,
+                "maxMs": 14.787,
+                "peakNodes": 463,
+                "minColumn": 0,
+                "maxColumn": 255,
+                "retainedMeasures": 0,
+                "heapMiB": 22.68,
+                "rssMiB": 193.2
+            }
+        ]
+    }
+}

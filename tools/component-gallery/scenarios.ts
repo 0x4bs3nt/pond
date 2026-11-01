@@ -1,3 +1,4 @@
+import { createStressScenario } from './stress-data';
 import type { GalleryScenario } from './types';
 
 const columns = [
@@ -88,4 +89,6 @@ export const scenarios: readonly GalleryScenario[] = [
         rows: [{ id: 'input', cells: ['{\n  "large": 9007199254740993,\n  "enabled": true\n}'] }],
         editor: { multiline: true, json: true },
     },
+    createStressScenario('stress', 'Large grid', 100_000, 256, 32),
+    createStressScenario('long-values', 'Long cell values', 1_000, 32, 65_536),
 ];

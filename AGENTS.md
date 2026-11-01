@@ -29,6 +29,7 @@ Install Bun 1.3.14 or later, then run `bun install --frozen-lockfile`. Alternati
 - `bun run dev`: run with automatic source-change restarts.
 - `bun run start`: run without watching.
 - `bun run gallery`: exercise isolated components with mock props; see `docs/component-gallery.md`.
+- `bun run gallery:bench`: record headless grid latency, node counts, and memory; see `docs/grid-performance.md`.
 - `bun run typecheck`: check TypeScript.
 - `bun run lint`: enforce coding rules and module boundaries.
 - `bun run test`: run existing Bun tests.
@@ -49,6 +50,8 @@ Keep named types and interfaces in the owning module’s `types.ts`, including c
 Tests use `bun:test` and OpenTUI rendering utilities. Place `*.test.ts(x)` or `*.spec.ts(x)` under the owning module’s `tests/` directory, not beside implementation files. Mirror nested responsibilities where helpful, e.g. `src/components/data-grid/tests/navigation/move-selection.test.ts`. Keep test-only helpers and fixtures under `tests/` too; production code must not import them. Tooling follows the same convention (`tools/tests/`, `tools/release/tests/`). Reserve root `tests/` for future cross-module integration, contract, and performance suites. No numeric coverage threshold is configured.
 
 Write tests only when they protect actual business logic, prevent regressions between releases, verify critical behavior, or address a concrete failure risk worth maintaining coverage for. Prioritize data integrity, state transitions, transaction handling, and release correctness. Do not write tests merely because code changed, to increase test counts or coverage percentages, or to mirror implementation details. Avoid routine rendering, styling, trivial wiring, and redundant tests. For each new test, identify the meaningful failure it would catch. Run interface changes locally and report the scenarios checked.
+
+Use `bun run gallery` to validate reusable UI components. Add gallery scenarios for new reusable components and update relevant scenarios when their behavior changes, using public component APIs and mock props without application stores. Exercise keyboard/mouse interaction, focus, resizing, and relevant palettes or edge cases; report what was checked and any limitations. Gallery validation complements meaningful behavior and regression tests; do not add routine snapshots solely for coverage. See [docs/component-gallery.md](docs/component-gallery.md).
 
 ## Logging & Error Handling
 

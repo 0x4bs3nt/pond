@@ -2,6 +2,7 @@ import { theme } from '../../../theme';
 import type { GridBodyProps } from '../types';
 import { GridCell } from './GridCell';
 
+// Stateless viewport slots reuse native nodes as logical rows and columns scroll past.
 export const GridBody = ({
     columns,
     rows,
@@ -24,14 +25,15 @@ export const GridBody = ({
                 const rowIndex = top + index;
 
                 return (
-                    <box key={row.id} height={1} flexShrink={0} flexDirection="row">
+                    <box key={index} height={1} flexShrink={0} flexDirection="row">
                         <text
                             width={gutter}
+                            flexShrink={0}
                             height={1}
                             selectable={false}
                             fg={selection.row === rowIndex ? theme.accent : theme.muted}
                         >
-                            {String(rowIndex + 1).padStart(4) + '  '}
+                            {String(rowIndex + 1).padStart(gutter - 2) + '  '}
                         </text>
                         <box
                             width={width}
@@ -40,9 +42,9 @@ export const GridBody = ({
                             overflow="hidden"
                             backgroundColor={rowIndex % 2 ? theme.stripe : theme.background}
                         >
-                            {columns.map((column) => (
+                            {columns.map((column, slot) => (
                                 <GridCell
-                                    key={column.id}
+                                    key={slot}
                                     value={row.cells[column.index]}
                                     modified={row.modifiedColumns?.includes(column.id)}
                                     left={column.left - left}

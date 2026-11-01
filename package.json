@@ -14,7 +14,8 @@
         "format": "prettier . --write",
         "format:check": "prettier . --check",
         "check": "bun run typecheck && bun run lint && bun run format && bun run test",
-        "gallery": "bun run tools/component-gallery/index.ts"
+        "gallery": "bun run tools/component-gallery/index.ts",
+        "gallery:bench": "bun run tools/component-gallery/benchmark.tsx"
     },
     "engines": {
         "bun": ">=1.3.14"

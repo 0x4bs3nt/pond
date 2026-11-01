@@ -28,6 +28,16 @@ test('switching preserves pending edits and dirty close requires explicit discar
         expect(store.getState().activeTableId).toBe('members');
         expect(view.captureCharFrame()).toContain('Edited');
         expect(view.captureCharFrame()).toContain('*members');
+        for (const [width, height] of [
+            [60, 16],
+            [40, 10],
+            [100, 24],
+        ]) {
+            await act(async () => view.resize(width!, height!));
+            await view.renderOnce();
+        }
+        expect(view.captureCharFrame()).toContain('Edited');
+        expect(view.captureCharFrame()).toContain('*members');
         await act(async () => view.mockInput.pressKey('w', { ctrl: true }));
         await view.renderOnce();
         expect(store.getState().openTableIds).toEqual(['members', 'events']);
@@ -44,8 +54,9 @@ test('switching preserves pending edits and dirty close requires explicit discar
         await view.renderOnce();
         expect(view.captureCharFrame()).toContain('Open a table from the explorer.');
         expect(store.getState().focus).toBe('explorer');
+        // Shrinking below the minimum remounts the explorer at its first table.
         await act(async () => view.mockInput.pressEnter());
-        expect(store.getState().openTableIds).toEqual(['events']);
+        expect(store.getState().openTableIds).toEqual(['members']);
     } finally {
         await act(async () => view.dispose());
     }

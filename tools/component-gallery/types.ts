@@ -32,3 +32,4 @@ export type ScenarioKeyboardOptions = {
 };
 export type GalleryPalette = typeof theme;
 export type GalleryOptions = { scenario: string; theme: string; list?: boolean };
+export type BenchmarkOptions = { rows: number; columns: number; steps: number; rounds: number; valueLength: number };

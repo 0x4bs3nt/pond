@@ -1,7 +1,9 @@
+import { discardDeliveredMeasures } from '../platform/performance';
 import type { ErrorSource } from '../platform/logging';
 import type { LifecycleOptions, Renderer } from './types';
 
 export const createLifecycle = ({ logger, writeError, exit, timeoutMs = 1500 }: LifecycleOptions) => {
+    const stopTimingCleanup = discardDeliveredMeasures();
     let renderer: Renderer | undefined;
     let shutdown: Promise<void> | undefined;
     let failed = false;
@@ -50,6 +52,7 @@ export const createLifecycle = ({ logger, writeError, exit, timeoutMs = 1500 }: 
                 logger.log('shutdown.failed', 'shutdown', error);
             } finally {
                 clearTimeout(timer);
+                stopTimingCleanup();
             }
 
             logger.log('app.stopped');
