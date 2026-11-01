@@ -7,7 +7,18 @@ import { clamp, layoutColumns, revealCell, visibleColumns } from './layout';
 import { moveSelection } from './navigation/move-selection';
 import type { CellPosition, DataGridProps, GridViewport } from './types';
 
-export const DataGrid = ({ columns, rows, width, height, focused, selection, onSelect, onFocus }: DataGridProps) => {
+export const DataGrid = ({
+    columns,
+    rows,
+    width,
+    height,
+    getInteraction,
+    selection,
+    onSelect,
+    onFocus,
+    onEdit,
+}: DataGridProps) => {
+    const focused = getInteraction() === 'focused';
     const positioned = useMemo(() => layoutColumns(columns), [columns]);
 
     const bodyHeight = Math.max(1, height - 2);
@@ -20,6 +31,8 @@ export const DataGrid = ({ columns, rows, width, height, focused, selection, onS
     const selectionRef = useRef(selection);
 
     const selectCell = (next: CellPosition) => {
+        if (getInteraction() === 'disabled') return;
+
         selectionRef.current = next;
         onSelect(next);
     };
@@ -34,7 +47,14 @@ export const DataGrid = ({ columns, rows, width, height, focused, selection, onS
     }, [selection, positioned, rows.length, contentWidth, bodyHeight]);
 
     useKeyboard((key) => {
-        if (!focused || rows.length === 0 || key.meta) return;
+        if (getInteraction() !== 'focused' || rows.length === 0 || key.meta || key.defaultPrevented) return;
+
+        if (key.name === 'return' && !key.ctrl && onEdit) {
+            key.preventDefault();
+            onEdit(selectionRef.current);
+
+            return;
+        }
 
         const next = moveSelection(selectionRef.current, key.name, key.ctrl, rows.length, columns.length, bodyHeight);
 
@@ -51,8 +71,12 @@ export const DataGrid = ({ columns, rows, width, height, focused, selection, onS
             flexShrink={0}
             overflow="hidden"
             flexDirection="column"
-            onMouseDown={onFocus}
+            onMouseDown={() => {
+                if (getInteraction() !== 'disabled') onFocus();
+            }}
             onMouseScroll={(event) => {
+                if (getInteraction() === 'disabled') return;
+
                 const direction = event.scroll?.direction;
                 const horizontal = event.modifiers.shift || direction === 'left' || direction === 'right';
                 const delta = direction === 'up' || direction === 'left' ? -3 : 3;

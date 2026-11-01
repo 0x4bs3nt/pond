@@ -14,6 +14,7 @@ export const SchemaExplorer = ({ tables, width, height }: SchemaExplorerProps) =
     const activeTableId = useWorkspace((state) => state.activeTableId);
     const focused = useWorkspace((state) => state.focus === 'explorer');
     const openTable = useWorkspace((state) => state.openTable);
+    const isEditing = useWorkspace((state) => state.isEditing);
 
     const [cursor, setCursor] = useState(0);
     const cursorRef = useRef(0);
@@ -30,6 +31,7 @@ export const SchemaExplorer = ({ tables, width, height }: SchemaExplorerProps) =
 
     const openAtIndex = useCallback(
         (index: number) => {
+            if (isEditing()) return;
             const table = tables[index];
             if (!table) return;
 
@@ -37,7 +39,7 @@ export const SchemaExplorer = ({ tables, width, height }: SchemaExplorerProps) =
             setCursor(index);
             openTable(table.id);
         },
-        [tables, openTable]
+        [tables, openTable, isEditing]
     );
     const openSelected = useCallback(() => openAtIndex(cursorRef.current), [openAtIndex]);
 
