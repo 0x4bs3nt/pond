@@ -8,7 +8,7 @@ export const useWorkspaceKeyboard = () => {
     const isEditing = useWorkspace((state) => state.isEditing);
 
     useKeyboard((key) => {
-        if (isEditing()) return;
+        if (isEditing() || key.defaultPrevented) return;
         if (key.name === 'q' && !key.ctrl && !key.meta) {
             renderer.destroy();
 
@@ -16,7 +16,7 @@ export const useWorkspaceKeyboard = () => {
         }
         if (key.name === 'tab') {
             key.preventDefault();
-            toggleFocus();
+            toggleFocus(key.shift);
         }
     });
 };

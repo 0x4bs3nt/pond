@@ -11,10 +11,12 @@ export const WorkspaceProvider = ({ store, children }: WorkspaceProviderProps) =
     <WorkspaceContext.Provider value={store}>{children}</WorkspaceContext.Provider>
 );
 
-export const useWorkspace = <T,>(selector: (state: WorkspaceState) => T): T => {
+export const useWorkspaceStore = () => {
     const store = useContext(WorkspaceContext);
 
     if (!store) throw new Error('useWorkspace requires a WorkspaceProvider.');
 
-    return useStore(store, selector);
+    return store;
 };
+
+export const useWorkspace = <T,>(selector: (state: WorkspaceState) => T): T => useStore(useWorkspaceStore(), selector);
