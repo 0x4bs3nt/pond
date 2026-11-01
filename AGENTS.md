@@ -28,6 +28,7 @@ Install Bun 1.3.14 or later, then run `bun install --frozen-lockfile`. Alternati
 - `bun install --frozen-lockfile`: install pinned dependencies.
 - `bun run dev`: run with automatic source-change restarts.
 - `bun run start`: run without watching.
+- `bun run gallery`: exercise isolated components with mock props; see `docs/component-gallery.md`.
 - `bun run typecheck`: check TypeScript.
 - `bun run lint`: enforce coding rules and module boundaries.
 - `bun run test`: run existing Bun tests.
