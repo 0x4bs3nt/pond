@@ -72,6 +72,7 @@ export default [
         settings: {
             'import/resolver': { typescript: { project: './tsconfig.json' } },
             'boundaries/files': [
+                { pattern: 'package.json', category: 'metadata' },
                 { pattern: testFiles, category: 'test' },
                 { pattern: 'eslint.config.js', category: 'tooling' },
             ],
@@ -102,6 +103,7 @@ export default [
                             allow: { to: { element: { types: allowed } } },
                         })),
                         publicApiPolicy,
+                        { from: { element: { type: 'app' } }, allow: { to: { file: { categories: 'metadata' } } } },
                         internalPolicy,
                         {
                             from: { element: { types: ['app', 'adapters', 'platform'] } },
@@ -136,6 +138,10 @@ export default [
                 },
             ],
         },
+    },
+    {
+        files: ['src/app/bootstrap.tsx', 'src/app/run-tui.tsx'],
+        rules: { 'boundaries/no-unknown-dependencies': ['error', { require: 'any' }] },
     },
     {
         files: ['tools/**/*.{ts,tsx,js,mjs}', 'eslint.config.js'],

@@ -1,13 +1,23 @@
-import { createCliRenderer } from '@opentui/core';
-import { createRoot } from '@opentui/react';
-import { App } from './App';
+import { Command } from 'commander';
+import { version } from '../../package.json';
 
-const renderer = await createCliRenderer({ exitOnCtrlC: true });
+const program = new Command()
+    .name('pond')
+    .description('A terminal database workspace. Run without a command to open the app.')
+    .version(version)
+    .showHelpAfterError()
+    .action(async () => {
+        await import('./run-tui');
+    });
 
-try {
-    createRoot(renderer).render(<App />);
-} catch (error) {
-    renderer.destroy();
-    await renderer.closed;
-    throw error;
-}
+program
+    .command('logs')
+    .description('Print the latest Pond log')
+    .option('-f, --follow', 'Stream new log records until Ctrl+C', false)
+    .action(async (options: { follow: boolean }) => {
+        const { runLogsCommand } = await import('./logs-command');
+
+        process.exitCode = await runLogsCommand(options);
+    });
+
+await program.parseAsync(process.argv);
