@@ -17,8 +17,8 @@ export const hostTarget = (): Target => {
     return target;
 };
 
-export const run = (args: string[], cwd?: string) => {
-    const result = Bun.spawnSync(args, { cwd, stdout: 'pipe', stderr: 'pipe' });
+export const run = (args: string[], env: NodeJS.ProcessEnv = {}) => {
+    const result = Bun.spawnSync(args, { env: { ...process.env, ...env }, stdout: 'pipe', stderr: 'pipe' });
     if (result.exitCode !== 0) throw new Error(`${args[0]} failed: ${result.stderr.toString()}`);
 
     return result.stdout.toString().trim();
