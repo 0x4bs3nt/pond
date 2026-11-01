@@ -212,7 +212,7 @@ The grid receives visible data, column descriptions, decorations, and callbacks.
 
 Render and format the visible viewport with a bounded cache. Avoid building elements for the entire result set or measuring every value on each navigation event. Database type decoding belongs in the adapter, not display formatting.
 
-The component gallery provides independent scenarios for wide grids, empty states, long values, Unicode, editors, terminal resizing, and themes. Use it to refine styling and interaction without a live database.
+The [component gallery](component-gallery.md), launched with `bun run gallery`, provides independent scenarios for wide grids, empty states, long values, Unicode, editors, terminal resizing, and themes. Use it to refine styling and interaction without a live database.
 
 ## Feature module structure
 
