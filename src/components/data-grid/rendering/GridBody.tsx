@@ -58,6 +58,7 @@ export const GridBody = ({
                                 <GridCell
                                     key={column.id}
                                     value={row.cells[column.index]}
+                                    modified={row.modifiedColumns?.includes(column.id)}
                                     left={column.left - left}
                                     width={column.width}
                                     selected={selection.row === rowIndex && selection.column === column.index}

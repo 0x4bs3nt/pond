@@ -1,16 +1,37 @@
 import { useState } from 'react';
-import { DataGrid, type CellPosition } from '../../components/data-grid';
+import { DataGrid, type CellPosition, type GridInteraction } from '../../components/data-grid';
+import { CellEditor } from '../../components/editors';
+import type { TableSessionsStore } from '../../state/table-sessions';
 import { theme } from '../../theme';
 import type { TableView } from './types';
+import { useTableEditing } from './use-table-editing';
 
-type TableBrowserProps = { table: TableView; width: number; height: number; focused: boolean; onFocus: () => void };
+type TableBrowserProps = {
+    table: TableView;
+    sessions: TableSessionsStore;
+    width: number;
+    height: number;
+    focused: boolean;
+    onFocus: () => void;
+};
 
-export const TableBrowser = ({ table, width, height, focused, onFocus }: TableBrowserProps) => {
+export const TableBrowser = ({ table, sessions, width, height, focused, onFocus }: TableBrowserProps) => {
     const [selection, setSelection] = useState<CellPosition>({ row: 0, column: 0 });
+    const editing = useTableEditing(table, sessions, focused);
+
+    const getGridInteraction = (): GridInteraction => {
+        if (editing.isEditing()) return 'disabled';
+
+        return focused ? 'focused' : 'unfocused';
+    };
 
     const column = table.columns[selection.column];
-    const row = table.rows[selection.row];
+    const row = editing.rows[selection.row];
     const value = row?.cells[selection.column];
+    const editorColumn = editing.editor ? table.columns[editing.editor.column] : undefined;
+    const editorValue = editing.editor
+        ? (editing.rows[editing.editor.row]?.cells[editing.editor.column] ?? null)
+        : null;
 
     return (
         <box width={width} height={height} flexDirection="column" overflow="hidden">
@@ -31,16 +52,17 @@ export const TableBrowser = ({ table, width, height, focused, onFocus }: TableBr
                 flexShrink={0}
                 wrapMode="none"
                 fg={theme.muted}
-            >{` ${table.rows.length} rows  ·  ${table.columns.length} columns  ·  Read-only mock data`}</text>
+            >{` ${table.rows.length} rows · ${editing.count} pending cells · Mock data`}</text>
             <DataGrid
                 columns={table.columns}
-                rows={table.rows}
+                rows={editing.rows}
                 width={width}
                 height={height - 6}
-                focused={focused}
+                getInteraction={getGridInteraction}
                 selection={selection}
                 onSelect={setSelection}
                 onFocus={onFocus}
+                onEdit={editing.open}
             />
             <text height={1} flexShrink={0} bg={theme.raised} fg={theme.accent} wrapMode="none">
                 {row
@@ -54,6 +76,22 @@ export const TableBrowser = ({ table, width, height, focused, onFocus }: TableBr
                         : 'Select another table in the explorer.'}
                 </text>
             </box>
+            {editing.editor && editorColumn && (
+                <CellEditor
+                    label={editorColumn.name}
+                    value={editorValue}
+                    multiline={
+                        editorColumn.type === 'text' ||
+                        editorColumn.type.startsWith('json') ||
+                        Boolean(editorValue?.includes('\n'))
+                    }
+                    json={editorColumn.type.startsWith('json')}
+                    width={width}
+                    height={height - 3}
+                    onConfirm={editing.confirm}
+                    onCancel={editing.cancel}
+                />
+            )}
         </box>
     );
 };
