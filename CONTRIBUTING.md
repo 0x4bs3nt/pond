@@ -70,3 +70,27 @@ An optional scope is welcome, for example `feat(grid): add column selection`. Fe
 ## Report bugs and vulnerabilities
 
 Use the bug-report template for ordinary bugs. For security vulnerabilities, follow [SECURITY.md](SECURITY.md) and report privately.
+
+## Stable releases
+
+Feature PRs target `dev`. To release, open a same-repository PR from `dev` into `main`. All PRs are squash merged. There are no nightly builds or prerelease versions. Releases currently contain a source tag and release notes; executables and installers are not built yet.
+
+The promotion PR title determines the highest-impact change in the release, not the individual commits on `dev`:
+
+| Promotion title                         | Before 1.0 | From 1.0 onward |
+| --------------------------------------- | ---------- | --------------- |
+| `fix: ...` or `perf: ...`               | Patch      | Patch           |
+| `feat: ...`                             | Minor      | Minor           |
+| `feat!: ...` (or another type with `!`) | Minor      | Major           |
+
+A `BREAKING CHANGE:` footer in the PR body also declares a breaking change. Ordinary `chore:`, `docs:`, and `refactor:` titles do not qualify as release PRs. Describe the release's user-facing changes in the PR body: that text becomes the release notes. This workflow does not infer changes hidden by squash merging.
+
+The first release is explicitly `0.1.0`, regardless of the initial bump category. Subsequent versions are based on the latest stable version tag reachable from `main`. While versions start with `0`, compatibility is still evolving. To graduate to `1.0.0`, add a standalone `Release-As: 1.0.0` footer to the promotion PR body; arbitrary version overrides are not supported.
+
+1. Open the `dev → main` PR with a release title and description. Draft PRs are not prepared until marked ready.
+2. **Prepare release** writes `package.json`, `CHANGELOG.md`, and `.release.json` to `dev`. Do not edit those generated release entries manually. The version lives on `dev` before release so CI validates the exact files that will be published. Title/body edits or new commits regenerate the pending entry from `main`'s changelog without duplicating it.
+3. Wait for **Checks** and **Release metadata** to pass on the updated PR. An initial metadata failure is expected while preparation is still running; the bot's commit triggers fresh CI. Keep the Conventional Commit PR title when squash merging.
+4. Squash-merge into `main`. CI runs on the resulting commit. **Release** publishes only after that run succeeds, tagging that exact commit and creating a normal GitHub Release.
+5. The release bot merges the released `main` commit back into `dev`. This is the sole non-squash synchronization operation: it preserves common ancestry between the long-lived branches. Wait for synchronization before starting another release. Normal feature and promotion PRs remain squash-only.
+
+Do not delete `dev` after merging a release PR. If preparation loses a race with a new commit, rerun it on the latest PR revision. Failed CI never publishes a release. Publication can be retried by rerunning the failed Release workflow; it accepts an existing matching stable release but refuses to move a version tag. If the final sync job fails due to a concurrent push or conflict, resolve the conflict if necessary and rerun that job; the published release stays intact. Do not edit a merged promotion PR's description while publication is pending.
