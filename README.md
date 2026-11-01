@@ -83,6 +83,8 @@ and [runtime requirements](https://opentui.com/docs/getting-started/runtime-supp
 
 Run `bun run gallery` to exercise grids and editors independently with mock props. Use `--list` for scenarios or `--scenario json --theme light` for a specific preview. See [the gallery guide](docs/component-gallery.md) for controls and validation scenarios.
 
+Use `bun run gallery:bench` for repeatable headless grid measurements. Large-data scenarios and current findings are documented in [grid responsiveness validation](docs/grid-performance.md).
+
 ## Releases
 
 Development happens on `dev`. Stable releases are prepared on `dev → main` PRs and published after the squash merge passes CI. Versions start at `0.1.0`; there are no nightly releases. See [the release workflow](CONTRIBUTING.md#stable-releases). Releases currently provide source code and release notes, not packaged executables.

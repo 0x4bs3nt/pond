@@ -1,3 +1,4 @@
+import { formatCellValue } from '../formatting/format-cell-value';
 import { theme } from '../../../theme';
 import type { GridHeaderProps } from '../types';
 
@@ -7,9 +8,9 @@ export const GridHeader = ({ columns, left, width, gutter, focused }: GridHeader
             {'  #\n' + (focused ? '  ●' : '  ○')}
         </text>
         <box width={width} height={2} flexShrink={0} overflow="hidden">
-            {columns.map((column) => (
+            {columns.map((column, slot) => (
                 <box
-                    key={column.id}
+                    key={slot}
                     position="absolute"
                     left={column.left - left}
                     top={0}
@@ -20,10 +21,10 @@ export const GridHeader = ({ columns, left, width, gutter, focused }: GridHeader
                     overflow="hidden"
                 >
                     <text height={1} wrapMode="none" selectable={false} fg={theme.accent}>
-                        {column.name}
+                        {formatCellValue(column.name, column.width)}
                     </text>
                     <text height={1} wrapMode="none" selectable={false} fg={theme.muted}>
-                        {column.type}
+                        {formatCellValue(column.type, column.width)}
                     </text>
                 </box>
             ))}

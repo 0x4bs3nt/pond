@@ -21,7 +21,7 @@ export const DataGrid = ({
     const positioned = useMemo(() => layoutColumns(columns), [columns]);
 
     const bodyHeight = Math.max(1, height - 2);
-    const gutter = 6;
+    const gutter = Math.max(6, String(rows.length).length + 2);
     const contentWidth = Math.max(1, width - gutter);
     const last = positioned.at(-1);
     const totalWidth = last ? last.left + last.width : 0;
@@ -42,7 +42,10 @@ export const DataGrid = ({
 
     useLayoutEffect(() => {
         selectionRef.current = selection;
-        setViewport((current) => revealCell(current, selection, positioned, rows.length, contentWidth, bodyHeight));
+        setViewport((current) => {
+            const next = revealCell(current, selection, positioned, rows.length, contentWidth, bodyHeight);
+            return next.top === current.top && next.left === current.left ? current : next;
+        });
     }, [selection, positioned, rows.length, contentWidth, bodyHeight]);
 
     useGridKeyboard({

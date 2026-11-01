@@ -24,6 +24,8 @@ bun run gallery --scenario values --theme contrast
 | `multiline`   | Newlines, mouse selection, confirm/cancel, and resizing an open editor.                                              |
 | `json`        | Invalid-JSON feedback and preservation of whitespace and large numeric literals.                                     |
 
+Additional stress scenarios added for #14: `stress` (100,000 rows × 256 columns) and `long-values` (1,000 rows × 32 columns with 65,536-unit cell values). See [grid performance](grid-performance.md) for repeatable measurements and validation results.
+
 ## Controls
 
 - `F5` / `F6`, or click **Previous** / **Next**, to change scenarios. Each visit starts from its fixture.
@@ -46,6 +48,6 @@ Compare NULL/empty text, selection, pending decorations, borders, and editor fee
 
 ## Validation and extension
 
-Use the gallery for manual UI validation, especially narrow/wide terminals, Unicode alignment, mouse selection, editor focus, and errors. It is not a performance benchmark and does not replace the broader responsiveness work in #14. Avoid routine snapshot tests merely to cover gallery scenarios.
+Use the gallery for manual UI validation, especially narrow/wide terminals, Unicode alignment, mouse selection, editor focus, and errors. For headless response-time, node-count, and memory observations, run `bun run gallery:bench`; see [the validation report](grid-performance.md). The interactive gallery itself is not a benchmark. Avoid routine snapshot tests merely to cover gallery scenarios.
 
 Add scenario definitions and mock props to `tools/component-gallery/scenarios.ts`, with contracts in `types.ts`. Keep fixtures independent of application features and stores. Import components through their public `index.ts` APIs. The gallery reuses Pond's error boundary, terminal lifecycle, and sanitized local logger; unexpected failures can be inspected with `bun run logs`.
