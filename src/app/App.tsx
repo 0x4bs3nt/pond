@@ -1,12 +1,10 @@
-import { useCallback, useState } from 'react';
-import { useTerminalDimensions } from '@opentui/react';
+import { useState } from 'react';
 
-import { SchemaExplorer } from '../features/schema-explorer';
-import { TableBrowser, mockTables } from '../features/table-browser';
-import { WorkspaceProvider, WorkspaceStatusBar, useWorkspace, useWorkspaceKeyboard } from '../features/workspace';
+import { mockTables } from '../features/table-browser';
+import { WorkspaceProvider } from '../features/workspace';
 import { createWorkspaceStore } from '../state/workspace';
-import { createTableSessionsStore, type TableSessionsStore } from '../state/table-sessions';
-import { theme } from '../theme';
+import { createTableSessionsStore } from '../state/table-sessions';
+import { Workspace } from './Workspace';
 
 export const App = () => {
     const [store] = useState(() => createWorkspaceStore(mockTables[0]?.id ?? null));
@@ -16,47 +14,5 @@ export const App = () => {
         <WorkspaceProvider store={store}>
             <Workspace sessions={sessions} />
         </WorkspaceProvider>
-    );
-};
-
-const Workspace = ({ sessions }: { sessions: TableSessionsStore }) => {
-    const { width, height } = useTerminalDimensions();
-
-    const activeTableId = useWorkspace((state) => state.activeTableId);
-    const focus = useWorkspace((state) => state.focus);
-    const focusPanel = useWorkspace((state) => state.focusPanel);
-
-    const focusGrid = useCallback(() => focusPanel('grid'), [focusPanel]);
-
-    const sidebarWidth = width >= 90 ? 24 : 20;
-    const table = mockTables.find((candidate) => candidate.id === activeTableId);
-
-    useWorkspaceKeyboard();
-
-    if (width < 60 || height < 16)
-        return <text fg={theme.accent}>Pond · Resize terminal to at least 60 × 16. Press q to quit.</text>;
-
-    if (!table) return null;
-
-    return (
-        <box width={width} height={height} flexDirection="column" backgroundColor={theme.background}>
-            <box height={2} flexShrink={0} paddingLeft={1} backgroundColor={theme.panel}>
-                <text fg={theme.accent}>POND / Database workspace</text>
-                <text fg={theme.muted}>Explore your data · Mock connection</text>
-            </box>
-            <box height={height - 3} flexDirection="row">
-                <SchemaExplorer tables={mockTables} width={sidebarWidth} height={height - 3} />
-                <TableBrowser
-                    key={table.id}
-                    table={table}
-                    sessions={sessions}
-                    width={width - sidebarWidth}
-                    height={height - 3}
-                    focused={focus === 'grid'}
-                    onFocus={focusGrid}
-                />
-            </box>
-            <WorkspaceStatusBar />
-        </box>
     );
 };
