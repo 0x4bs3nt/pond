@@ -1,5 +1,5 @@
 import { expect, test } from 'bun:test';
-import { layoutColumns, revealCell } from './layout';
+import { layoutColumns, revealCell } from '../layout';
 
 const columns = layoutColumns([
     { id: 'a', name: 'a', type: 'text', width: 10 },

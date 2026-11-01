@@ -1,8 +1,8 @@
 import { afterAll, beforeAll, expect, test } from 'bun:test';
-import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { ESLint } from 'eslint';
+import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
-import { ESLint } from 'eslint';
 
 let root: string;
 let eslint: ESLint;
@@ -13,6 +13,7 @@ beforeAll(async () => {
     const fixtures = [
         'components/grid/index.ts',
         'components/grid/private.ts',
+        'components/grid/tests/fixtures/rows.ts',
         'components/grid/helpers.test.ts',
         'components/grid/helpers.spec.tsx',
         'components/inputs/index.ts',
@@ -73,6 +74,9 @@ test.each([
     ['features/browser/probe.ts', 'zustand'],
     ['features/browser/probe.ts', '../../state/workspace'],
     ['components/grid/probe.test.ts', './private'],
+    ['components/grid/tests/probe.test.ts', '../private'],
+    ['components/grid/tests/probe.test.ts', './fixtures/rows'],
+    ['components/grid/tests/fixtures/rows.ts', 'bun:test'],
     ['components/grid/probe.test.ts', './helpers.test'],
     ['components/grid/probe.spec.tsx', 'bun:test'],
 ])('allows valid dependency from %s to %s', async (filePath, source) => {
@@ -114,6 +118,8 @@ test.each([
 
 test.each([
     ['src/app/probe.ts', "import './helpers.test';"],
+    ['src/components/grid/probe.ts', "import { item } from './tests/fixtures/rows';"],
+    ['src/components/grid/index.ts', "export { item } from './tests/fixtures/rows';"],
     ['src/components/grid/probe.ts', "import { item } from './helpers.test';"],
     ['src/components/grid/probe.tsx', "import type { Item } from './helpers.spec';"],
     ['src/components/grid/index.ts', "export { item } from './helpers.test';"],

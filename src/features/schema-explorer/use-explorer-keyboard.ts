@@ -1,14 +1,9 @@
 import { useKeyboard } from '@opentui/react';
-
-type ExplorerKeyboardOptions = {
-    focused: boolean;
-    moveCursor: (offset: number) => void;
-    openSelected: () => void;
-};
+import type { ExplorerKeyboardOptions } from './types';
 
 export const useExplorerKeyboard = ({ focused, moveCursor, openSelected }: ExplorerKeyboardOptions) => {
     useKeyboard((key) => {
-        if (!focused) return;
+        if (!focused || key.defaultPrevented) return;
 
         switch (key.name) {
             case 'up':

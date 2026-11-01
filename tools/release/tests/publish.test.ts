@@ -1,9 +1,9 @@
 import { expect, test } from 'bun:test';
-import { mkdtemp, mkdir, rm, chmod } from 'node:fs/promises';
+import { chmod, mkdir, mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
-import { createPlan } from './policy';
+import { createPlan } from '../policy';
 
 const script = resolve('tools/release/publish.ts');
 

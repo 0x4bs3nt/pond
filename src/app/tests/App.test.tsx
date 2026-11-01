@@ -1,10 +1,10 @@
 import { act } from 'react';
 
-import { describe, expect, test } from 'bun:test';
-import { testRender } from '@opentui/react/test-utils';
 import type { BaseRenderable } from '@opentui/core';
+import { testRender } from '@opentui/react/test-utils';
+import { describe, expect, test } from 'bun:test';
 
-import { App } from './App';
+import { App } from '../App';
 
 const countNodes = (node: BaseRenderable): number =>
     1 + node.getChildren().reduce((sum, child) => sum + countNodes(child), 0);
@@ -43,7 +43,7 @@ describe('mock workspace', () => {
             expect(view.captureCharFrame()).toContain('Row 2 / 250');
             await act(async () => view.mockInput.pressKey('\u001b[6~'));
             await view.renderOnce();
-            expect(view.captureCharFrame()).toContain('Row 15 / 250');
+            expect(view.captureCharFrame()).toContain('Row 13 / 250');
             await act(async () => view.mockInput.pressKey('END'));
             await view.renderOnce();
             expect(view.captureCharFrame()).toContain('settings');
@@ -86,18 +86,18 @@ describe('mock workspace', () => {
         const view = await testRender(<App />, { width: 100, height: 24 });
         try {
             await view.renderOnce();
-            await act(async () => view.mockMouse.click(43, 8));
+            await act(async () => view.mockMouse.click(43, 10));
             await view.renderOnce();
             expect(view.captureCharFrame()).toContain('Row 2 / 250');
             expect(view.captureCharFrame()).toContain('Value  Renée Martin');
             await act(async () => view.mockMouse.scroll(45, 10, 'down'));
             await view.renderOnce();
             expect(view.captureCharFrame()).toContain('varchar(120)');
-            expect(view.captureCharFrame().split('\n')[7]).toContain('Luka Horvat');
-            const header = view.captureCharFrame().split('\n')[5];
+            expect(view.captureCharFrame().split('\n')[9]).toContain('Luka Horvat');
+            const header = view.captureCharFrame().split('\n')[7];
             await act(async () => view.mockMouse.scroll(45, 10, 'right'));
             await view.renderOnce();
-            expect(view.captureCharFrame().split('\n')[5]).not.toBe(header);
+            expect(view.captureCharFrame().split('\n')[7]).not.toBe(header);
         } finally {
             await act(async () => view.dispose());
         }

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 
-import { nextVersion } from './policy';
+import { nextVersion } from '../policy';
 
 describe('stable release policy', () => {
     test.each([

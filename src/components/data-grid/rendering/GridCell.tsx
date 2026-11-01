@@ -1,16 +1,8 @@
 import { theme } from '../../../theme';
 import { formatCellValue } from '../formatting/format-cell-value';
+import type { GridCellProps } from '../types';
 
-type GridCellProps = {
-    value: string | null | undefined;
-    left: number;
-    width: number;
-    selected: boolean;
-    focused: boolean;
-    onSelect: () => void;
-};
-
-export const GridCell = ({ value, left, width, selected, focused, onSelect }: GridCellProps) => (
+export const GridCell = ({ value, left, width, selected, focused, modified, onSelect }: GridCellProps) => (
     <box
         position="absolute"
         left={left}
@@ -25,8 +17,13 @@ export const GridCell = ({ value, left, width, selected, focused, onSelect }: Gr
             if (event.button === 0) onSelect();
         }}
     >
-        <text height={1} wrapMode="none" selectable={false} fg={value === null ? theme.muted : theme.text}>
-            {formatCellValue(value)}
+        <text
+            height={1}
+            wrapMode="none"
+            selectable={false}
+            fg={modified ? theme.modified : value === null ? theme.muted : theme.text}
+        >
+            {`${modified ? '* ' : ''}${formatCellValue(value, width)}`}
         </text>
     </box>
 );

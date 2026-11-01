@@ -47,7 +47,7 @@ Use a module's `index.ts` when importing it from another module. Files inside th
 - State stores use `zustand/vanilla`; React subscriptions use `zustand` in features or app wiring. Subscribe to specific values rather than entire state snapshots. Create stores per app instance to keep workspaces and tests isolated.
 - Domain models and ports remain independent of React, OpenTUI, and database drivers.
 
-The allowed dependency directions and external packages are defined in `eslint.config.js`. When adding a new module category or external library, update that configuration deliberately. Production files must not import test files or `bun:test`, including inside their own module. Name tests `*.test.ts(x)` or `*.spec.ts(x)`; tooling also supports `.js` and `.mjs` tests.
+The allowed dependency directions and external packages are defined in `eslint.config.js`. When adding a new module category or external library, update that configuration deliberately. Production files must not import test files, helpers or fixtures under `tests/`, or `bun:test`, including inside their own module. Put module tests in a `tests/` directory within that module, mirroring nested responsibilities as needed. Name tests `*.test.ts(x)` or `*.spec.ts(x)`; tooling also supports `.js` and `.mjs` tests.
 
 ESLint covers `src/`, `tools/`, and `eslint.config.js`. Use arrow functions for standalone functions and callbacks; class and object methods, constructors, getters, and setters are allowed. Use `const` when a binding is not reassigned, `let` when it is, and strict equality (`===` / `!==`). TypeScript checks types and Prettier handles formatting.
 

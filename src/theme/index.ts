@@ -8,4 +8,5 @@ export const theme = {
     accent: '#75d6bf',
     selection: '#24594f',
     stripe: '#13202a',
+    modified: '#f0c674',
 };
