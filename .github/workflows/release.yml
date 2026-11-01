@@ -1,0 +1,71 @@
+name: Release
+
+on:
+    workflow_run:
+        workflows: [CI]
+        types: [completed]
+        branches: [main]
+
+permissions:
+    contents: read
+
+concurrency:
+    group: stable-release
+    cancel-in-progress: false
+
+jobs:
+    publish:
+        if: >-
+            github.event.workflow_run.conclusion == 'success' &&
+            github.event.workflow_run.event == 'push' &&
+            github.event.workflow_run.head_repository.full_name == github.repository
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        permissions:
+            contents: write
+            pull-requests: read
+        steps:
+            - uses: actions/checkout@v7
+              with:
+                  ref: ${{ github.event.workflow_run.head_sha }}
+                  fetch-depth: 0
+                  persist-credentials: false
+
+            - uses: oven-sh/setup-bun@v2
+              with:
+                  bun-version: '1.4.2'
+
+            - name: Publish the checked commit
+              run: bun tools/release/publish.ts
+              env:
+                  GH_TOKEN: ${{ github.token }}
+
+    sync-dev:
+        needs: publish
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        steps:
+            - uses: actions/checkout@v7
+              with:
+                  ref: dev
+                  fetch-depth: 0
+                  persist-credentials: false
+
+            - name: Create release bot token
+              id: bot
+              uses: actions/create-github-app-token@v3
+              with:
+                  client-id: ${{ vars.RELEASE_APP_CLIENT_ID }}
+                  private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+                  permission-contents: write
+
+            - name: Merge the released commit back into dev
+              env:
+                  GH_TOKEN: ${{ steps.bot.outputs.token }}
+                  RELEASE_SHA: ${{ github.event.workflow_run.head_sha }}
+              run: |
+                  gh auth setup-git
+                  git config user.name 'pond-release[bot]'
+                  git config user.email 'pond-release[bot]@users.noreply.github.com'
+                  git merge --no-edit "$RELEASE_SHA"
+                  git push origin HEAD:refs/heads/dev

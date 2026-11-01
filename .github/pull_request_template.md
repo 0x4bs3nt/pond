@@ -12,3 +12,4 @@
 - [ ] `bun run format:check`
 
 <!-- Target dev and use a Conventional Commit title, such as feat: add table navigation. -->
+<!-- For a release, target main from dev. Use the highest-impact Conventional Commit title and summarize release changes above. See CONTRIBUTING.md#stable-releases. -->

@@ -58,3 +58,7 @@ Shared workspace state uses Zustand: `src/state/workspace` owns the active table
 
 The setup follows the official [OpenTUI React documentation](https://opentui.com/docs/bindings/react/)
 and [runtime requirements](https://opentui.com/docs/getting-started/runtime-support/).
+
+## Releases
+
+Development happens on `dev`. Stable releases are prepared on `dev → main` PRs and published after the squash merge passes CI. Versions start at `0.1.0`; there are no nightly releases. See [the release workflow](CONTRIBUTING.md#stable-releases). Releases currently provide source code and release notes, not packaged executables.
