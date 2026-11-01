@@ -55,6 +55,8 @@ Describe the problem, resulting behavior, validation, related issues, and limita
 
 ## Contribution Documentation
 
+Track implementation work in the [Pond GitHub Project](https://github.com/users/0x4bs3nt/projects/5). When available, read local `docs/architecture.md` for design guidance and `docs/releases.md` for release criteria. After completing a ticket, check those criteria and remind the user when a phase is ready for release; never publish automatically.
+
 Do not add new sections, topics, or implementation details to `CONTRIBUTING.md`. Update it only when a change alters behavior already documented there, and limit the edit to keeping that existing guidance accurate. New features or tooling do not automatically require additions to `CONTRIBUTING.md`.
 
 ## Agent Git Workflow
