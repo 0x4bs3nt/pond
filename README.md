@@ -22,7 +22,7 @@ bun install
 bun run dev
 ```
 
-Press `q` outside an editor or `Ctrl+C` to quit. Development mode restarts on source changes.
+Press `q` outside an editor or `Ctrl+C` to quit. Development mode debounces source saves and waits for terminal cleanup before restarting. If a save introduces a startup error, it restores the terminal and waits for the next change so you can fix it without restarting the command.
 
 ```sh
 bun run start        # Run without watching

@@ -8,5 +8,6 @@ try {
     createRoot(renderer).render(<App />);
 } catch (error) {
     renderer.destroy();
+    await renderer.closed;
     throw error;
 }
