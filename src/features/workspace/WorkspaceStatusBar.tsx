@@ -21,9 +21,18 @@ const modes: Record<StatusMode, { label?: string; hints: readonly KeyboardHint[]
             { keys: 'q', action: 'quit' },
         ],
     },
+    tabs: {
+        hints: [
+            { keys: '←→', action: 'tabs' },
+            { keys: 'Enter', action: 'grid' },
+            { keys: 'Del', action: 'close' },
+            { keys: 'Tab', action: 'next panel' },
+            { keys: 'q', action: 'quit' },
+        ],
+    },
     explorer: {
         hints: [
-            { keys: 'Tab', action: 'grid' },
+            { keys: 'Tab', action: 'tabs' },
             { keys: '↑↓', action: 'select table' },
             { keys: 'Enter', action: 'open' },
             { keys: 'q', action: 'quit' },

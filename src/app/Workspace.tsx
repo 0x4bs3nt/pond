@@ -4,7 +4,7 @@ import type { WorkspaceProps } from './types';
 
 import { SchemaExplorer } from '../features/schema-explorer';
 import { TableBrowser, mockTables } from '../features/table-browser';
-import { WorkspaceStatusBar, useWorkspace, useWorkspaceKeyboard } from '../features/workspace';
+import { WorkspaceStatusBar, WorkspaceTabs, useWorkspace, useWorkspaceKeyboard } from '../features/workspace';
 import { theme } from '../theme';
 
 export const Workspace = ({ sessions }: WorkspaceProps) => {
@@ -24,8 +24,6 @@ export const Workspace = ({ sessions }: WorkspaceProps) => {
     if (width < 60 || height < 16)
         return <text fg={theme.accent}>Pond · Resize terminal to at least 60 × 16. Press q to quit.</text>;
 
-    if (!table) return null;
-
     return (
         <box width={width} height={height} flexDirection="column" backgroundColor={theme.background}>
             <box height={2} flexShrink={0} paddingLeft={1} backgroundColor={theme.panel}>
@@ -34,15 +32,22 @@ export const Workspace = ({ sessions }: WorkspaceProps) => {
             </box>
             <box height={height - 3} flexDirection="row">
                 <SchemaExplorer tables={mockTables} width={sidebarWidth} height={height - 3} />
-                <TableBrowser
-                    key={table.id}
-                    table={table}
-                    sessions={sessions}
-                    width={width - sidebarWidth}
-                    height={height - 3}
-                    focused={focus === 'grid'}
-                    onFocus={focusGrid}
-                />
+                <box width={width - sidebarWidth} height={height - 3} flexDirection="column">
+                    <WorkspaceTabs tables={mockTables} sessions={sessions} width={width - sidebarWidth} />
+                    {table ? (
+                        <TableBrowser
+                            key={table.id}
+                            table={table}
+                            sessions={sessions}
+                            width={width - sidebarWidth}
+                            height={height - 5}
+                            focused={focus === 'grid'}
+                            onFocus={focusGrid}
+                        />
+                    ) : (
+                        <text fg={theme.muted}>Open a table from the explorer.</text>
+                    )}
+                </box>
             </box>
             <WorkspaceStatusBar />
         </box>
