@@ -1,0 +1,2 @@
+# Preserve the reviewed notice bundle's bytes and SHA-256 on every platform.
+tools/packaging/licenses/THIRD-PARTY-NOTICES.txt -text
