@@ -1,7 +1,7 @@
 {
-    "version": "0.3.1",
-    "previousTag": "v0.3.0",
-    "pullRequest": 62,
-    "title": "fix(release): avoid stale draft lookup during publication",
-    "notes": "fix(release): avoid stale draft lookup during publication (#62)\n\nFix release publication occasionally failing immediately after creating a draft. The publisher now uses GitHub’s creation response directly, avoiding a stale release-list lookup while preserving safe retries and asset verification."
+    "version": "0.3.2",
+    "previousTag": "v0.3.1",
+    "pullRequest": 64,
+    "title": "fix(packaging): retry transient Windows cleanup failures",
+    "notes": "fix(packaging): retry transient Windows cleanup failures (#64)\n\nFix Windows release packaging occasionally failing after successful smoke checks because temporary files remained locked. Cleanup now retries transient lock errors and reports success only after the temporary directory has been removed."
 }
