@@ -92,7 +92,7 @@ test('publishes despite a stale release list, retries safely, and refuses a conf
         };
         await Bun.write(prFile, JSON.stringify(pr));
         await Bun.write(releasesFile, '[]');
-        const missingManifest = join(artifacts, targetNames[0] + '.json');
+        const missingManifest = join(artifacts, targetNames.at(-1) + '.json');
         const manifestContents = await Bun.file(missingManifest).text();
         await rm(missingManifest);
         expect(run().exitCode).toBe(1);
