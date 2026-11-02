@@ -16,3 +16,19 @@ export type ReleasePlan = {
     title: string;
     notes: string;
 };
+
+export type PublishedRelease = {
+    id: number;
+    tag_name: string;
+    target_commitish: string;
+    draft: boolean;
+    prerelease: boolean;
+    assets: { name: string }[];
+};
+
+export type ReleaseContext = {
+    sha: string;
+    tag: string;
+    plan: ReleasePlan;
+    hasMatchingTag: boolean;
+};
