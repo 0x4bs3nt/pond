@@ -1,4 +1,4 @@
-import { mkdtemp, rm } from 'node:fs/promises';
+import { mkdtemp } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { hostTarget } from './index';
@@ -7,6 +7,7 @@ import { verifyArchive } from './smoke/package';
 import { createSmokeContext, checkCommands } from './smoke/commands';
 import { checkRenderer } from './smoke/renderer';
 import { verifyRuntimeNotices } from './verify-notices';
+import { removeSmokeDirectory } from './smoke/cleanup';
 
 const target = hostTarget();
 const { archive, version } = await verifyArchive(target);
@@ -19,10 +20,10 @@ try {
 
     await checkCommands(context, version);
     await checkRenderer(context);
-
-    console.log(
-        `Validated ${target}: runtime notices, version, help, renderer, logs, normal quit, terminal restoration (no Bun on PATH).`
-    );
 } finally {
-    await rm(directory, { recursive: true, force: true });
+    await removeSmokeDirectory(directory);
 }
+
+console.log(
+    `Validated ${target}: runtime notices, version, help, renderer, logs, normal quit, terminal restoration (no Bun on PATH).`
+);
