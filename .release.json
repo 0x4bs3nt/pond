@@ -1,7 +1,7 @@
 {
-    "version": "0.3.0",
-    "previousTag": "v0.2.0",
-    "pullRequest": 59,
-    "title": "feat: distribute standalone Pond executables",
-    "notes": "feat: distribute standalone Pond executables (#59)\n\nThis release adds standalone Pond executables for Linux x64, macOS Apple Silicon, and Windows x64. Users can run Pond without installing Bun or cloning the repository.\n\n## Downloads and packaging\n\n- Publish versioned platform archives with SHA-256 checksums, build metadata, source maps, and license notices.\n- Bundle a pinned Bun runtime and OpenTUI dependencies.\n- Support `pond`, `pond --version`, and `pond logs` from the extracted installation.\n\n## Release reliability\n\n- Build and smoke-test every supported platform from the exact release commit.\n- Verify uploaded assets before publishing the release.\n- Resume interrupted draft uploads without overwriting conflicting assets.\n- Validate relevant PR changes without generating duplicate artifacts on pushes to dev.\n\n## Validation\n\nAll three platform builds and automated smoke checks passed CI. Manual testing passed on NixOS x64, macOS Tahoe 26.6 on Apple Silicon, and Windows 11 x64.\n\nLocal validation passed typechecking, linting, formatting, and all 125 tests. Regression coverage includes release retries, artifact integrity, subprocess environment handling, and forced cleanup of unresponsive smoke-test processes.\n\n## Current limitations\n\nPond still uses mock data; PostgreSQL connections and database writes are not included. Pending edits remain memory-only.\n\nmacOS builds are not Developer ID signed or notarized and currently require a Gatekeeper override. Windows builds are unsigned and may display an unknown-publisher prompt.\n\nPackage-manager integrations and installation scripts remain follow-up work."
+    "version": "0.3.1",
+    "previousTag": "v0.3.0",
+    "pullRequest": 62,
+    "title": "fix(release): avoid stale draft lookup during publication",
+    "notes": "fix(release): avoid stale draft lookup during publication (#62)\n\nFix release publication occasionally failing immediately after creating a draft. The publisher now uses GitHub’s creation response directly, avoiding a stale release-list lookup while preserving safe retries and asset verification."
 }
