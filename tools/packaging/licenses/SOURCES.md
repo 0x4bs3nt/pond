@@ -1,6 +1,6 @@
 # Runtime source and rebuilding
 
-Pond is MIT licensed. Its executable also contains Bun and OpenTUI; those components retain their respective licenses. The included `BUN-LICENSE.md` is Bun's upstream inventory, not a replacement for individual library license terms.
+Pond is MIT licensed. Its executable also contains Bun and OpenTUI; those components retain their respective licenses. The included `BUN-LICENSE.md` is Bun's upstream inventory. `THIRD-PARTY-NOTICES.txt` supplies collected license and copyright notices; `provenance.json` identifies their sources, downloaded package hashes, and notice hashes. Lockfile collections deliberately include build/test dependencies and other-platform code. Inclusion does not mean every listed package is linked into every executable.
 
 The `build.json` included in this archive identifies the exact Pond commit. Obtain it from `https://github.com/0x4bs3nt/pond/tree/<commit>`, including `bun.lock` and `tools/packaging/`. Source access is public and does not require purchasing Pond.
 
@@ -21,3 +21,17 @@ To compile Pond with a rebuilt runtime, install Pond's locked dependencies and i
 ## OpenTUI and JavaScript dependencies
 
 OpenTUI 0.6.8 source is available at https://github.com/anomalyco/opentui/tree/v0.6.8. The exact JavaScript/native package versions and integrity hashes are recorded in Pond's `bun.lock`. Installed package license notices are included in this archive's `licenses/` directory. Native renderer notices include Ghostty, LCMS2, libwebp, STB, and Wuffs notices supplied by the OpenTUI native package.
+
+## Acknowledgments and source availability
+
+This software is based in part on the work of the Independent JPEG Group.
+
+Bun includes LGPL-covered WebKit/JavaScriptCore and TinyCC. Their licenses are included alongside this file. Obtain their source archives directly:
+
+- https://github.com/oven-sh/WebKit/archive/2e2aa2290fac856d6f451ceacb58f7f5b44dd057.tar.gz
+- https://github.com/oven-sh/tinycc/archive/05f0fafaa3be31e31d7b4b5c17dc60f62c991171.tar.gz
+- Bun source, patches, build scripts, and dependency pins: https://github.com/oven-sh/bun/archive/refs/tags/bun-v1.4.2.tar.gz
+
+Bun also incorporates MPL-covered Rust components. Their source archives are the component URLs in `provenance.json`; these are public source distributions. Bun's source contains its integration changes and patches. Those files retain their original licenses; Pond's MIT license does not replace them. Pond imposes no EULA restriction on modification or reverse engineering for debugging those modifications.
+
+Download Pond's exact source using the commit in `build.json`: `https://github.com/0x4bs3nt/pond/archive/<commit>.tar.gz`. Together with the pinned Bun and dependency sources, this supplies application source and build inputs for rebuilding with modified libraries. The upstream procedure has been inspected; a complete custom WebKit/Bun rebuild has not been executed as part of Pond's packaged-app smoke checks.

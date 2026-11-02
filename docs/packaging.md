@@ -16,6 +16,8 @@ The build uses `--compile --minify --bytecode --format=esm --sourcemap`, with au
 
 Output lives under ignored `dist/<target>/`: an unpacked `package/`, a versioned archive, a checksum sidecar, and a build manifest identifying version, commit, runtime, target, size, and archive SHA-256. Archives include source maps, Pond's license, Bun's upstream licensing information, and installed dependency notices (including native renderer notices). Builds are repeatable from pinned inputs but archives are not promised to be byte-for-byte reproducible across rebuilds. Local manifests identify HEAD; uncommitted edits can be present. Only clean CI checkouts are publishable release inputs.
 
+The runtime notice collection, provenance, LGPL texts, and source/rebuild directions are included under `licenses/bun-runtime/`. Builds check its Bun version and bundle hash; extracted-archive checks verify the shipped files. Repeat the [dependency license review](dependency-licenses.md) when upgrading the runtime or renderer.
+
 ## Initial platform matrix
 
 | Target         | CI environment         | Runtime choice          | Validation status                                                    |
