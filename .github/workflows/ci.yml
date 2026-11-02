@@ -11,15 +11,49 @@ permissions:
     contents: read
 
 jobs:
+    package-changes:
+        name: Detect packaging changes
+        if: github.event_name == 'pull_request'
+        runs-on: ubuntu-24.04
+        timeout-minutes: 5
+        outputs:
+            relevant: ${{ steps.changes.outputs.relevant }}
+        steps:
+            - uses: actions/checkout@v7
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+                  fetch-depth: 0
+                  persist-credentials: false
+            - name: Check build inputs changed by the PR
+              id: changes
+              shell: bash
+              env:
+                  BASE_SHA: ${{ github.event.pull_request.base.sha }}
+                  HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+              run: |
+                  git diff --no-renames --name-only -z "$BASE_SHA...$HEAD_SHA" > "$RUNNER_TEMP/pond-changed-files"
+                  relevant=false
+                  while IFS= read -r -d '' path; do
+                      case "$path" in
+                          src/*|tools/packaging/*|tools/release/*|.github/workflows/*|package.json|bun.lock|bun.lockb|tsconfig*.json|bunfig.toml|.bun-version|.npmrc|.gitattributes|LICENSE*)
+                              relevant=true
+                              break
+                              ;;
+                      esac
+                  done < "$RUNNER_TEMP/pond-changed-files"
+                  echo "relevant=$relevant" >> "$GITHUB_OUTPUT"
+
     packages:
+        needs: package-changes
+        if: github.event_name == 'pull_request' && needs.package-changes.outputs.relevant == 'true'
         uses: ./.github/workflows/package.yml
         with:
-            ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+            ref: ${{ github.event.pull_request.head.sha }}
 
     release-metadata:
         name: Release metadata
         if: github.event_name == 'pull_request' && github.base_ref == 'main'
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         timeout-minutes: 10
         permissions:
             contents: read
@@ -45,7 +79,7 @@ jobs:
 
     checks:
         name: Checks
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         timeout-minutes: 10
         steps:
             - name: Check out repository

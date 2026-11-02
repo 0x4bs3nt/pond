@@ -25,7 +25,7 @@ jobs:
 
     publish:
         needs: packages
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         timeout-minutes: 10
         permissions:
             contents: write
@@ -41,9 +41,9 @@ jobs:
               with:
                   bun-version: '1.4.2'
 
-            - uses: actions/download-artifact@v4
+            - uses: actions/download-artifact@v8
               with:
-                  pattern: package-*
+                  pattern: pond-*
                   path: dist/release
                   merge-multiple: true
 
@@ -54,7 +54,7 @@ jobs:
 
     sync-dev:
         needs: publish
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         timeout-minutes: 10
         steps:
             - uses: actions/checkout@v7

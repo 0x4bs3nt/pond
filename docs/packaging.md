@@ -18,13 +18,13 @@ Output lives under ignored `dist/<target>/`: an unpacked `package/`, a versioned
 
 ## Initial platform matrix
 
-| Target         | CI environment         | Runtime choice          | Validation status                                               |
-| -------------- | ---------------------- | ----------------------- | --------------------------------------------------------------- |
-| `linux-x64`    | Ubuntu 24.04           | Bun x64 baseline, glibc | Local NixOS package smoke passed; conventional Linux CI pending |
-| `darwin-arm64` | macOS 15 Apple Silicon | Bun ARM64               | CI and manual macOS Tahoe 26.6 checks pending                   |
-| `windows-x64`  | Windows Server 2025    | Bun x64 baseline        | CI and manual Windows 11 checks pending                         |
+| Target         | CI environment         | Runtime choice          | Validation status                                                    |
+| -------------- | ---------------------- | ----------------------- | -------------------------------------------------------------------- |
+| `linux-x64`    | Ubuntu 24.04           | Bun x64 baseline, glibc | Ubuntu CI and manual NixOS checks passed                             |
+| `darwin-arm64` | macOS 15 Apple Silicon | Bun ARM64               | CI and manual Tahoe 26.6 checks passed; Gatekeeper override required |
+| `windows-x64`  | Windows Server 2025    | Bun x64 baseline        | CI and manual Windows 11 checks passed; unknown-publisher prompt     |
 
-These are candidate release targets until their CI jobs pass. All three are required for publication. The initial support envelope is the listed CI systems plus manually verified systems; older OS versions are not certified. Both Linux ELF objects reference glibc symbols up to 2.17, but that inspection alone does not validate older distributions. x64 builds explicitly select Bun's baseline target; native OpenTUI compatibility must also pass on the intended CPU. Linux ARM64, Intel macOS, Windows ARM64, musl/Alpine, and 32-bit systems are outside this first matrix.
+All three targets passed [PR CI](https://github.com/0x4bs3nt/pond/actions/runs/41364494005) and maintainer manual testing. All three are required for publication. The initial support envelope is the listed CI systems plus manually verified systems; older OS versions are not certified. Both Linux ELF objects reference glibc symbols up to 2.17, but that inspection alone does not validate older distributions. x64 builds explicitly select Bun's baseline target; native OpenTUI compatibility must also pass on the intended CPU. Linux ARM64, Intel macOS, Windows ARM64, musl/Alpine, and 32-bit systems are outside this first matrix.
 
 The generic Linux executable uses `/lib64/ld-linux-x86-64.so.2`. NixOS may need `nix-ld` and appropriate runtime libraries; do not assume the generic archive works on every NixOS configuration. The local test machine can run it. A native Nix package is tracked separately in #45.
 
@@ -38,7 +38,7 @@ Before advertising a target, manually check the downloaded archive on a fresh ma
 
 ## Release workflow
 
-PR and branch CI build and smoke-test all three targets with read-only repository permissions. The release workflow rebuilds the exact successful `main` commit, smoke-tests each archive, and passes only archives/manifests to the publishing job. Only the publisher receives release write permission.
+PR CI builds and smoke-tests all three targets with read-only repository permissions when the PR changes application code, packaging/release tooling, workflows, dependency manifests/locks, build configuration, or license files. Documentation-only PRs skip packaging. Downloadable CI artifacts are named `pond-linux-x64`, `pond-darwin-arm64`, and `pond-windows-x64`. Pushes to `dev` and `main` run normal CI checks without producing duplicate package artifacts. The release workflow rebuilds the exact successful `main` commit, smoke-tests each archive, and passes only archives/manifests to the publishing job. Only the publisher receives release write permission.
 
 The publisher validates version/commit/target/checksums, generates `SHA256SUMS`, creates a draft, uploads and downloads each asset to verify its bytes, then publishes. Missing required builds block publication. An interrupted upload leaves a draft. Retry the failed jobs using the original successful build artifacts (retained for 14 days): identical remote assets are reused and missing draft assets are uploaded. Different remote bytes, conflicting tags, or incomplete already-public releases fail closed. Rebuilding may produce different archive bytes; never delete or replace published assets to make a retry pass. Investigate first; a corrected public binary belongs in a new release.
 
