@@ -7,6 +7,7 @@ export const copyNotices = async (stage: string) => {
 
     const notices = join(stage, 'licenses');
     await mkdir(notices);
+    await cp('tools/packaging/licenses', join(notices, 'bun-runtime'), { recursive: true });
 
     const visitPackage = async (directory: string, name: string) => {
         for (const entry of await readdir(directory, { withFileTypes: true })) {
