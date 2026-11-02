@@ -1,5 +1,38 @@
 # Changelog
 
+## 0.3.0
+
+feat: distribute standalone Pond executables (#59)
+
+This release adds standalone Pond executables for Linux x64, macOS Apple Silicon, and Windows x64. Users can run Pond without installing Bun or cloning the repository.
+
+## Downloads and packaging
+
+- Publish versioned platform archives with SHA-256 checksums, build metadata, source maps, and license notices.
+- Bundle a pinned Bun runtime and OpenTUI dependencies.
+- Support `pond`, `pond --version`, and `pond logs` from the extracted installation.
+
+## Release reliability
+
+- Build and smoke-test every supported platform from the exact release commit.
+- Verify uploaded assets before publishing the release.
+- Resume interrupted draft uploads without overwriting conflicting assets.
+- Validate relevant PR changes without generating duplicate artifacts on pushes to dev.
+
+## Validation
+
+All three platform builds and automated smoke checks passed CI. Manual testing passed on NixOS x64, macOS Tahoe 26.6 on Apple Silicon, and Windows 11 x64.
+
+Local validation passed typechecking, linting, formatting, and all 125 tests. Regression coverage includes release retries, artifact integrity, subprocess environment handling, and forced cleanup of unresponsive smoke-test processes.
+
+## Current limitations
+
+Pond still uses mock data; PostgreSQL connections and database writes are not included. Pending edits remain memory-only.
+
+macOS builds are not Developer ID signed or notarized and currently require a Gatekeeper override. Windows builds are unsigned and may display an unknown-publisher prompt.
+
+Package-manager integrations and installation scripts remain follow-up work.
+
 ## 0.2.0
 
 feat: add mock cell editing, workspace tabs, and runtime diagnostics (#57)

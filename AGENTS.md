@@ -35,7 +35,7 @@ Install Bun 1.3.14 or later, then run `bun install --frozen-lockfile`. Alternati
 - `bun run test`: run existing Bun tests.
 - `bun run format:check`: check Prettier formatting; `bun run format` rewrites files.
 
-There is no packaged executable build yet. `bun run check` also rewrites formatting.
+Use `bun run build` with Bun 1.4.2 to produce a native-platform archive, then `bun run package:check` to validate the extracted executable. Read `docs/packaging.md` before changing build targets or release artifacts. Never publish untested platforms or replace existing release assets with different bytes. `bun run check` also rewrites formatting.
 
 Always run `bun run check` after finishing code changes and before reporting the work complete. Resolve failures and rerun until it passes. Review any formatting changes it makes. If the command cannot run or a failure cannot be resolved, clearly report the blocker and do not claim validation passed.
 
