@@ -20,7 +20,7 @@ The 326 component records in `tools/packaging/licenses/provenance.json` identify
 
 Packaging rejects a Bun version that differs from the notice collection and rejects an altered notice bundle. The extracted-archive smoke check verifies the bundle, LGPL texts, source directions, and provenance file against the checked-in materials. Installed package notice copying also includes `COPYRIGHT` files.
 
-The regression test checks a valid collection, an altered bundle, and a missing LGPL text. Run `bun run check`, `bun run build`, and `bun run package:check` after changes. All three platform packaging jobs must pass before promotion; the local check covers Linux only.
+The regression test checks a valid collection, an altered bundle, and a missing LGPL text. Run `bun run check`, `bun run build`, and `bun run package:check` after changes. All configured platform packaging jobs must pass before promotion; the local check covers Linux only.
 
 ## Source access and maintenance
 
