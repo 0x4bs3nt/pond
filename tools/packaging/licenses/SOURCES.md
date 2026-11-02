@@ -16,7 +16,7 @@ The WebKit and TinyCC revisions above are taken from Bun 1.4.2's `scripts/build/
 
 Follow the build instructions at that Bun tag to build Bun with a modified WebKit or TinyCC. Bun's upstream license guide describes cloning WebKit into `vendor/WebKit`, selecting its pinned revision with `bun sync-webkit-source`, and running `bun run build:local`. Preserve Bun's applicable patches when rebuilding TinyCC. This is a source rebuild procedure; Pond's normal packaging script intentionally downloads an unmodified pinned runtime.
 
-To compile Pond with a rebuilt runtime, install Pond's locked dependencies and invoke the rebuilt Bun directly, explicitly supplying that same executable as `--compile-executable-path`. Use the compile flags in `tools/packaging/build/package.ts` and the platform target in `tools/packaging/targets.json`; select glibc for the existing Linux target. Do not use `bun run build` for this purpose, because it replaces the runtime with the official pinned download. Modified builds can be run locally; they will not carry the original release checksums or any original publisher signature.
+To compile Pond with a rebuilt runtime, install Pond's locked dependencies and invoke the rebuilt Bun directly, explicitly supplying that same executable as `--compile-executable-path`. Use the compile flags in `tools/packaging/build/package.ts` and the platform target in `tools/packaging/targets.json`; select glibc or musl to match the Linux target. Do not use `bun run build` for this purpose, because it replaces the runtime with the official pinned download. Modified builds can be run locally; they will not carry the original release checksums or any original publisher signature.
 
 ## OpenTUI and JavaScript dependencies
 

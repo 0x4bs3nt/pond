@@ -19,11 +19,25 @@ jobs:
                 include:
                     - target: linux-x64
                       runner: ubuntu-24.04
+                    - target: linux-arm64
+                      runner: ubuntu-24.04-arm
+                    - target: linux-x64-musl
+                      runner: ubuntu-24.04
+                      musl: true
+                    - target: linux-arm64-musl
+                      runner: ubuntu-24.04-arm
+                      musl: true
                     - target: darwin-arm64
                       runner: macos-15
+                    - target: darwin-x64
+                      runner: macos-15-intel
                     - target: windows-x64
                       runner: windows-2025
+                    - target: windows-arm64
+                      runner: windows-11-arm
         runs-on: ${{ matrix.runner }}
+        env:
+            POND_PACKAGE_TARGET: ${{ matrix.target }}
         timeout-minutes: 20
         steps:
             - uses: actions/checkout@v7
@@ -31,11 +45,30 @@ jobs:
                   ref: ${{ inputs.ref }}
                   persist-credentials: false
             - uses: oven-sh/setup-bun@v2
+              if: ${{ !matrix.musl }}
               with:
                   bun-version: '1.4.2'
             - run: bun install --frozen-lockfile
+              if: ${{ !matrix.musl }}
             - run: bun run build
+              if: ${{ !matrix.musl }}
             - run: bun run package:check
+              if: ${{ !matrix.musl }}
+            - name: Build and smoke-test on musl
+              if: ${{ matrix.musl }}
+              shell: bash
+              run: |
+                  docker run --rm \
+                    -v "$GITHUB_WORKSPACE:/work" -w /work \
+                    -e POND_PACKAGE_TARGET \
+                    oven/bun:1.4.2-alpine@sha256:d888c0ae6c86d7866ff10c5aafdd9077b36aee6455b33dd270fb93c0dd5cef6f \
+                    sh -ec '
+                      apk add --no-cache git tar libstdc++ libgcc
+                      git config --global --add safe.directory /work
+                      bun install --frozen-lockfile
+                      bun run build
+                      bun run package:check
+                    '
             - uses: actions/upload-artifact@v7
               with:
                   name: pond-${{ matrix.target }}

@@ -1,7 +1,7 @@
 {
-    "version": "0.3.2",
-    "previousTag": "v0.3.1",
-    "pullRequest": 64,
-    "title": "fix(packaging): retry transient Windows cleanup failures",
-    "notes": "fix(packaging): retry transient Windows cleanup failures (#64)\n\nFix Windows release packaging occasionally failing after successful smoke checks because temporary files remained locked. Cleanup now retries transient lock errors and reports success only after the temporary directory has been removed."
+    "version": "0.3.3",
+    "previousTag": "v0.3.2",
+    "pullRequest": 66,
+    "title": "fix(packaging): fill gaps in standalone platform coverage",
+    "notes": "fix(packaging): fill gaps in standalone platform coverage (#66)\n\nExpand standalone downloads from three to eight platform targets, adding:\n\n- macOS Intel x64.\n- Linux ARM64 with glibc.\n- Windows ARM64.\n- Linux x64 and ARM64 with musl, including Alpine environments.\n\nBuilds now select the matching Bun runtime and OpenTUI native library for each platform. All eight targets passed automated build and packaged-app smoke checks. Release publication requires the complete set of archives and checksums."
 }

@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import targets from './targets.json';
-import type { Artifact, Target } from './types';
+import type { Artifact, BuildHost, RuntimeReport, Target } from './types';
 
 export { targets };
 export type { Artifact, BuildManifest, Target } from './types';
@@ -8,11 +8,23 @@ export type { Artifact, BuildManifest, Target } from './types';
 export const buildBunVersion = '1.4.2';
 export const targetNames = Object.keys(targets) as Target[];
 
-export const hostTarget = (): Target => {
+export const selectTarget = ({ platform, arch, libc }: BuildHost): Target => {
     const target = targetNames.find(
-        (name) => targets[name].platform === process.platform && targets[name].arch === process.arch
+        (name) => targets[name].platform === platform && targets[name].arch === arch && targets[name].libc === libc
     );
-    if (!target) throw new Error(`No validated build configuration for ${process.platform}/${process.arch}.`);
+    if (!target) throw new Error(`No build configuration for ${platform}/${arch}/${libc ?? 'native'}.`);
+
+    return target;
+};
+
+export const hostTarget = (): Target => {
+    const report = process.platform === 'linux' ? (process.report.getReport() as RuntimeReport) : undefined;
+    const libc = report ? (report.header.glibcVersionRuntime ? 'glibc' : 'musl') : null;
+
+    const target = selectTarget({ platform: process.platform, arch: process.arch, libc });
+
+    const expected = process.env.POND_PACKAGE_TARGET;
+    if (expected && expected !== target) throw new Error(`Expected ${expected}, but this build host is ${target}.`);
 
     return target;
 };

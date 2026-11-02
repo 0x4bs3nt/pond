@@ -1,6 +1,8 @@
 import type targets from './targets.json';
 
 export type Target = keyof typeof targets;
+export type BuildHost = { platform: string; arch: string; libc: 'glibc' | 'musl' | null };
+export type RuntimeReport = { header: { glibcVersionRuntime?: string } };
 export type Artifact = { name: string; sha256: string; size: number };
 export type BuildManifest = {
     version: string;

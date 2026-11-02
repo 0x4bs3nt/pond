@@ -6,7 +6,8 @@
         "compile": "bun-linux-x64-baseline",
         "extension": "tar.gz",
         "url": "https://registry.npmjs.org/@oven/bun-linux-x64-baseline/-/bun-linux-x64-baseline-1.4.2.tgz",
-        "integrity": "sha512-OKKzX/SOVIUVARCzTg+2r4Rcc4fPyWnQmBsd3K08buxeu7DAof4iwW9zSb6Lt1NhTCu4Uhi8k9UeI6f7GEE4Zg=="
+        "integrity": "sha512-OKKzX/SOVIUVARCzTg+2r4Rcc4fPyWnQmBsd3K08buxeu7DAof4iwW9zSb6Lt1NhTCu4Uhi8k9UeI6f7GEE4Zg==",
+        "libc": "glibc"
     },
     "darwin-arm64": {
         "platform": "darwin",
@@ -15,7 +16,8 @@
         "compile": "bun-darwin-arm64",
         "extension": "tar.gz",
         "url": "https://registry.npmjs.org/@oven/bun-darwin-aarch64/-/bun-darwin-aarch64-1.4.2.tgz",
-        "integrity": "sha512-MXdZkP1featqxZ+/VTXWG1BVjM4OGBehVY2Q88EeUj/7L0UMeCGItmyPYTN+wxvlGJ6F66JEtzsw+GvQWewnag=="
+        "integrity": "sha512-MXdZkP1featqxZ+/VTXWG1BVjM4OGBehVY2Q88EeUj/7L0UMeCGItmyPYTN+wxvlGJ6F66JEtzsw+GvQWewnag==",
+        "libc": null
     },
     "windows-x64": {
         "platform": "win32",
@@ -24,6 +26,57 @@
         "compile": "bun-windows-x64-baseline",
         "extension": "zip",
         "url": "https://registry.npmjs.org/@oven/bun-windows-x64-baseline/-/bun-windows-x64-baseline-1.4.2.tgz",
-        "integrity": "sha512-lq82LqVjSXAx9gNUcibCdfQdtrelh86FxQqlhpOdiV4SZQAP8HHUxWhnfbjx2fqz+jzglwBvjmlEs7xFyONBZw=="
+        "integrity": "sha512-lq82LqVjSXAx9gNUcibCdfQdtrelh86FxQqlhpOdiV4SZQAP8HHUxWhnfbjx2fqz+jzglwBvjmlEs7xFyONBZw==",
+        "libc": null
+    },
+    "darwin-x64": {
+        "platform": "darwin",
+        "arch": "x64",
+        "libc": null,
+        "runtime": "bun-darwin-x64-baseline",
+        "compile": "bun-darwin-x64-baseline",
+        "extension": "tar.gz",
+        "url": "https://registry.npmjs.org/@oven/bun-darwin-x64-baseline/-/bun-darwin-x64-baseline-1.4.2.tgz",
+        "integrity": "sha512-lVDbk/HkN+RP8QKXBe0aou7EifA2PC9+Z4cvy2VDpmR1ONdDm8e2h/HsU7ABq7mvVs/76iq5H86nMvAhwJDadQ=="
+    },
+    "linux-arm64": {
+        "platform": "linux",
+        "arch": "arm64",
+        "libc": "glibc",
+        "runtime": "bun-linux-aarch64",
+        "compile": "bun-linux-arm64",
+        "extension": "tar.gz",
+        "url": "https://registry.npmjs.org/@oven/bun-linux-aarch64/-/bun-linux-aarch64-1.4.2.tgz",
+        "integrity": "sha512-3BBP9ovJ2RGHFH6Ae1CAtxNtG1+YY6GD6rmYbsUosoAk9+OEl6zeDQ/k4fBkc6dYOJCtWnx8hUxzNzQATSmvYQ=="
+    },
+    "windows-arm64": {
+        "platform": "win32",
+        "arch": "arm64",
+        "libc": null,
+        "runtime": "bun-windows-aarch64",
+        "compile": "bun-windows-arm64",
+        "extension": "zip",
+        "url": "https://registry.npmjs.org/@oven/bun-windows-aarch64/-/bun-windows-aarch64-1.4.2.tgz",
+        "integrity": "sha512-8EJ1ST7339WJE3poPW5nBgVW/lWf9HBz4W27ZUNhburKmcBLOByPyE6DP9fHD8FQGm5c+ilUN2hX1mrW0jxq9Q=="
+    },
+    "linux-x64-musl": {
+        "platform": "linux",
+        "arch": "x64",
+        "libc": "musl",
+        "runtime": "bun-linux-x64-musl-baseline",
+        "compile": "bun-linux-x64-baseline-musl",
+        "extension": "tar.gz",
+        "url": "https://registry.npmjs.org/@oven/bun-linux-x64-musl-baseline/-/bun-linux-x64-musl-baseline-1.4.2.tgz",
+        "integrity": "sha512-Rn9yJ/7FPA+WZe7L2BvGifFFCiiRfB8zeLZa2Ye0ojOvdN1FJ2ddthH80L4twNMW0N142LrDEaMnTLUYAX971w=="
+    },
+    "linux-arm64-musl": {
+        "platform": "linux",
+        "arch": "arm64",
+        "libc": "musl",
+        "runtime": "bun-linux-aarch64-musl",
+        "compile": "bun-linux-arm64-musl",
+        "extension": "tar.gz",
+        "url": "https://registry.npmjs.org/@oven/bun-linux-aarch64-musl/-/bun-linux-aarch64-musl-1.4.2.tgz",
+        "integrity": "sha512-+Sm6y+lSiSFBOtXmnekp5Q6n1tUKlyv71FCPWBc61Cgb14T5eBs8SN/nh4MUCOKzONkI3O+as3MGUgikS4aCBQ=="
     }
 }
