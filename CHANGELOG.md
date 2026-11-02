@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1
+
+fix(release): avoid stale draft lookup during publication (#62)
+
+Fix release publication occasionally failing immediately after creating a draft. The publisher now uses GitHub’s creation response directly, avoiding a stale release-list lookup while preserving safe retries and asset verification.
+
 ## 0.3.0
 
 feat: distribute standalone Pond executables (#59)

@@ -8,7 +8,7 @@ import { createPlan } from '../policy';
 
 const script = resolve('tools/release/publish.ts');
 
-test('publishes the exact squash commit, retries safely, and refuses a conflicting tag', async () => {
+test('publishes despite a stale release list, retries safely, and refuses a conflicting tag', async () => {
     const root = await mkdtemp(join(tmpdir(), 'pond-publish-'));
     const cwd = join(root, 'repo');
     const bin = join(root, 'bin');
@@ -40,6 +40,7 @@ test('publishes the exact squash commit, retries safely, and refuses a conflicti
                 POND_TEST_CALLS: callsFile,
                 POND_TEST_REMOTE: remote,
                 POND_TEST_FAIL_UPLOAD: failUpload ? '1' : '0',
+                POND_TEST_STALE_LIST: failUpload ? '1' : '0',
             },
             stdout: 'pipe',
             stderr: 'pipe',
@@ -106,9 +107,16 @@ test('publishes the exact squash commit, retries safely, and refuses a conflicti
         expect(published.stderr.toString()).toBe('');
         expect(published.exitCode).toBe(0);
         const call = await Bun.file(callsFile).text();
-        expect(call).toContain(`--target\n${sha}\n`);
-        expect(call).toContain('create\nv0.2.0\n');
-        expect(await Bun.file(join(root, 'pond-release-notes.md')).text()).toBe(plan.notes);
+        expect(call).toContain(
+            'create\n' +
+                JSON.stringify({
+                    tag_name: 'v0.2.0',
+                    target_commitish: sha,
+                    name: 'v0.2.0',
+                    body: plan.notes,
+                    draft: true,
+                })
+        );
 
         git('tag', 'v0.2.0');
         expect((await Bun.file(releasesFile).json())[0].draft).toBe(false);
