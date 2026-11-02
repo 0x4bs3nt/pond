@@ -29,14 +29,21 @@ export const ensureRelease = async ({ sha, tag, plan, hasMatchingTag }: ReleaseC
         return existing;
     }
 
-    const notes = join(process.env.RUNNER_TEMP ?? tmpdir(), 'pond-release-notes.md');
-    await Bun.write(notes, plan.notes);
+    const temporary = await mkdtemp(join(process.env.RUNNER_TEMP ?? tmpdir(), 'pond-release-create-'));
+    try {
+        const payload = join(temporary, 'release.json');
+        await Bun.write(
+            payload,
+            JSON.stringify({ tag_name: tag, target_commitish: sha, name: tag, body: plan.notes, draft: true })
+        );
 
-    releaseCommand('create', tag, '--target', sha, '--title', tag, '--notes-file', notes, '--draft');
-
-    const created = findRelease(tag);
-    if (!created) throw new Error('Created draft could not be found.');
-    return readRelease(created.id);
+        // The list endpoint can lag behind creation; POST returns the created release directly.
+        return JSON.parse(
+            run('gh', 'api', `repos/${repository()}/releases`, '--method', 'POST', '--input', payload)
+        ) as PublishedRelease;
+    } finally {
+        await rm(temporary, { recursive: true, force: true });
+    }
 };
 
 const verifyRemoteAsset = async (tag: string, asset: Artifact, directory: string, failure: string) => {

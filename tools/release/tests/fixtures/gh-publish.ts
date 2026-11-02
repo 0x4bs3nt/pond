@@ -7,7 +7,17 @@ const state = await Bun.file(statePath).json();
 const option = (name: string) => args[args.indexOf(name) + 1]!;
 
 if (args[0] === 'api') {
-    if (args[1]!.includes('/pulls/')) console.log(await Bun.file(process.env.POND_TEST_PR!).text());
+    if (args.includes('--method') && option('--method') === 'POST' && args[1]!.endsWith('/releases')) {
+        const payload = await Bun.file(option('--input')).json();
+        const release = { ...payload, id: 1, prerelease: false, assets: [] };
+
+        state.push(release);
+
+        await Bun.write(statePath, JSON.stringify(state));
+        await appendFile(process.env.POND_TEST_CALLS!, 'create\n' + JSON.stringify(payload) + '\n');
+
+        console.log(JSON.stringify(release));
+    } else if (args[1]!.includes('/pulls/')) console.log(await Bun.file(process.env.POND_TEST_PR!).text());
     else if (args[1]!.includes('/releases/tags/')) {
         const release = state.find(
             (item: { tag_name: string; draft: boolean }) => item.tag_name === args[1]!.split('/').at(-1) && !item.draft
@@ -21,21 +31,11 @@ if (args[0] === 'api') {
         if (!release) process.exit(1);
 
         console.log(JSON.stringify(release));
-    } else console.log(JSON.stringify(state));
+    } else console.log(JSON.stringify(process.env.POND_TEST_STALE_LIST === '1' ? [] : state));
 } else {
     await appendFile(process.env.POND_TEST_CALLS!, args.join('\n') + '\n');
 
     switch (args[1]) {
-        case 'create':
-            state.push({
-                id: 1,
-                tag_name: args[2],
-                target_commitish: option('--target'),
-                draft: true,
-                prerelease: false,
-                assets: [],
-            });
-            break;
         case 'upload': {
             if (process.env.POND_TEST_FAIL_UPLOAD === '1' && state[0].assets.length > 0) process.exit(1);
 
