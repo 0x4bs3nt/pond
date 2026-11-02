@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.2
+
+fix(packaging): retry transient Windows cleanup failures (#64)
+
+Fix Windows release packaging occasionally failing after successful smoke checks because temporary files remained locked. Cleanup now retries transient lock errors and reports success only after the temporary directory has been removed.
+
 ## 0.3.1
 
 fix(release): avoid stale draft lookup during publication (#62)
