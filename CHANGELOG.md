@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.3.3
+
+fix(packaging): fill gaps in standalone platform coverage (#66)
+
+Expand standalone downloads from three to eight platform targets, adding:
+
+- macOS Intel x64.
+- Linux ARM64 with glibc.
+- Windows ARM64.
+- Linux x64 and ARM64 with musl, including Alpine environments.
+
+Builds now select the matching Bun runtime and OpenTUI native library for each platform. All eight targets passed automated build and packaged-app smoke checks. Release publication requires the complete set of archives and checksums.
+
 ## 0.3.2
 
 fix(packaging): retry transient Windows cleanup failures (#64)
