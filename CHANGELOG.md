@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.3.4
+
+fix(distribution): complete Unix installation and safe upgrades (#69)
+
+Complete standalone distribution with a verified installer for Linux and macOS. Install Pond without Bun or a source checkout:
+
+```sh
+curl -fsSL https://pond.cat/install.sh | sh
+```
+
+- Detect x64 and ARM64, Linux glibc/musl, and macOS Rosetta.
+- Install the latest stable release or a selected version into a configurable directory.
+- Verify SHA-256 checksums, reject unsafe archives, and validate the executable before activation.
+- Preserve existing installations on failure and retain previous packages for recovery.
+- Configure PATH for Bash, Zsh, and Fish without duplicate entries, with `--no-modify-path` available.
+- Show startup guidance based on the actual PATH configuration.
+- Document installation, upgrades, removal, and platform requirements.
+
+Validation: checks and all eight platform packaging jobs passed for the installer and PATH-guidance changes. Unix packaging jobs also test installation of the native archive. Regression coverage includes target detection, upgrades, repeat installation, checksum/download failures, and preservation of existing installations.
+
+Pond still uses mock data. PostgreSQL support is planned for 0.4.0. macOS builds remain unsigned/not notarized; Windows builds remain unsigned. Windows installation uses release archives. Homebrew, AUR, and nixpkgs distribution remain separate follow-ups.
+
 ## 0.3.3
 
 fix(packaging): fill gaps in standalone platform coverage (#66)
