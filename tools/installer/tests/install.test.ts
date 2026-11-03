@@ -135,8 +135,14 @@ describe.skipIf(process.platform === 'win32')('Unix installer', () => {
         mkdirSync(physicalBin);
         mkdirSync(join(f.home, '.local'));
         symlinkSync(physicalBin, f.installDir);
-        expect(f.run({ shell: `/bin/${shell}` }, []).status).toBe(0);
-        expect(f.run({ shell: `/bin/${shell}` }, []).status).toBe(0);
+        const first = f.run({ shell: `/bin/${shell}` }, []);
+        expect(first.status).toBe(0);
+        expect(first.stdout).toContain('Added Pond to PATH');
+        expect(first.stdout).toContain('Open a new terminal and run pond');
+        const repeated = f.run({ shell: `/bin/${shell}` }, []);
+        expect(repeated.status).toBe(0);
+        expect(repeated.stdout).toContain('Pond is already configured on PATH');
+        expect(repeated.stdout).toContain('Open a new terminal and run pond');
         const config = join(f.home, shell === 'fish' ? '.config/fish/config.fish' : `.${shell}rc`);
         const content = readFileSync(config, 'utf8');
         expect(content.match(/# Pond installer/g)?.length).toBe(1);
