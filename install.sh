@@ -8,6 +8,7 @@ readonly RELEASES_URL
 version=
 install_dir=
 modify_path=true
+path_status=manual
 work=
 stage=
 lock=
@@ -284,14 +285,33 @@ ART
     fi
 
     note "Installed Pond $version at $launcher"
-    note "Run $launcher to start Pond."
+    case "$path_status" in
+        ready)
+            note 'Pond is on PATH. Run pond to start it.'
+            ;;
+        added|configured)
+            if [ "$path_status" = added ]; then
+                note "Added Pond to PATH in $config."
+            else
+                note "Pond is already configured on PATH in $config."
+            fi
+            note 'Open a new terminal and run pond to start it.'
+            note "To start it now, use $launcher."
+            ;;
+        manual)
+            note "Run $launcher to start Pond."
+            ;;
+    esac
 }
 
 configure_path() {
-    [ "$modify_path" = true ] || return 0
     case ":${PATH:-}:" in
-        *":$install_dir:"*) return 0 ;;
+        *":$install_dir:"*)
+            path_status=ready
+            return 0
+            ;;
     esac
+    [ "$modify_path" = true ] || return 0
 
     shell=${SHELL:-}
     case "${shell##*/}" in
@@ -316,12 +336,12 @@ configure_path() {
     esac
 
     if [ -f "$config" ] && grep -Fqx "$entry" "$config"; then
+        path_status=configured
         return 0
     fi
 
     if (mkdir -p "$(dirname "$config")" && printf '\n# Pond installer\n%s\n' "$entry" >> "$config"); then
-        note "Added Pond to PATH in $config"
-        note 'Open a new terminal to use the pond command from PATH.'
+        path_status=added
     else
         note "Could not update $config. Add $install_dir to PATH manually."
     fi
