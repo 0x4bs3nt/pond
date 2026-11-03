@@ -23,15 +23,15 @@ The runtime notice collection, provenance, LGPL texts, and source/rebuild direct
 | Target             | Build and smoke-test environment                  | Runtime choice          | Validation status                               |
 | ------------------ | ------------------------------------------------- | ----------------------- | ----------------------------------------------- |
 | `linux-x64`        | Ubuntu 24.04                                      | Bun x64 baseline, glibc | Existing CI and manual NixOS checks passed      |
-| `linux-arm64`      | Ubuntu 24.04 ARM64                                | Bun ARM64, glibc        | Added; native CI and manual checks pending      |
-| `linux-x64-musl`   | Pinned Bun 1.4.2 Alpine container on Ubuntu x64   | Bun x64 baseline, musl  | Added; native CI and manual checks pending      |
-| `linux-arm64-musl` | Pinned Bun 1.4.2 Alpine container on Ubuntu ARM64 | Bun ARM64, musl         | Added; native CI and manual checks pending      |
+| `linux-arm64`      | Ubuntu 24.04 ARM64                                | Bun ARM64, glibc        | Native CI passed; no manual checks              |
+| `linux-x64-musl`   | Pinned Bun 1.4.2 Alpine container on Ubuntu x64   | Bun x64 baseline, musl  | Native CI passed; no manual checks              |
+| `linux-arm64-musl` | Pinned Bun 1.4.2 Alpine container on Ubuntu ARM64 | Bun ARM64, musl         | Native CI passed; no manual checks              |
 | `darwin-arm64`     | macOS 15 Apple Silicon                            | Bun ARM64               | Existing CI and manual Tahoe 26.6 checks passed |
-| `darwin-x64`       | macOS 15 Intel                                    | Bun x64 baseline        | Added; native CI and manual checks pending      |
+| `darwin-x64`       | macOS 15 Intel                                    | Bun x64 baseline        | Native CI passed; no manual checks              |
 | `windows-x64`      | Windows Server 2025                               | Bun x64 baseline        | Existing CI and manual Windows 11 checks passed |
-| `windows-arm64`    | Windows 11 ARM64                                  | Bun ARM64               | Added; native CI and manual checks pending      |
+| `windows-arm64`    | Windows 11 ARM64                                  | Bun ARM64               | Native CI passed; no manual checks              |
 
-The original three targets passed CI and maintainer manual testing. The five additions are configured for validation, not yet advertised as tested releases. All eight packaging jobs must pass before publication; the publisher requires an archive and manifest for every configured target. Never bypass a failing platform job to publish an incomplete release.
+All eight targets passed native packaging CI and are published in 0.3.3. The original three targets also passed maintainer manual testing; the five additions have automated-only validation. All eight packaging jobs must pass before publication; the publisher requires an archive and manifest for every configured target. Never bypass a failing platform job to publish an incomplete release.
 
 All builds run on matching CPU architectures. Musl jobs build and run the complete smoke check inside an Alpine container pinned by multi-architecture image digest; checkout and artifact upload run on the Ubuntu host. This avoids requiring GitHub's glibc-based JavaScript actions to execute on musl. The container supplies Git, tar, and the native runtime dependencies. Normal builds need no container.
 
@@ -45,7 +45,9 @@ macOS builds are not Developer ID signed/notarized; Bun may apply an ad-hoc sign
 
 `package:check` verifies the archive hash, extracts into a temporary directory outside the checkout, and launches the extracted executable with an empty PATH. It checks version/help without log creation, starts the real renderer through a PTY/ConPTY, sends normal quit, checks terminal restoration and lifecycle records, and runs the log reader. Temporary data is removed afterward. This proves the bundled runtime works without Bun on PATH; it does not substitute for interactive terminal testing.
 
-Before advertising a target, manually check the downloaded archive on a fresh machine: launch, grid navigation, mouse input, cell editing/cancel/stage, tabs, resize, logs/follow, and normal/Ctrl+C exit. Check terminal restoration and OS installation prompts. Upgrade validation is deferred to each package-manager or installer delivery path (#45–#48), where its replacement and persistence behavior can be tested. Record OS/CPU and results in the PR. The current mock app has no saved database profiles to migrate.
+On available hardware, manually check the downloaded archive: launch, grid navigation, mouse input, cell editing/cancel/stage, tabs, resize, logs/follow, and normal/Ctrl+C exit. Check terminal restoration and OS installation prompts. Record OS/CPU and results in the PR, distinguishing manual checks from automated-only validation. Upgrade validation belongs to each package-manager or installer delivery path (#45–#48), where its replacement and persistence behavior can be tested. The current mock app has no saved database profiles to migrate.
+
+Unix packaging jobs also run `bun test tools/installer/tests` with `POND_PACKAGE_TARGET` set. This exercises installation of the actual native archive, alongside fixture tests for target selection, upgrades, shell quoting, and failure recovery. Ordinary `bun run check` runs the fixture tests and skips the native-archive case when no packaging target is set.
 
 ## Release workflow
 
@@ -59,4 +61,4 @@ Download the matching archive and `SHA256SUMS` from the same GitHub release. Ver
 
 For an upgrade, exit Pond, verify and extract the newer archive, then replace the dedicated installation directory and check `pond --version`. Keep the previous archive if rollback is needed. To uninstall, remove that directory and its PATH entry; local logs remain in the documented OS state location unless explicitly deleted. See [error handling](error-handling.md).
 
-The maintainer owns release artifact updates. Nixpkgs (#45), AUR (#46), Homebrew (#47), and the Unix installer (#48) will consume these versioned artifacts or build the same pinned sources. Their delivery paths/submissions are not implemented here. PowerShell and npm distribution also remain follow-ups. #44 covers standalone builds and release publication, including the additional platform validation above. Package-manager delivery and upgrade testing are independent follow-ups in #45–#48.
+The maintainer owns release artifact updates. The [Unix installer](installation.md) (#48) consumes these versioned archives and is the remaining delivery path in #44. Its installation and upgrade checks belong to this scope. Nixpkgs (#45), AUR (#46), and Homebrew (#47) remain independent follow-ups and do not block #44. PowerShell and npm distribution also remain follow-ups.

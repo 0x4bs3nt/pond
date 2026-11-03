@@ -2,6 +2,10 @@
 
 A terminal database manager built with TypeScript, OpenTUI, and React.
 
+## Installation
+
+Download a standalone executable from [GitHub Releases](https://github.com/0x4bs3nt/pond/releases). Bun is not required. See [installation instructions](docs/installation.md) for the Unix installer, PATH setup, upgrades, and platform requirements. Pond currently uses mock data; PostgreSQL support is planned for 0.4.0.
+
 ## Development
 
 Requires [Bun](https://bun.sh) 1.3.14 or later.
@@ -87,6 +91,6 @@ Use `bun run gallery:bench` for repeatable headless grid measurements. Large-dat
 
 ## Releases
 
-Development happens on `dev`. Stable releases are prepared on `dev → main` PRs and published after the squash merge passes CI. Versions start at `0.1.0`; there are no nightly releases. See [the release workflow](CONTRIBUTING.md#stable-releases). Releases currently provide source code and release notes, not packaged executables.
+Development happens on `dev`. Stable releases are prepared on `dev → main` PRs and published after the squash merge passes CI. Versions start at `0.1.0`; there are no nightly releases. See [the release workflow](CONTRIBUTING.md#stable-releases). Releases include standalone executables, checksums, source code, and release notes.
 
 See [building and packaging](docs/packaging.md) for native executable builds, platform validation, and release artifacts.
