@@ -2,6 +2,7 @@ import { writeSync } from 'node:fs';
 import { version } from '../../package.json';
 import { createLifecycle, ErrorBoundary } from '../../src/app';
 import { createLogger } from '../../src/platform/logging';
+import { diagnosticsRendererOptions } from '../../src/platform/performance';
 import { theme } from '../../src/theme';
 import { palettes } from './palettes';
 
@@ -40,6 +41,7 @@ export const runGallery = async (initialScenario: string, palette: string) => {
         const { createRoot } = await import('@opentui/react');
         const { Gallery } = await import('./Gallery');
         const renderer = await createCliRenderer({
+            ...diagnosticsRendererOptions(process.env.POND_DIAGNOSTICS),
             exitOnCtrlC: true,
             exitSignals: [],
             openConsoleOnError: false,

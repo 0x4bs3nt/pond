@@ -1,6 +1,22 @@
 # Runtime diagnostics measurement contract
 
-This records step 1 of [#43](https://github.com/0x4bs3nt/pond/issues/43). Application diagnostic collection and report export are not implemented yet. The capability probe below is development tooling, not a benchmark. Bun remains pinned to 1.4.2.
+This records the measurement contract and startup opt-in for [#43](https://github.com/0x4bs3nt/pond/issues/43). Resource collectors, interaction correlation, and report export are not implemented yet. The capability probe below is development tooling, not a benchmark. Bun remains pinned to 1.4.2.
+
+## Startup opt-in
+
+Enable bounded renderer frame history for a TUI session with:
+
+```sh
+POND_DIAGNOSTICS=1 bun run start
+POND_DIAGNOSTICS=1 bun run gallery
+POND_DIAGNOSTICS=1 pond
+```
+
+The packaged command requires an executable built with this change. The variable is read at runtime; no separate diagnostics build is needed. Only the exact value `1` enables collection. An unset variable or any other value leaves collection disabled. On PowerShell, set `$env:POND_DIAGNOSTICS = '1'` before launching and remove it afterward with `Remove-Item Env:POND_DIAGNOSTICS`.
+
+This step enables only OpenTUI's in-memory history, capped at 300 pass durations. It creates no report files, resource-sampling timers, Profiler boundaries, or overlays. Native automatic memory snapshots remain disabled; later resource sampling will have its own bounded collector. Renderer destruction owns disposal of its history. Existing always-on timing-retention cleanup is unchanged.
+
+App help/version/log commands and gallery help/listing bypass renderer creation even with opt-in enabled. Normal TUI runs still use OpenTUI's native rendering counters internally; disabling diagnostics means no optional JavaScript frame history or Pond diagnostic collectors, not disabling the renderer's own bookkeeping. Persistent application error logs remain enabled independently.
 
 ## Renderer measurements
 

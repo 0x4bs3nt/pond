@@ -11,7 +11,8 @@ test('logs command prints records without starting the TUI or writing its own lo
         const content = '{"event":"app.started"}\n';
         await writeFile(join(directory, 'pond-123.jsonl'), content);
         const child = Bun.spawn([process.execPath, bootstrap, 'logs'], {
-            env: { ...process.env, POND_LOG_DIR: directory },
+            cwd: directory,
+            env: { ...process.env, POND_LOG_DIR: directory, POND_DIAGNOSTICS: '1' },
             stdout: 'pipe',
             stderr: 'pipe',
         });
@@ -97,7 +98,8 @@ test('help, version, and invalid commands never start the TUI or create logs', a
             [['logs', 'unexpected'], 1, 'too many arguments'],
         ] as const) {
             const child = Bun.spawn([process.execPath, bootstrap, ...args], {
-                env: { ...process.env, POND_LOG_DIR: directory },
+                cwd: directory,
+                env: { ...process.env, POND_LOG_DIR: directory, POND_DIAGNOSTICS: '1' },
                 stdout: 'pipe',
                 stderr: 'pipe',
             });

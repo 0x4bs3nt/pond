@@ -1,6 +1,7 @@
 import { writeSync } from 'node:fs';
 import { version } from '../../package.json';
 import { createLogger } from '../platform/logging';
+import { diagnosticsRendererOptions } from '../platform/performance';
 import { createLifecycle } from './lifecycle';
 
 const logger = createLogger({ version });
@@ -40,6 +41,7 @@ try {
     const { App } = await import('./App');
     const { ErrorBoundary } = await import('./ErrorBoundary');
     const renderer = await createCliRenderer({
+        ...diagnosticsRendererOptions(process.env.POND_DIAGNOSTICS),
         exitOnCtrlC: true,
         exitSignals: [],
         openConsoleOnError: false,
