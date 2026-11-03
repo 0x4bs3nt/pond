@@ -1,7 +1,7 @@
 {
-    "version": "0.3.3",
-    "previousTag": "v0.3.2",
-    "pullRequest": 66,
-    "title": "fix(packaging): fill gaps in standalone platform coverage",
-    "notes": "fix(packaging): fill gaps in standalone platform coverage (#66)\n\nExpand standalone downloads from three to eight platform targets, adding:\n\n- macOS Intel x64.\n- Linux ARM64 with glibc.\n- Windows ARM64.\n- Linux x64 and ARM64 with musl, including Alpine environments.\n\nBuilds now select the matching Bun runtime and OpenTUI native library for each platform. All eight targets passed automated build and packaged-app smoke checks. Release publication requires the complete set of archives and checksums."
+    "version": "0.3.4",
+    "previousTag": "v0.3.3",
+    "pullRequest": 69,
+    "title": "fix(distribution): complete Unix installation and safe upgrades",
+    "notes": "fix(distribution): complete Unix installation and safe upgrades (#69)\n\nComplete standalone distribution with a verified installer for Linux and macOS. Install Pond without Bun or a source checkout:\n\n```sh\ncurl -fsSL https://pond.cat/install.sh | sh\n```\n\n- Detect x64 and ARM64, Linux glibc/musl, and macOS Rosetta.\n- Install the latest stable release or a selected version into a configurable directory.\n- Verify SHA-256 checksums, reject unsafe archives, and validate the executable before activation.\n- Preserve existing installations on failure and retain previous packages for recovery.\n- Configure PATH for Bash, Zsh, and Fish without duplicate entries, with `--no-modify-path` available.\n- Show startup guidance based on the actual PATH configuration.\n- Document installation, upgrades, removal, and platform requirements.\n\nValidation: checks and all eight platform packaging jobs passed for the installer and PATH-guidance changes. Unix packaging jobs also test installation of the native archive. Regression coverage includes target detection, upgrades, repeat installation, checksum/download failures, and preservation of existing installations.\n\nPond still uses mock data. PostgreSQL support is planned for 0.4.0. macOS builds remain unsigned/not notarized; Windows builds remain unsigned. Windows installation uses release archives. Homebrew, AUR, and nixpkgs distribution remain separate follow-ups."
 }
