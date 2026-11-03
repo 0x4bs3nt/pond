@@ -1,5 +1,15 @@
 import { afterEach, describe, expect, test } from 'bun:test';
-import { existsSync, mkdirSync, readFileSync, readdirSync, readlinkSync, rmSync, writeFileSync } from 'node:fs';
+import {
+    existsSync,
+    mkdirSync,
+    readFileSync,
+    readdirSync,
+    readlinkSync,
+    realpathSync,
+    rmSync,
+    symlinkSync,
+    writeFileSync,
+} from 'node:fs';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { createFixture } from './fixture';
@@ -121,6 +131,10 @@ describe.skipIf(process.platform === 'win32')('Unix installer', () => {
 
     test.each(['bash', 'zsh', 'fish'])('writes one quoted PATH entry for %s across repeat installs', (shell) => {
         const f = fixture();
+        const physicalBin = join(f.home, 'physical bin');
+        mkdirSync(physicalBin);
+        mkdirSync(join(f.home, '.local'));
+        symlinkSync(physicalBin, f.installDir);
         expect(f.run({ shell: `/bin/${shell}` }, []).status).toBe(0);
         expect(f.run({ shell: `/bin/${shell}` }, []).status).toBe(0);
         const config = join(f.home, shell === 'fish' ? '.config/fish/config.fish' : `.${shell}rc`);
@@ -141,7 +155,7 @@ describe.skipIf(process.platform === 'win32')('Unix installer', () => {
                 }
             );
             expect(result.status).toBe(0);
-            expect(result.stdout.trim()).toBe(join(f.installDir, 'pond'));
+            expect(result.stdout.trim()).toBe(join(realpathSync(f.installDir), 'pond'));
         }
     });
 });
