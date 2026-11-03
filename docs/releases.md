@@ -19,9 +19,9 @@ Bug fixes to an existing release can ship as patch releases, such as `0.2.1`, wi
 
 Phase 1 validation is complete on Linux; see [the grid measurements and interaction results](grid-performance.md). Phase 1 was released as 0.2.0. Packaging CI and maintainer manual checks now also pass on Linux, macOS, and Windows; see [packaging validation](packaging.md). This does not establish compatibility with every terminal/font combination.
 
-The initial three-platform archives are published. The [bundled-license review](dependency-licenses.md) and checksums accompany the release. The next packaging slice adds Intel macOS, Linux ARM64/glibc, Windows ARM64, and Linux x64/ARM64 musl. Before releasing those additions, require all eight platform packaging jobs and release metadata checks to pass, and record their manual-validation status in [packaging](packaging.md). The additional targets are pending validation; do not advertise them as tested yet.
+All eight platform archives are published in 0.3.3, including Intel macOS, Linux ARM64/glibc, Windows ARM64, and Linux x64/ARM64 musl. The [bundled-license review](dependency-licenses.md) and checksums accompany the release. All eight targets passed native packaging CI; the original three also have manual validation. See [packaging](packaging.md) for the distinction.
 
-Release notes must state that Pond still uses mock data and that macOS/Windows builds are unsigned. Signing/notarization remains deferred. Package-manager delivery and upgrade testing are tracked independently in #45–#48; they do not block completing the standalone packaging work in #44 once the expanded platform scope is validated.
+Release notes must state that Pond still uses mock data and that macOS/Windows builds are unsigned. Signing/notarization remains deferred. Finish the Unix installer and its installation/upgrade validation (#48) to complete #44. Publish this delivery work within 0.3.x; reserve 0.4.0 for PostgreSQL. Package-manager delivery (#45–#47) remains separate. After the installer, prioritize opt-in diagnostics (#43), then database models, ports, and adapter registration (#15).
 
 ### Milestone completion reminders
 

@@ -54,6 +54,9 @@ jobs:
               if: ${{ !matrix.musl }}
             - run: bun run package:check
               if: ${{ !matrix.musl }}
+            - name: Test Unix installer against the native archive
+              if: ${{ !matrix.musl && runner.os != 'Windows' }}
+              run: bun test tools/installer/tests
             - name: Build and smoke-test on musl
               if: ${{ matrix.musl }}
               shell: bash
@@ -68,6 +71,7 @@ jobs:
                       bun install --frozen-lockfile
                       bun run build
                       bun run package:check
+                      bun test tools/installer/tests
                     '
             - uses: actions/upload-artifact@v7
               with:
