@@ -77,7 +77,7 @@ export const createFileProfiles = (directory = profileDirectory()): ProfileRepos
                 await rm(temporary, { force: true }).catch(() => {});
             }
         });
-        
+
         writes = write.then(() => {});
 
         return write;
