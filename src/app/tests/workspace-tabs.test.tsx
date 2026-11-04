@@ -5,6 +5,9 @@ import { WorkspaceProvider } from '../../features/workspace';
 import { createTableSessionsStore } from '../../state/table-sessions';
 import { createWorkspaceStore } from '../../state/workspace';
 import { Workspace } from '../Workspace';
+import { loadMockWorkspace } from '../load-mock-workspace';
+
+const tables = await loadMockWorkspace();
 
 test('switching preserves pending edits and dirty close requires explicit discard', async () => {
     const store = createWorkspaceStore('members');
@@ -14,7 +17,7 @@ test('switching preserves pending edits and dirty close requires explicit discar
         .stage('members', { rowId: 'member-1', columnId: 'name', original: 'Mara Novak', value: 'Edited' });
     const view = await testRender(
         <WorkspaceProvider store={store}>
-            <Workspace sessions={sessions} />
+            <Workspace tables={tables} sessions={sessions} />
         </WorkspaceProvider>,
         { width: 100, height: 24 }
     );
@@ -69,7 +72,7 @@ test('editor owns keyboard and mouse focus until it is cancelled', async () => {
     const sessions = createTableSessionsStore();
     const view = await testRender(
         <WorkspaceProvider store={store}>
-            <Workspace sessions={sessions} />
+            <Workspace tables={tables} sessions={sessions} />
         </WorkspaceProvider>,
         { width: 100, height: 24 }
     );
@@ -114,7 +117,7 @@ test('overflow navigation reveals active tabs through resizing and mouse activat
     const sessions = createTableSessionsStore();
     const view = await testRender(
         <WorkspaceProvider store={store}>
-            <Workspace sessions={sessions} />
+            <Workspace tables={tables} sessions={sessions} />
         </WorkspaceProvider>,
         { width: 60, height: 16 }
     );

@@ -160,6 +160,22 @@ Adding an engine should primarily require implementing its adapter, registering 
 
 Initially, pluggable means adding an adapter in source without rewriting existing layers. Runtime installation of third-party plugins is out of scope.
 
+### Implemented database contracts
+
+The first implementation uses the existing mock workspace to exercise these boundaries:
+
+- `domain/database` owns connection targets, structured namespace/table references, native column types, exact values, row identities, bounded page requests/results, and expected database error codes. It has no React, driver, or OS dependencies.
+- `ports/database` exposes adapter registration lookup, asynchronous connection/session contracts, schema inspection, bounded browsing, and idempotent close. Session capabilities describe namespace and primary-key support and the maximum page size. Mutation, arbitrary SQL, and cancellation APIs are added when their workflows arrive.
+- `adapters/databases` selects explicitly registered adapters by engine ID. Duplicate IDs fail at startup; unsupported engines return an error instead of falling back to another adapter. The `mock` adapter provides the demo through these ports and returns detached results.
+- `services/database` connects through the registry and combines metadata with a row page. Services return domain results and never import UI stores or concrete adapters. Expected errors contain fixed application-owned codes; unexpected failures reject to the existing lifecycle handling.
+- `app/load-mock-workspace.ts` registers the mock adapter, reads its small fixture, and closes the session in `finally`. The table-browser presenter maps domain data into grid props; widths and pending edits stay outside the adapter. The app receives the resulting tables as props.
+
+Namespace paths are ordered identifier parts, including an empty path for engines without namespaces. Never split a dotted display name to form a database identifier. Native type strings retain modifiers and are descriptive metadata, not SQL fragments. Values distinguish SQL NULL, exact adapter text, and unsupported read-only representations; no generic number, date, or JSON conversion occurs at the boundary. Ordered primary-key values are separate from display row IDs, and rows without reliable keys have a null identity. These contracts do not establish write eligibility yet.
+
+Page reads require a nonnegative safe-integer offset and a positive safe-integer limit within the session's maximum. Offset order and row IDs outside a result are adapter-defined; concurrent pagination stability is not promised. The mock adapter has a fixed fixture order and a 250-row maximum. Preloading all three small mock tables is specific to the demo, not the loading strategy for a real database.
+
+Only the mock adapter is registered today. PostgreSQL connection options, credentials, and profile persistence belong to #16; catalog metadata and value decoding are implemented in #17–#18. Real browsing, request/session ownership, and PostgreSQL integration validation follow in #19–#21. Existing lint rules enforce these layer boundaries and module entry points without granting services or features access to drivers.
+
 ## State architecture
 
 Each open table has a session identified by a stable session ID:

@@ -74,7 +74,7 @@ Changed cells have a `*` marker and amber text. Original mock values remain unch
 
 While an editor is open, it owns keyboard focus: `q` types text, Tab does not switch panels, and clicks cannot switch tables or select another grid cell. Shrinking below the minimum terminal size cancels the open draft while preserving previously staged edits. Pending changes live only for the current app session and are lost on quit or development restart. Applying changes to PostgreSQL is future work.
 
-The reusable grid lives in `src/components/data-grid`; mock data and table presentation live in `src/features/table-browser`. App startup and workspace composition live in `src/app`.
+The reusable grid lives in `src/components/data-grid`; table presentation lives in `src/features/table-browser`. App startup registers the in-memory adapter in `src/adapters/databases/mock` and loads the fixtures through database ports and services before rendering. The adapter's session closes after loading; editing still stages local changes only. See [database contracts](docs/architecture.md#implemented-database-contracts) for the boundary used by the upcoming PostgreSQL adapter.
 
 Shared workspace state uses Zustand: `src/state/workspace` owns open tab IDs, the active table ID, and panel focus, while `src/features/workspace` provides React subscriptions. Each app instance creates its own store. Explorer highlighting and grid selection/scrolling remain local; reusable components receive props rather than importing stores.
 

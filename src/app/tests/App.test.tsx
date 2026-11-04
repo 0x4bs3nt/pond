@@ -5,13 +5,16 @@ import { testRender } from '@opentui/react/test-utils';
 import { describe, expect, test } from 'bun:test';
 
 import { App } from '../App';
+import { loadMockWorkspace } from '../load-mock-workspace';
+
+const tables = await loadMockWorkspace();
 
 const countNodes = (node: BaseRenderable): number =>
     1 + node.getChildren().reduce((sum, child) => sum + countNodes(child), 0);
 
 describe('mock workspace', () => {
     test('retains every movement when key events arrive in one batch', async () => {
-        const view = await testRender(<App />, { width: 100, height: 24 });
+        const view = await testRender(<App tables={tables} />, { width: 100, height: 24 });
 
         try {
             await view.renderOnce();
@@ -30,7 +33,7 @@ describe('mock workspace', () => {
     });
 
     test('navigates across rows and columns with a fixed header', async () => {
-        const view = await testRender(<App />, { width: 100, height: 24 });
+        const view = await testRender(<App tables={tables} />, { width: 100, height: 24 });
         try {
             await view.renderOnce();
             expect(view.captureCharFrame()).toContain('Mara Novak');
@@ -62,7 +65,7 @@ describe('mock workspace', () => {
     });
 
     test('preserves NULL, empty strings, Unicode, and exact numeric display values', async () => {
-        const view = await testRender(<App />, { width: 120, height: 24 });
+        const view = await testRender(<App tables={tables} />, { width: 120, height: 24 });
         try {
             await view.renderOnce();
             expect(view.captureCharFrame()).toContain('田中 花子');
@@ -83,7 +86,7 @@ describe('mock workspace', () => {
     });
 
     test('mouse selects cells and scrolls while the header stays visible', async () => {
-        const view = await testRender(<App />, { width: 100, height: 24 });
+        const view = await testRender(<App tables={tables} />, { width: 100, height: 24 });
         try {
             await view.renderOnce();
             await act(async () => view.mockMouse.click(43, 10));
@@ -104,7 +107,7 @@ describe('mock workspace', () => {
     });
 
     test('explorer owns keyboard focus and opens an empty table', async () => {
-        const view = await testRender(<App />, { width: 100, height: 24 });
+        const view = await testRender(<App tables={tables} />, { width: 100, height: 24 });
         try {
             await view.renderOnce();
             await act(async () => {
@@ -124,7 +127,7 @@ describe('mock workspace', () => {
     });
 
     test('explorer clamps rapid navigation and opens the latest cursor before a render', async () => {
-        const view = await testRender(<App />, { width: 100, height: 24 });
+        const view = await testRender(<App tables={tables} />, { width: 100, height: 24 });
         try {
             await view.renderOnce();
             await act(async () => view.mockInput.pressTab());
@@ -151,7 +154,7 @@ describe('mock workspace', () => {
     });
 
     test('mouse opening updates the explorer cursor used by Enter', async () => {
-        const view = await testRender(<App />, { width: 100, height: 24 });
+        const view = await testRender(<App tables={tables} />, { width: 100, height: 24 });
         try {
             await view.renderOnce();
             await act(async () => view.mockMouse.click(10, 8));
@@ -167,7 +170,7 @@ describe('mock workspace', () => {
     });
 
     test('resizes and recovers from a terminal too small for the workspace', async () => {
-        const view = await testRender(<App />, { width: 100, height: 24 });
+        const view = await testRender(<App tables={tables} />, { width: 100, height: 24 });
         try {
             await view.renderOnce();
             await act(async () => view.resize(60, 16));

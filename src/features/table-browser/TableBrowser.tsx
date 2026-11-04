@@ -36,7 +36,7 @@ export const TableBrowser = ({ table, sessions, width, height, focused, onFocus 
                     wrapMode="none"
                     fg={theme.accent}
                     selectable={false}
-                >{`▦  ${table.name}   /   public`}</text>
+                >{`▦  ${table.name}${table.namespace ? `   /   ${table.namespace}` : ''}`}</text>
                 <text height={1} flexShrink={0} wrapMode="none" fg={theme.border} selectable={false}>
                     {'─'.repeat(width - 1)}
                 </text>

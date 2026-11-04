@@ -1,0 +1,1 @@
+export { createDatabaseRegistry } from './registry';
