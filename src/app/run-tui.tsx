@@ -4,6 +4,11 @@ import { createLogger } from '../platform/logging';
 import { diagnosticsRendererOptions, createDiagnosticsSession, writeDiagnosticsReport } from '../platform/performance';
 import { createLifecycle } from './lifecycle';
 import { DiagnosticsProvider, DiagnosticBoundary } from '../features/diagnostics';
+import { createDatabaseRegistry } from '../adapters/databases';
+import { postgresDatabaseAdapter } from '../adapters/databases/postgres';
+import { createFileProfiles } from '../adapters/profiles';
+import { createMemoryCredentials } from '../adapters/credentials';
+import { createConnectionService } from '../services/connections';
 
 export const runTui = async (startedAtMs: number) => {
     const logger = createLogger({ version });
@@ -39,6 +44,17 @@ export const runTui = async (startedAtMs: number) => {
     console.warn = () => logger.log('runtime.warning', 'console');
 
     try {
+        const credentials = createMemoryCredentials();
+        const connections = createConnectionService(createDatabaseRegistry([postgresDatabaseAdapter]), credentials);
+        lifecycle.attachCleanup(connections.dispose);
+
+        const connectionDependencies = {
+            profiles: createFileProfiles(),
+            credentials,
+            connections,
+            onError: onRejection,
+        };
+
         const { createCliRenderer } = await import('@opentui/core');
         const { createRoot } = await import('@opentui/react');
         const { App } = await import('./App');
@@ -80,7 +96,12 @@ export const runTui = async (startedAtMs: number) => {
             <ErrorBoundary onError={lifecycle.reportUI} logPath={logger.path}>
                 <DiagnosticsProvider session={diagnostics}>
                     <DiagnosticBoundary id="workspace">
-                        <App tables={tables} onError={lifecycle.reportUI} logPath={logger.path} />
+                        <App
+                            tables={tables}
+                            connectionDependencies={connectionDependencies}
+                            onError={lifecycle.reportUI}
+                            logPath={logger.path}
+                        />
                     </DiagnosticBoundary>
                 </DiagnosticsProvider>
             </ErrorBoundary>

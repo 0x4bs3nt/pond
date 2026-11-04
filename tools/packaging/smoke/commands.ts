@@ -9,6 +9,7 @@ export const createSmokeContext = (cwd: string): SmokeContext => {
         ...process.env,
         PATH: '',
         POND_LOG_DIR: logs,
+        POND_CONFIG_DIR: join(cwd, 'config'),
         TERM: 'xterm-256color',
         BUN_OPTIONS: '',
         NODE_OPTIONS: '',

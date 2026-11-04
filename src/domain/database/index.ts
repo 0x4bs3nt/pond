@@ -1,4 +1,5 @@
 export type {
+    DatabaseNetwork,
     DatabaseConnection,
     DatabaseNamespace,
     TableReference,

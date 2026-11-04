@@ -13,7 +13,12 @@ export const copyNotices = async (stage: string) => {
 
     const visitPackage = async (directory: string, name: string) => {
         for (const entry of await readdir(directory, { withFileTypes: true })) {
-            if (entry.isFile() && /^(LICENSE|LICENCE|COPYING|COPYRIGHT|NOTICE|AUTHORS|PATENTS)/i.test(entry.name)) {
+            // These distributions carry their complete MIT notices only in README.md.
+            const readmeLicense = ['pg-types', 'pgpass'].includes(name) && entry.name === 'README.md';
+            if (
+                entry.isFile() &&
+                (readmeLicense || /^(LICENSE|LICENCE|COPYING|COPYRIGHT|NOTICE|AUTHORS|PATENTS)/i.test(entry.name))
+            ) {
                 await cp(join(directory, entry.name), join(notices, `${name.replaceAll('/', '__')}--${entry.name}`));
             }
         }

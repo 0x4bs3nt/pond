@@ -20,7 +20,7 @@ bun install --frozen-lockfile
 bun run dev
 ```
 
-Press `q` or `Ctrl+C` to quit. Use `bun run start` to run without watching for source changes.
+Press `Ctrl+C` to quit. In the mock demo (F2 from the connection manager), `q` outside an editor also quits. Use `bun run start` to run without watching for source changes.
 
 ## Check your changes
 

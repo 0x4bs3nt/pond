@@ -4,7 +4,7 @@ A terminal database manager built with TypeScript, OpenTUI, and React.
 
 ## Installation
 
-Download a standalone executable from [GitHub Releases](https://github.com/0x4bs3nt/pond/releases). Bun is not required. See [installation instructions](docs/installation.md) for the Unix installer, PATH setup, upgrades, and platform requirements. Pond currently uses mock data; PostgreSQL support is planned for 0.4.0.
+Download a standalone executable from [GitHub Releases](https://github.com/0x4bs3nt/pond/releases). Bun is not required. See [installation instructions](docs/installation.md) for the Unix installer, PATH setup, upgrades, and platform requirements. The published 0.3.4 release uses mock data; PostgreSQL browsing is planned for 0.4.0.
 
 ## Development
 
@@ -26,7 +26,7 @@ bun install
 bun run dev
 ```
 
-Press `q` outside an editor or `Ctrl+C` to quit. Development mode debounces source saves and waits for terminal cleanup before restarting. If a save introduces a startup error, it restores the terminal and waits for the next change so you can fix it without restarting the command.
+The development app opens the [PostgreSQL connection manager](docs/connections.md). Save non-secret profiles, connect with a prompted password, and disconnect with Ctrl+D. Ctrl+C quits; F2 opens the mock demo while disconnected. Development mode debounces source saves and waits for terminal cleanup before restarting. If a save introduces a startup error, it restores the terminal and waits for the next change so you can fix it without restarting the command.
 
 ```sh
 bun run start        # Run without watching
@@ -39,7 +39,7 @@ bun run format:check # Check formatting
 
 ## Mock workspace
 
-Pond currently opens a mock workspace with an explorer, mock-table tabs, a grid, and a selected-value preview. Cell edits are staged locally; no database connection is needed. The demo includes 250 members, 120 events, and an empty audit log, with NULLs, empty text, Unicode, long values, and JSON.
+Press F2 from the connection manager to open the mock workspace with an explorer, mock-table tabs, a grid, and a selected-value preview. Cell edits are staged locally; no database connection is needed. The demo includes 250 members, 120 events, and an empty audit log, with NULLs, empty text, Unicode, long values, and JSON. F2 outside an editor returns to connections; `q` outside an editor exits.
 
 | Control                                   | Action                                                                 |
 | ----------------------------------------- | ---------------------------------------------------------------------- |

@@ -53,7 +53,7 @@ Bootstrap failures, uncaught exceptions, unhandled rejections, and renderer/inpu
 
 The app intercepts `console.error` before creating the React root because the installed OpenTUI React renderer uses that callback for caught render errors. Reporting is deferred one microtask so the application boundary can claim the error first. Unclaimed error objects are fatal; string-only console errors produce a generic log event. This integration should be rechecked when upgrading OpenTUI or React.
 
-Error boundaries do not catch asynchronous work or event-handler errors. Future database operations should handle expected failures at their feature/service boundary, show a safe user-facing message, and retain pending changes where safe. Unexpected failures must reach the fatal handler rather than being swallowed.
+Error boundaries do not catch asynchronous work or event-handler errors. Database operations handle expected failures at their feature/service boundary, show a safe user-facing message, and retain pending changes where safe. Unexpected failures must reach the fatal handler rather than being swallowed. PostgreSQL authentication/network/TLS errors are translated into fixed UI messages without persisting driver text. Connection cleanup has its own 1.5-second window after terminal restoration; failure still permits log flushing and exits with status 1.
 
 Pending edits remain memory-only and do not survive process termination. Forced termination, native crashes, power loss, or a blocked JavaScript thread can prevent both cleanup and log flushing. Disk writes are not a crash-durable journal. Performance measurements remain a separate opt-in feature.
 

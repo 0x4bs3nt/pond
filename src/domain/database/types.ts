@@ -1,5 +1,16 @@
-// Connection options grow with concrete adapters; no credentials belong in this target.
-export type DatabaseConnection = { readonly engineId: string; readonly database: string };
+export type DatabaseNetwork = {
+    readonly host: string;
+    readonly port: number;
+    readonly user: string;
+    readonly tls: 'disable' | 'require' | 'verify-full';
+};
+
+// Credentials travel separately and never belong in a saved target.
+export type DatabaseConnection = {
+    readonly engineId: string;
+    readonly database: string;
+    readonly network?: DatabaseNetwork;
+};
 
 // Identifier parts are kept separate, never parsed from a dotted or SQL-quoted string.
 // An empty path represents an engine without namespaces.
@@ -44,6 +55,18 @@ export type TableData = { readonly schema: TableSchema; readonly page: RowPage }
 
 // Expected failures cross the port as application-owned codes, never raw driver errors/messages.
 // Unexpected failures reject and are handled by the application lifecycle.
-export type DatabaseError = { readonly code: 'unsupported-engine' | 'invalid-request' | 'not-found' | 'closed' };
+export type DatabaseError = {
+    readonly code:
+        | 'unsupported-engine'
+        | 'unsupported-operation'
+        | 'invalid-request'
+        | 'not-found'
+        | 'closed'
+        | 'authentication'
+        | 'unreachable'
+        | 'tls'
+        | 'connection-failed'
+        | 'cancelled';
+};
 export type DatabaseResult<T> =
     { readonly ok: true; readonly value: T } | { readonly ok: false; readonly error: DatabaseError };

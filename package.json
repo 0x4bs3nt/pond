@@ -26,6 +26,7 @@
         "@opentui/core": "^0.6.8",
         "@opentui/react": "^0.6.8",
         "commander": "^15.0.0",
+        "pg": "^8.23.1",
         "react": "^19.3.1",
         "zustand": "^5.0.16"
     },
@@ -33,6 +34,7 @@
         "@babel/core": "^8.0.9",
         "@babel/eslint-parser": "^8.0.7",
         "@types/bun": "^1.4.4",
+        "@types/pg": "^8.23.1",
         "@types/react": "^19.3.0",
         "eslint": "^10.13.0",
         "eslint-import-resolver-typescript": "^4.4.5",
