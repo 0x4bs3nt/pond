@@ -49,7 +49,7 @@ Expected validation failures stay in the relevant UI. For example, invalid JSON 
 
 Unexpected React render failures replace the affected workspace with an exit screen. Workspace and pending-change stores are created outside that boundary, but the UI does not automatically remount or claim it is safe to continue. Press `q` or Ctrl+C to exit with a failure status.
 
-Bootstrap failures, uncaught exceptions, unhandled rejections, and renderer/input failures use a single fatal shutdown path. OpenTUI may also report the same error through its console channel; object identity prevents duplicate reports. Cleanup is deferred out of rendering callbacks, waits up to 1.5 seconds for terminal closure, then waits up to 1.5 seconds for logs. Fatal exits use status 1; normal exits use status 0. If terminal cleanup fails or times out, shutdown still exits and terminal restoration is best-effort.
+Bootstrap failures, uncaught exceptions, unhandled rejections, and renderer/input failures use a single fatal shutdown path. OpenTUI may also report the same error through its console channel; object identity prevents duplicate reports. Cleanup is deferred out of rendering callbacks, waits up to 1.5 seconds for terminal closure, then waits up to 1.5 seconds for logs. Opted-in [runtime diagnostics](runtime-diagnostics.md) stop collection and get a separate export window of up to 1.5 seconds between terminal cleanup and log flushing. Report failures produce fixed safe guidance without changing the application exit status. Fatal exits use status 1; normal exits use status 0. If terminal cleanup fails or times out, shutdown still exits and terminal restoration is best-effort.
 
 The app intercepts `console.error` before creating the React root because the installed OpenTUI React renderer uses that callback for caught render errors. Reporting is deferred one microtask so the application boundary can claim the error first. Unclaimed error objects are fatal; string-only console errors produce a generic log event. This integration should be rechecked when upgrading OpenTUI or React.
 
@@ -59,7 +59,7 @@ Pending edits remain memory-only and do not survive process termination. Forced 
 
 ## Runtime timing retention
 
-Application and gallery startup also consume and discard delivered User Timing measures so React development measurements do not accumulate in Bun. No timing details are logged. Other live performance observers still receive entries, but the process-wide measure history is cleared; future diagnostics must retain their own bounded samples. Marks and CPU profiling are unaffected. Shutdown disconnects the cleanup observer. See [grid performance](grid-performance.md#memory-finding-and-resolution) for the reproduction and measurements.
+Application and gallery startup also consume and discard delivered User Timing measures so React development measurements do not accumulate in Bun. No timing details are logged. Other live performance observers still receive entries, but the process-wide measure history is cleared; runtime diagnostics retain their own bounded samples. Marks and CPU profiling are unaffected. Shutdown disconnects the cleanup observer. See [grid performance](grid-performance.md#memory-finding-and-resolution) for the reproduction and measurements.
 
 ## Validation
 

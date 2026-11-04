@@ -4,7 +4,7 @@ Track work and completion in the [Pond GitHub Project](https://github.com/users/
 
 ## Release criteria
 
-Release at meaningful, usable milestones rather than after each feature PR. Phase 1 shipped in 0.2.0. Standalone packaging shipped in 0.3.0, followed by release-tooling fixes in 0.3.1 and 0.3.2. Expand platform coverage before implementing package-manager delivery or PostgreSQL browsing. Version numbers below are targets; calculate the actual next version from the latest release when preparing the promotion PR.
+Release at meaningful, usable milestones rather than after each feature PR. Phase 1 shipped in 0.2.0. Standalone packaging shipped in 0.3.0, followed by release-tooling fixes in 0.3.1 and 0.3.2, expanded platform coverage in 0.3.3, and the Unix installer in 0.3.4. Version numbers below are targets; calculate the actual next version from the latest release when preparing the promotion PR.
 
 | Target version | Milestone                          | Completion criteria                                                                                                                                                                                             | Status   |
 | -------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
@@ -21,7 +21,7 @@ Phase 1 validation is complete on Linux; see [the grid measurements and interact
 
 All eight platform archives are published in 0.3.3, including Intel macOS, Linux ARM64/glibc, Windows ARM64, and Linux x64/ARM64 musl. The [bundled-license review](dependency-licenses.md) and checksums accompany the release. All eight targets passed native packaging CI; the original three also have manual validation. See [packaging](packaging.md) for the distinction.
 
-Release notes must state that Pond still uses mock data and that macOS/Windows builds are unsigned. Signing/notarization remains deferred. Finish the Unix installer and its installation/upgrade validation (#48) to complete #44. Publish this delivery work within 0.3.x; reserve 0.4.0 for PostgreSQL. Package-manager delivery (#45–#47) remains separate. After the installer, prioritize opt-in diagnostics (#43), then database models, ports, and adapter registration (#15).
+Release notes must state that Pond still uses mock data and that macOS/Windows builds are unsigned. Signing/notarization remains deferred. The Unix installer and its installation/upgrade validation (#48) shipped in 0.3.4, completing standalone delivery (#44). Reserve 0.4.0 for PostgreSQL. Package-manager delivery (#45–#47) remains separate. Prioritize opt-in diagnostics (#43), then database models, ports, and adapter registration (#15).
 
 ### Milestone completion reminders
 

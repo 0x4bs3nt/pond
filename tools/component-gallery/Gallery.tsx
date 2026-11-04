@@ -4,6 +4,7 @@ import { theme } from '../../src/theme';
 import { scenarios } from './scenarios';
 import { Scenario } from './Scenario';
 import { useGalleryKeyboard } from './use-gallery-keyboard';
+import { useDiagnosticsReady } from '../../src/features/diagnostics';
 import type { GalleryProps } from './types';
 
 export const Gallery = ({ initialScenario, palette }: GalleryProps) => {
@@ -41,6 +42,7 @@ export const Gallery = ({ initialScenario, palette }: GalleryProps) => {
 
     // Keep the scenario mounted below the minimum size so an editor draft survives resizing.
     const small = width < 60 || height < 18;
+    useDiagnosticsReady(!small);
     return (
         <box width={width} height={height} flexDirection="column" backgroundColor={theme.background} overflow="hidden">
             <text

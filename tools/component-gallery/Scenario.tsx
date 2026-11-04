@@ -4,9 +4,13 @@ import { CellEditor } from '../../src/components/editors';
 import { theme } from '../../src/theme';
 import type { ScenarioProps } from './types';
 import { useScenarioKeyboard } from './use-gallery-keyboard';
+import { useDiagnosticActions } from '../../src/features/diagnostics';
 
 export const Scenario = ({ scenario, width, height, isActive, onEditing }: ScenarioProps) => {
+    const diagnostics = useDiagnosticActions();
     const [selection, setSelection] = useState<CellPosition>({ row: 0, column: 0 });
+    const latestSelection = useRef(selection);
+    latestSelection.current = selection;
     const [rows, setRows] = useState<readonly GridRow[]>(scenario.rows);
     const [editor, setEditor] = useState<CellPosition | null>(null);
 
@@ -15,6 +19,7 @@ export const Scenario = ({ scenario, width, height, isActive, onEditing }: Scena
 
     const open = (position: CellPosition) => {
         if (!isActive() || editing.current || !rows[position.row] || !scenario.columns[position.column]) return;
+        diagnostics.mark('editing');
 
         editing.current = true;
         onEditing(true);
@@ -22,6 +27,7 @@ export const Scenario = ({ scenario, width, height, isActive, onEditing }: Scena
     };
 
     const cancel = () => {
+        if (editing.current) diagnostics.mark('editing');
         editing.current = false;
         onEditing(false);
         setEditor(null);
@@ -83,7 +89,16 @@ export const Scenario = ({ scenario, width, height, isActive, onEditing }: Scena
                     width={width}
                     height={height - 3}
                     selection={selection}
-                    onSelect={setSelection}
+                    onSelect={(position) => {
+                        if (
+                            position.row !== latestSelection.current.row ||
+                            position.column !== latestSelection.current.column
+                        ) {
+                            diagnostics.mark('navigation');
+                            latestSelection.current = position;
+                            setSelection(position);
+                        }
+                    }}
                     getInteraction={() => (!isActive() || isEditing() ? 'disabled' : 'focused')}
                     onFocus={() => {}}
                     onEdit={open}
@@ -99,6 +114,7 @@ export const Scenario = ({ scenario, width, height, isActive, onEditing }: Scena
             </text>
             {editor && (
                 <CellEditor
+                    onContentEdited={diagnostics.nativeEdit}
                     label={scenario.columns[editor.column]!.name}
                     value={editorValue}
                     multiline={scenario.editor?.multiline ?? true}

@@ -48,6 +48,6 @@ Compare NULL/empty text, selection, pending decorations, borders, and editor fee
 
 ## Validation and extension
 
-Use the gallery for manual UI validation, especially narrow/wide terminals, Unicode alignment, mouse selection, editor focus, and errors. For headless response-time, node-count, and memory observations, run `bun run gallery:bench`; see [the validation report](grid-performance.md). The interactive gallery itself is not a benchmark. Avoid routine snapshot tests merely to cover gallery scenarios.
+Use the gallery for manual UI validation, especially narrow/wide terminals, Unicode alignment, mouse selection, editor focus, and errors. For headless response-time, node-count, and memory observations, run `bun run gallery:bench`; see [the validation report](grid-performance.md). Use `POND_DIAGNOSTICS=1 bun run gallery` to collect startup, grid/editor interaction, rendering, and resource measurements into `.profiles` on exit; see [runtime diagnostics](runtime-diagnostics.md). The interactive gallery itself is not a benchmark. Avoid routine snapshot tests merely to cover gallery scenarios.
 
 Add scenario definitions and mock props to `tools/component-gallery/scenarios.ts`, with contracts in `types.ts`. Keep fixtures independent of application features and stores. Import components through their public `index.ts` APIs. The gallery reuses Pond's error boundary, terminal lifecycle, and sanitized local logger; unexpected failures can be inspected with `bun run logs`.

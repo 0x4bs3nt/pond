@@ -1,13 +1,17 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { DataGrid, type CellPosition, type GridInteraction } from '../../components/data-grid';
 import { CellEditor } from '../../components/editors';
 import { theme } from '../../theme';
 import type { TableBrowserProps } from './types';
 import { useTableEditing } from './use-table-editing';
+import { useDiagnosticActions } from '../diagnostics';
 
 export const TableBrowser = ({ table, sessions, width, height, focused, onFocus }: TableBrowserProps) => {
     const [selection, setSelection] = useState<CellPosition>({ row: 0, column: 0 });
+    const latestSelection = useRef(selection);
+    latestSelection.current = selection;
     const editing = useTableEditing(table, sessions, focused);
+    const diagnostics = useDiagnosticActions();
 
     const getGridInteraction = (): GridInteraction => {
         if (editing.isEditing()) return 'disabled';
@@ -50,7 +54,16 @@ export const TableBrowser = ({ table, sessions, width, height, focused, onFocus 
                 height={height - 6}
                 getInteraction={getGridInteraction}
                 selection={selection}
-                onSelect={setSelection}
+                onSelect={(position) => {
+                    if (
+                        position.row !== latestSelection.current.row ||
+                        position.column !== latestSelection.current.column
+                    ) {
+                        diagnostics.mark('navigation');
+                        latestSelection.current = position;
+                        setSelection(position);
+                    }
+                }}
                 onFocus={onFocus}
                 onEdit={editing.open}
             />
@@ -68,6 +81,7 @@ export const TableBrowser = ({ table, sessions, width, height, focused, onFocus 
             </box>
             {editing.editor && editorColumn && (
                 <CellEditor
+                    onContentEdited={diagnostics.nativeEdit}
                     label={editorColumn.name}
                     value={editorValue}
                     multiline={

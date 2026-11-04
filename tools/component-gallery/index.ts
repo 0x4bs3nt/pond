@@ -3,6 +3,8 @@ import { Command, Option } from 'commander';
 import { scenarios } from './scenarios';
 import { palettes } from './palettes';
 
+const startedAtMs = performance.now();
+
 const program = new Command()
     .name('gallery')
     .description('Exercise Pond components with isolated mock props.')
@@ -23,7 +25,7 @@ program.action(async (options: GalleryOptions) => {
         return;
     }
     const { runGallery } = await import('./run-gallery');
-    await runGallery(options.scenario, options.theme);
+    await runGallery(options.scenario, options.theme, startedAtMs);
 });
 
 await program.parseAsync();

@@ -21,4 +21,9 @@ export type LifecycleOptions = {
     timeoutMs?: number;
 };
 
+export type DiagnosticsLifecycle = {
+    stop: () => void;
+    finalize: (signal: AbortSignal) => Promise<void>;
+};
+
 export type LogsCommandOptions = { follow: boolean };

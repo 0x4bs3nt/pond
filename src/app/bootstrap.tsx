@@ -2,13 +2,17 @@ import { Command } from 'commander';
 import { version } from '../../package.json';
 import type { LogsCommandOptions } from './types';
 
+const startedAtMs = performance.now();
+
 const program = new Command()
     .name('pond')
     .description('A terminal database workspace. Run without a command to open the app.')
     .version(version)
     .showHelpAfterError()
     .action(async () => {
-        await import('./run-tui');
+        const { runTui } = await import('./run-tui');
+
+        await runTui(startedAtMs);
     });
 
 program

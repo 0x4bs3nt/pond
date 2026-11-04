@@ -5,7 +5,17 @@ import type { CellEditorProps } from './types';
 import { theme } from '../../theme';
 import { useCellEditorKeyboard } from './use-cell-editor-keyboard';
 
-export const CellEditor = ({ label, value, multiline, json, width, height, onConfirm, onCancel }: CellEditorProps) => {
+export const CellEditor = ({
+    label,
+    value,
+    multiline,
+    json,
+    width,
+    height,
+    onConfirm,
+    onCancel,
+    onContentEdited,
+}: CellEditorProps) => {
     const input = useRef<InputRenderable>(null);
     const textarea = useRef<TextareaRenderable>(null);
     const changed = useRef(false);
@@ -15,7 +25,10 @@ export const CellEditor = ({ label, value, multiline, json, width, height, onCon
 
     const trackChange = () => {
         const text = (multiline ? textarea.current?.plainText : input.current?.value) ?? '';
-        if (text !== lastText.current) changed.current = true;
+        if (text !== lastText.current) {
+            changed.current = true;
+            onContentEdited?.();
+        }
         lastText.current = text;
     };
 
