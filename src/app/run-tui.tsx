@@ -43,6 +43,8 @@ export const runTui = async (startedAtMs: number) => {
         const { createRoot } = await import('@opentui/react');
         const { App } = await import('./App');
         const { ErrorBoundary } = await import('./ErrorBoundary');
+        const { loadMockWorkspace } = await import('./load-mock-workspace');
+        const tables = await loadMockWorkspace();
         const renderer = await createCliRenderer({
             ...diagnosticsRendererOptions(process.env.POND_DIAGNOSTICS),
             exitOnCtrlC: true,
@@ -78,7 +80,7 @@ export const runTui = async (startedAtMs: number) => {
             <ErrorBoundary onError={lifecycle.reportUI} logPath={logger.path}>
                 <DiagnosticsProvider session={diagnostics}>
                     <DiagnosticBoundary id="workspace">
-                        <App onError={lifecycle.reportUI} logPath={logger.path} />
+                        <App tables={tables} onError={lifecycle.reportUI} logPath={logger.path} />
                     </DiagnosticBoundary>
                 </DiagnosticsProvider>
             </ErrorBoundary>

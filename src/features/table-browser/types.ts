@@ -4,6 +4,7 @@ import type { TableSessionsStore } from '../../state/table-sessions';
 export type TableView = {
     id: string;
     name: string;
+    namespace: string;
     columns: readonly GridColumn[];
     rows: readonly GridRow[];
 };

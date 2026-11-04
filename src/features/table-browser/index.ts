@@ -1,3 +1,3 @@
 export { TableBrowser } from './TableBrowser';
-export { mockTables } from './mock-tables';
+export { presentTable } from './present-table';
 export type { TableView } from './types';

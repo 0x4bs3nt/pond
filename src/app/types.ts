@@ -1,10 +1,11 @@
 import type { ReactNode } from 'react';
 import type { Logger } from '../platform/logging';
 import type { TableSessionsStore } from '../state/table-sessions';
+import type { TableView } from '../features/table-browser';
 
-export type AppProps = { onError?: (error: unknown) => void; logPath?: string };
+export type AppProps = { tables: readonly TableView[]; onError?: (error: unknown) => void; logPath?: string };
 
-export type WorkspaceProps = { sessions: TableSessionsStore };
+export type WorkspaceProps = { tables: readonly TableView[]; sessions: TableSessionsStore };
 
 export type ErrorBoundaryProps = { children: ReactNode; onError?: (error: unknown) => void; logPath?: string };
 

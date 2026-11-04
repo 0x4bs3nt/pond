@@ -3,12 +3,12 @@ import { useCallback } from 'react';
 import type { WorkspaceProps } from './types';
 
 import { SchemaExplorer } from '../features/schema-explorer';
-import { TableBrowser, mockTables } from '../features/table-browser';
+import { TableBrowser } from '../features/table-browser';
 import { WorkspaceStatusBar, WorkspaceTabs, useWorkspace, useWorkspaceKeyboard } from '../features/workspace';
 import { theme } from '../theme';
 import { DiagnosticBoundary, useDiagnosticsReady } from '../features/diagnostics';
 
-export const Workspace = ({ sessions }: WorkspaceProps) => {
+export const Workspace = ({ tables, sessions }: WorkspaceProps) => {
     const { width, height } = useTerminalDimensions();
 
     const activeTableId = useWorkspace((state) => state.activeTableId);
@@ -18,7 +18,7 @@ export const Workspace = ({ sessions }: WorkspaceProps) => {
     const focusGrid = useCallback(() => focusPanel('grid'), [focusPanel]);
 
     const sidebarWidth = width >= 90 ? 24 : 20;
-    const table = mockTables.find((candidate) => candidate.id === activeTableId);
+    const table = tables.find((candidate) => candidate.id === activeTableId);
 
     useWorkspaceKeyboard();
     useDiagnosticsReady(width >= 60 && height >= 16);
@@ -34,11 +34,11 @@ export const Workspace = ({ sessions }: WorkspaceProps) => {
             </box>
             <box height={height - 3} flexDirection="row">
                 <DiagnosticBoundary id="explorer">
-                    <SchemaExplorer tables={mockTables} width={sidebarWidth} height={height - 3} />
+                    <SchemaExplorer tables={tables} width={sidebarWidth} height={height - 3} />
                 </DiagnosticBoundary>
                 <box width={width - sidebarWidth} height={height - 3} flexDirection="column">
                     <DiagnosticBoundary id="tabs">
-                        <WorkspaceTabs tables={mockTables} sessions={sessions} width={width - sidebarWidth} />
+                        <WorkspaceTabs tables={tables} sessions={sessions} width={width - sidebarWidth} />
                     </DiagnosticBoundary>
                     {table ? (
                         <DiagnosticBoundary id="table-browser">
