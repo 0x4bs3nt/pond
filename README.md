@@ -10,7 +10,7 @@ Download a standalone executable from [GitHub Releases](https://github.com/0x4bs
 
 Requires [Bun](https://bun.sh) 1.3.14 or later.
 
-On Nix, enter the development shell to use the pinned Bun package:
+On Nix, enter the development shell to use the pinned Bun package plus Git, curl, Fish, Zsh, and ShellCheck:
 
 ```sh
 nix develop path:.
@@ -20,6 +20,10 @@ With direnv and nix-direnv enabled in your shell, run `direnv allow` once instea
 The environment will load automatically when you enter this directory.
 The `path:.` reference also works before the new flake files are tracked by Git.
 Nix requires the `nix-command` and `flakes` experimental features to be enabled.
+
+The shell includes the tools needed for packaging and installer development. Run `bun test tools/installer/tests` to exercise the installer, including its Bash/Fish/Zsh PATH configuration, and `shellcheck install.sh` to check the installer script.
+
+Intel macOS uses a separately locked `nixpkgs-26.05-darwin` input because unstable Nixpkgs has dropped that platform. Its Bun package uses Pond's pinned release runtime and checksum to retain Bun 1.4.2; Linux and Apple Silicon keep the existing unstable pin. Upstream maintains the Intel macOS branch through the end of 2026, so this compatibility pin needs revisiting afterward; see the [Nixpkgs release notes](https://nixos.org/manual/nixpkgs/unstable/release-notes#x86_64-darwin-26.11).
 
 ```sh
 bun install
