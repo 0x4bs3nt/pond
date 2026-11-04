@@ -1,10 +1,11 @@
 import { discardDeliveredMeasures } from '../platform/performance';
 import type { ErrorSource } from '../platform/logging';
-import type { LifecycleOptions, Renderer } from './types';
+import type { DiagnosticsLifecycle, LifecycleOptions, Renderer } from './types';
 
 export const createLifecycle = ({ logger, writeError, exit, timeoutMs = 1500 }: LifecycleOptions) => {
     const stopTimingCleanup = discardDeliveredMeasures();
     let renderer: Renderer | undefined;
+    let diagnostics: DiagnosticsLifecycle | undefined;
     let shutdown: Promise<void> | undefined;
     let failed = false;
     let reportedFatal = false;
@@ -55,6 +56,31 @@ export const createLifecycle = ({ logger, writeError, exit, timeoutMs = 1500 }: 
                 stopTimingCleanup();
             }
 
+            if (diagnostics) {
+                const abort = new AbortController();
+
+                try {
+                    diagnostics.stop();
+
+                    await Promise.race([
+                        diagnostics.finalize(abort.signal),
+
+                        new Promise<never>((_resolve, reject) => {
+                            timer = setTimeout(() => {
+                                abort.abort();
+                                reject(new Error('Diagnostic report timeout.'));
+                            }, timeoutMs);
+                        }),
+                    ]);
+                } catch {
+                    writeError(
+                        'Pond could not finish its diagnostic report. Check .profiles permissions and disk space.\n'
+                    );
+                } finally {
+                    clearTimeout(timer);
+                }
+            }
+
             logger.log('app.stopped');
             const flushed = await logger.flush(timeoutMs);
 
@@ -95,6 +121,9 @@ export const createLifecycle = ({ logger, writeError, exit, timeoutMs = 1500 }: 
     };
 
     return {
+        attachDiagnostics: (value: DiagnosticsLifecycle) => {
+            diagnostics = value;
+        },
         attach: (value: Renderer) => {
             renderer = value;
         },

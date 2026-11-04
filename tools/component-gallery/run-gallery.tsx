@@ -2,11 +2,16 @@ import { writeSync } from 'node:fs';
 import { version } from '../../package.json';
 import { createLifecycle, ErrorBoundary } from '../../src/app';
 import { createLogger } from '../../src/platform/logging';
-import { diagnosticsRendererOptions } from '../../src/platform/performance';
+import {
+    diagnosticsRendererOptions,
+    createDiagnosticsSession,
+    writeDiagnosticsReport,
+} from '../../src/platform/performance';
 import { theme } from '../../src/theme';
 import { palettes } from './palettes';
+import { DiagnosticsProvider, DiagnosticBoundary } from '../../src/features/diagnostics';
 
-export const runGallery = async (initialScenario: string, palette: string) => {
+export const runGallery = async (initialScenario: string, palette: string, startedAtMs: number) => {
     const logger = createLogger({ version });
     const lifecycle = createLifecycle({
         logger,
@@ -48,6 +53,15 @@ export const runGallery = async (initialScenario: string, palette: string) => {
             consoleMode: 'disabled',
         });
         lifecycle.attach(renderer);
+        const diagnostics =
+            process.env.POND_DIAGNOSTICS === '1'
+                ? createDiagnosticsSession(renderer, { startedAtMs, appVersion: version, source: 'gallery' })
+                : undefined;
+        if (diagnostics)
+            lifecycle.attachDiagnostics({
+                stop: diagnostics.stop,
+                finalize: (signal) => writeDiagnosticsReport(diagnostics.snapshot(), signal),
+            });
         renderer.on('render:error', ({ error }) => {
             void lifecycle.fatal(error, 'renderer');
         });
@@ -59,7 +73,11 @@ export const runGallery = async (initialScenario: string, palette: string) => {
         });
         createRoot(renderer).render(
             <ErrorBoundary onError={lifecycle.reportUI} logPath={logger.path}>
-                <Gallery initialScenario={initialScenario} palette={palette} />
+                <DiagnosticsProvider session={diagnostics}>
+                    <DiagnosticBoundary id="gallery">
+                        <Gallery initialScenario={initialScenario} palette={palette} />
+                    </DiagnosticBoundary>
+                </DiagnosticsProvider>
             </ErrorBoundary>
         );
         logger.log('app.started');

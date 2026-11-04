@@ -7,6 +7,7 @@ export type CellEditorKeyboardOptions = {
 };
 
 export type CellEditorProps = {
+    onContentEdited?: () => void;
     label: string;
     value: string | null;
     multiline: boolean;

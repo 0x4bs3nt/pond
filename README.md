@@ -87,6 +87,8 @@ and [runtime requirements](https://opentui.com/docs/getting-started/runtime-supp
 
 Run `bun run gallery` to exercise grids and editors independently with mock props. Use `--list` for scenarios or `--scenario json --theme light` for a specific preview. See [the gallery guide](docs/component-gallery.md) for controls and validation scenarios.
 
+Use `POND_DIAGNOSTICS=1 bun run start` (or `bun run gallery`) for opt-in startup, interaction, rendering, and resource reports written to `.profiles` on exit. See [runtime diagnostics](docs/runtime-diagnostics.md) for usage and measurement limits.
+
 Use `bun run gallery:bench` for repeatable headless grid measurements. Large-data scenarios and current findings are documented in [grid responsiveness validation](docs/grid-performance.md).
 
 ## Releases

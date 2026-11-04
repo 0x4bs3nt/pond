@@ -6,8 +6,10 @@ import { cellKey, emptyChanges, type TableSessionsStore } from '../../state/tabl
 import { useWorkspace } from '../workspace';
 import type { TableView } from './types';
 import { useTableBrowserKeyboard } from './use-table-browser-keyboard';
+import { useDiagnosticActions } from '../diagnostics';
 
 export const useTableEditing = (table: TableView, store: TableSessionsStore, focused: boolean) => {
+    const diagnostics = useDiagnosticActions();
     const changes = useStore(store, (state) => state.changes[table.id] ?? emptyChanges);
     const setEditing = useWorkspace((state) => state.setEditing);
     const isEditing = useWorkspace((state) => state.isEditing);
@@ -34,6 +36,7 @@ export const useTableEditing = (table: TableView, store: TableSessionsStore, foc
 
     const open = (position: CellPosition) => {
         if (isEditing() || !table.rows[position.row] || !table.columns[position.column]) return;
+        diagnostics.mark('editing');
 
         editorRef.current = position;
         setEditing(true);
@@ -41,6 +44,7 @@ export const useTableEditing = (table: TableView, store: TableSessionsStore, foc
     };
 
     const cancel = () => {
+        if (editorRef.current) diagnostics.mark('editing');
         editorRef.current = null;
         setEditor(null);
         setEditing(false);
