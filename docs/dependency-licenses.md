@@ -18,7 +18,7 @@ The 326 component records in `tools/packaging/licenses/provenance.json` identify
 
 ## Build and archive protection
 
-Packaging rejects a Bun version that differs from the notice collection and rejects an altered notice bundle. The extracted-archive smoke check verifies the bundle, LGPL texts, source directions, and provenance file against the checked-in materials. Installed package notice copying also includes `COPYRIGHT` files.
+Packaging rejects a Bun version that differs from the notice collection and rejects an altered notice bundle. The extracted-archive smoke check verifies the bundle, LGPL texts, source directions, and provenance file against the checked-in materials. Installed package notice copying also includes `COPYRIGHT` files. The PostgreSQL client added for #16 (`pg` 8.23.1 and its locked runtime dependencies) declares MIT licensing. `pg-types` and `pgpass` distribute their full notices in README.md rather than standalone license files; packaging explicitly includes those readmes. This was checked against the installed lockfile versions on 2026-11-04.
 
 The regression test checks a valid collection, an altered bundle, and a missing LGPL text. Run `bun run check`, `bun run build`, and `bun run package:check` after changes. All configured platform packaging jobs must pass before promotion; the local check covers Linux only.
 

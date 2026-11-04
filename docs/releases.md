@@ -21,7 +21,7 @@ Phase 1 validation is complete on Linux; see [the grid measurements and interact
 
 All eight platform archives are published in 0.3.3, including Intel macOS, Linux ARM64/glibc, Windows ARM64, and Linux x64/ARM64 musl. The [bundled-license review](dependency-licenses.md) and checksums accompany the release. All eight targets passed native packaging CI; the original three also have manual validation. See [packaging](packaging.md) for the distinction.
 
-Release notes must state that Pond still uses mock data and that macOS/Windows builds are unsigned. Signing/notarization remains deferred. The Unix installer and its installation/upgrade validation (#48) shipped in 0.3.4, completing standalone delivery (#44). Reserve 0.4.0 for PostgreSQL. Package-manager delivery (#45–#47) remains separate. Prioritize opt-in diagnostics (#43), then database models, ports, and adapter registration (#15).
+Release notes must distinguish the mock demo from PostgreSQL functionality and state that macOS/Windows builds are unsigned. Signing/notarization remains deferred. The Unix installer and its installation/upgrade validation (#48) shipped in 0.3.4, completing standalone delivery (#44). Reserve 0.4.0 for PostgreSQL. Package-manager delivery (#45–#47) remains separate. Diagnostics (#43), database contracts (#15), and managed PostgreSQL connections (#16) are implemented on the development line. Catalog discovery, exact values, asynchronous real browsing and integration validation (#17–#21) remain before 0.4.0 is ready.
 
 ### Milestone completion reminders
 

@@ -8,7 +8,7 @@ import { WorkspaceStatusBar, WorkspaceTabs, useWorkspace, useWorkspaceKeyboard }
 import { theme } from '../theme';
 import { DiagnosticBoundary, useDiagnosticsReady } from '../features/diagnostics';
 
-export const Workspace = ({ tables, sessions }: WorkspaceProps) => {
+export const Workspace = ({ tables, sessions, onConnections }: WorkspaceProps) => {
     const { width, height } = useTerminalDimensions();
 
     const activeTableId = useWorkspace((state) => state.activeTableId);
@@ -20,7 +20,7 @@ export const Workspace = ({ tables, sessions }: WorkspaceProps) => {
     const sidebarWidth = width >= 90 ? 24 : 20;
     const table = tables.find((candidate) => candidate.id === activeTableId);
 
-    useWorkspaceKeyboard();
+    useWorkspaceKeyboard(onConnections);
     useDiagnosticsReady(width >= 60 && height >= 16);
 
     if (width < 60 || height < 16)
@@ -30,7 +30,9 @@ export const Workspace = ({ tables, sessions }: WorkspaceProps) => {
         <box width={width} height={height} flexDirection="column" backgroundColor={theme.background}>
             <box height={2} flexShrink={0} paddingLeft={1} backgroundColor={theme.panel}>
                 <text fg={theme.accent}>POND / Database workspace</text>
-                <text fg={theme.muted}>Explore your data · Mock connection</text>
+                <text fg={theme.muted}>
+                    Explore your data · Mock connection{onConnections ? ' · F2 connections' : ''}
+                </text>
             </box>
             <box height={height - 3} flexDirection="row">
                 <DiagnosticBoundary id="explorer">

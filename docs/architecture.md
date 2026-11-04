@@ -174,7 +174,9 @@ Namespace paths are ordered identifier parts, including an empty path for engine
 
 Page reads require a nonnegative safe-integer offset and a positive safe-integer limit within the session's maximum. Offset order and row IDs outside a result are adapter-defined; concurrent pagination stability is not promised. The mock adapter has a fixed fixture order and a 250-row maximum. Preloading all three small mock tables is specific to the demo, not the loading strategy for a real database.
 
-Only the mock adapter is registered today. PostgreSQL connection options, credentials, and profile persistence belong to #16; catalog metadata and value decoding are implemented in #17–#18. Real browsing, request/session ownership, and PostgreSQL integration validation follow in #19–#21. Existing lint rules enforce these layer boundaries and module entry points without granting services or features access to drivers.
+The app also registers the PostgreSQL adapter for the [connection manager](connections.md). `domain/connections` validates non-secret profiles; profile and credential ports isolate file persistence and one-use memory credentials. The connection service owns one session, serializes replacement, aborts pending handshakes, and closes late results. Features update a vanilla Zustand connection store and release session subscriptions on replacement/unmount. App shutdown disposes the service with bounded cleanup.
+
+The PostgreSQL adapter uses one `pg` client and an owned socket so cancellation interrupts stalled handshakes. Network options and fixed error codes cross the database port; passwords travel separately. TLS supports disabled, required encryption, and verified certificate/hostname modes. The PostgreSQL session currently reports schema/browsing operations as unsupported, rather than returning misleading empty results. Catalog metadata and value decoding follow in #17–#18; real browsing, table request/session ownership, and PostgreSQL integration validation follow in #19–#21. Existing lint rules enforce these layer boundaries without granting services or features access to drivers.
 
 ## State architecture
 

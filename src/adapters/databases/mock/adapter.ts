@@ -18,6 +18,7 @@ export const mockDatabaseAdapter: DatabaseAdapter = {
         if (connection.database !== 'demo') return { ok: false, error: { code: 'not-found' } };
 
         let closed = false;
+        const listeners = new Set<() => void>();
 
         const read = async <T>(operation: () => DatabaseResult<T>): Promise<DatabaseResult<T>> =>
             closed ? { ok: false, error: { code: 'closed' } } : structuredClone(operation());
@@ -67,7 +68,18 @@ export const mockDatabaseAdapter: DatabaseAdapter = {
                         }),
                 },
                 close: async () => {
+                    if (closed) return;
                     closed = true;
+                    for (const listener of listeners) listener();
+                    listeners.clear();
+                },
+                subscribeClose: (listener) => {
+                    listeners.add(listener);
+                    if (closed) listener();
+
+                    return () => {
+                        listeners.delete(listener);
+                    };
                 },
             },
         };

@@ -32,11 +32,14 @@ export type DatabaseSession = {
     readonly browsing: TableBrowsing;
     // Idempotent; release owned resources. Subsequent operations return the closed error.
     close: () => Promise<void>;
+    subscribeClose: (listener: () => void) => () => void;
 };
+
+export type ConnectOptions = { readonly password?: string; readonly signal?: AbortSignal };
 
 export type DatabaseAdapter = {
     readonly engineId: string;
-    connect: (connection: DatabaseConnection) => Promise<DatabaseResult<DatabaseSession>>;
+    connect: (connection: DatabaseConnection, options?: ConnectOptions) => Promise<DatabaseResult<DatabaseSession>>;
 };
 
 export type DatabaseRegistry = { get: (engineId: string) => DatabaseAdapter | undefined };

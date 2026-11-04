@@ -6,6 +6,7 @@ export const createLifecycle = ({ logger, writeError, exit, timeoutMs = 1500 }: 
     const stopTimingCleanup = discardDeliveredMeasures();
     let renderer: Renderer | undefined;
     let diagnostics: DiagnosticsLifecycle | undefined;
+    let cleanup: (() => Promise<void>) | undefined;
     let shutdown: Promise<void> | undefined;
     let failed = false;
     let reportedFatal = false;
@@ -54,6 +55,22 @@ export const createLifecycle = ({ logger, writeError, exit, timeoutMs = 1500 }: 
             } finally {
                 clearTimeout(timer);
                 stopTimingCleanup();
+            }
+
+            if (cleanup) {
+                try {
+                    await Promise.race([
+                        cleanup(),
+                        new Promise<never>((_resolve, reject) => {
+                            timer = setTimeout(() => reject(new Error('Session cleanup timeout.')), timeoutMs);
+                        }),
+                    ]);
+                } catch (error) {
+                    failed = true;
+                    logger.log('shutdown.failed', 'shutdown', error);
+                } finally {
+                    clearTimeout(timer);
+                }
             }
 
             if (diagnostics) {
@@ -121,6 +138,9 @@ export const createLifecycle = ({ logger, writeError, exit, timeoutMs = 1500 }: 
     };
 
     return {
+        attachCleanup: (value: () => Promise<void>) => {
+            cleanup = value;
+        },
         attachDiagnostics: (value: DiagnosticsLifecycle) => {
             diagnostics = value;
         },

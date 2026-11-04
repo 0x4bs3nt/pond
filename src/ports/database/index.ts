@@ -5,4 +5,5 @@ export type {
     DatabaseSession,
     DatabaseAdapter,
     DatabaseRegistry,
+    ConnectOptions,
 } from './types';

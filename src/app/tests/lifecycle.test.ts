@@ -36,12 +36,15 @@ test('fatal shutdown is idempotent, restores before reporting, and writes the or
             exit: (code) => calls.push(`exit:${code}`),
         });
         lifecycle.attach(renderer);
+        lifecycle.attachCleanup(async () => {
+            calls.push('disconnect');
+        });
         const error = new Error('private');
         const first = lifecycle.fatal(error, 'unhandledRejection');
         const second = lifecycle.fatal(error, 'uncaughtException');
         expect(first).toBe(second);
         await first;
-        expect(calls).toEqual(['destroy', 'report', 'exit:1']);
+        expect(calls).toEqual(['destroy', 'disconnect', 'report', 'exit:1']);
         const events = (await readFile(logger.path, 'utf8'))
             .trim()
             .split('\n')
@@ -83,3 +86,36 @@ test('a stuck terminal close cannot hang fatal shutdown', async () =>
         expect(exits).toEqual([1]);
         expect(await readFile(logger.path, 'utf8')).toContain('shutdown.failed');
     }));
+
+test.each(['reject', 'hang'])(
+    'session cleanup failure (%s) cannot prevent terminal restoration or exit',
+    async (mode) =>
+        run(async (directory) => {
+            const logger = createLogger({ version: 'test', directory });
+            const calls: string[] = [];
+            const lifecycle = createLifecycle({
+                logger,
+                timeoutMs: 20,
+                writeError: () => calls.push('report'),
+                exit: (code) => calls.push(`exit:${code}`),
+            });
+            lifecycle.attach({
+                isDestroyed: false,
+                destroy: () => {
+                    calls.push('restore');
+                },
+                closed: Promise.resolve(),
+            });
+            lifecycle.attachCleanup(async () => {
+                calls.push('cleanup');
+                if (mode === 'reject') throw new Error('password=private');
+                await new Promise(() => {});
+            });
+            await lifecycle.stop();
+            expect(calls).toEqual(['restore', 'cleanup', 'report', 'exit:1']);
+            const raw = await readFile(logger.path, 'utf8');
+            expect(raw).toContain('shutdown.failed');
+            expect(raw).toContain('app.stopped');
+            expect(raw).not.toContain('password=private');
+        })
+);

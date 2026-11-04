@@ -38,8 +38,10 @@ export const checkRenderer = async (context: SmokeContext) => {
             await Bun.sleep(50);
         }
 
-        // Allow the first frame and input handlers to settle, then exercise normal quit.
+        // Open the mock demo from the connection screen, then exercise normal quit.
         await Bun.sleep(300);
+        child.terminal!.write('\x1bOQ');
+        await Bun.sleep(150);
         child.terminal!.write('q');
 
         while (child.exitCode === null && Date.now() < deadline) await Bun.sleep(50);

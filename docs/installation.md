@@ -1,6 +1,6 @@
 # Installing Pond
 
-Pond currently uses mock data. PostgreSQL support is planned for 0.4.0. Bun is not required to run a release executable.
+The published 0.3.4 release uses mock data. PostgreSQL browsing is planned for 0.4.0. Bun is not required to run a release executable.
 
 ## Unix installer
 
