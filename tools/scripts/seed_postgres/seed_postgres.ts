@@ -47,7 +47,6 @@ const seed = async () => {
         console.info(
             'Seeded pond_dev, schema pond_demo. Connect to 127.0.0.1:5432 as pond, empty password, TLS disabled.'
         );
-
     } finally {
         await database.end();
     }
