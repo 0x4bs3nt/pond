@@ -30,22 +30,25 @@ export const checkRenderer = async (context: SmokeContext) => {
         },
     });
 
-    const deadline = Date.now() + 15000;
-    try {
-        while (!(await readRecords(logs)).includes('app.started')) {
-            if (child.exitCode !== null || Date.now() > deadline) throw new Error('Packaged renderer did not start.');
-
+    const waitFor = async (ready: () => boolean, phase: string) => {
+        const deadline = Date.now() + 15000;
+        while (!ready()) {
+            if (child.exitCode !== null)
+                throw new Error(`Packaged app exited with code ${child.exitCode} while waiting for ${phase}.`);
+            if (Date.now() > deadline) throw new Error(`Timed out waiting for packaged app ${phase}.`);
             await Bun.sleep(50);
         }
+    };
 
-        // Open the mock demo from the connection screen, then exercise normal quit.
-        await Bun.sleep(300);
+    try {
+        // app.started precedes React mounting. Send input only after each destination renders.
+        await waitFor(() => output.includes('POND / Connections'), 'connection screen');
         child.terminal!.write('\x1bOQ');
-        await Bun.sleep(150);
+        await waitFor(() => output.includes('POND / Database workspace'), 'mock workspace');
         child.terminal!.write('q');
 
-        while (child.exitCode === null && Date.now() < deadline) await Bun.sleep(50);
-        if (child.exitCode !== 0) throw new Error('Packaged app did not exit cleanly.');
+        await waitFor(() => child.exitCode !== null, 'normal quit');
+        if (child.exitCode !== 0) throw new Error(`Packaged app did not exit cleanly (code ${child.exitCode}).`);
 
         const log = await readRecords(logs);
 
