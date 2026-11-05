@@ -4,6 +4,7 @@ import type { DatabaseAdapter } from '../../../ports/database';
 import type { DatabaseResult } from '../../../domain/database';
 import { isConnectionProfile } from '../../../domain/connections';
 import { connectionError } from './errors';
+import { createSchemaInspection } from './schema';
 
 export const postgresDatabaseAdapter: DatabaseAdapter = {
     engineId: 'postgres',
@@ -37,6 +38,7 @@ export const postgresDatabaseAdapter: DatabaseAdapter = {
             ssl: network.tls === 'disable' ? false : { rejectUnauthorized: network.tls === 'verify-full' },
             stream: () => socket,
             application_name: 'pond',
+            statement_timeout: 10_000,
         });
 
         client.on('error', notifyClosed);
@@ -91,7 +93,7 @@ export const postgresDatabaseAdapter: DatabaseAdapter = {
             options.signal?.removeEventListener('abort', abort);
         }
 
-        // TODO: Catalog inspection and browsing arrive in #17–#19. Do not report an empty real database.
+        // Row decoding and browsing arrive in #18–#19.
         const unavailable = async (): Promise<DatabaseResult<never>> => ({
             ok: false,
             error: { code: closed ? 'closed' : 'unsupported-operation' },
@@ -100,8 +102,8 @@ export const postgresDatabaseAdapter: DatabaseAdapter = {
         return {
             ok: true,
             value: {
-                capabilities: { namespaces: false, primaryKeys: false, maxPageSize: 0 },
-                schema: { listNamespaces: unavailable, listTables: unavailable, describeTable: unavailable },
+                capabilities: { namespaces: true, primaryKeys: true, maxPageSize: 0 },
+                schema: createSchemaInspection(client, () => closed),
                 browsing: { readPage: unavailable },
                 close,
                 subscribeClose: (listener) => {

@@ -21,6 +21,7 @@ export type ProfileDraft = {
 };
 export type PasswordPromptProps = { onSubmit: (password: string) => void; onCancel: () => void };
 export type ConnectionKeyboardOptions = {
+    enabled: boolean;
     prompting: boolean;
     field: number;
     setField: (update: (value: number) => number) => void;

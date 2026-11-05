@@ -4,6 +4,7 @@ export type {
     DatabaseNamespace,
     TableReference,
     DatabaseTable,
+    CatalogNamespace,
     DatabaseColumn,
     TableSchema,
     DatabaseValue,

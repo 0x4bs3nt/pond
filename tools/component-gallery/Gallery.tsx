@@ -3,6 +3,7 @@ import { useRef, useState } from 'react';
 import { theme } from '../../src/theme';
 import { scenarios } from './scenarios';
 import { Scenario } from './Scenario';
+import { ExplorerScenario } from './ExplorerScenario';
 import { useGalleryKeyboard } from './use-gallery-keyboard';
 import { useDiagnosticsReady } from '../../src/features/diagnostics';
 import type { GalleryProps } from './types';
@@ -89,22 +90,33 @@ export const Gallery = ({ initialScenario, palette }: GalleryProps) => {
                     ? ' Resize to at least 60 × 18. An open draft is preserved; Esc cancels.'
                     : ` ${scenario.description}`}
             </text>
-            <Scenario
-                key={`${scenario.id}:${revision}`}
-                scenario={scenario}
-                width={Math.max(60, width)}
-                height={Math.max(13, height - 5)}
-                isActive={() => revision === currentRevision.current}
-                onEditing={(value) => {
-                    if (revision !== currentRevision.current) return;
-                    editing.current = value;
-                    setEditorOpen(value);
-                }}
-            />
+            {scenario.explorer ? (
+                <ExplorerScenario
+                    key={`${scenario.id}:${revision}`}
+                    {...scenario.explorer}
+                    width={Math.max(60, width)}
+                    height={Math.max(13, height - 5)}
+                />
+            ) : (
+                <Scenario
+                    key={`${scenario.id}:${revision}`}
+                    scenario={scenario}
+                    width={Math.max(60, width)}
+                    height={Math.max(13, height - 5)}
+                    isActive={() => revision === currentRevision.current}
+                    onEditing={(value) => {
+                        if (revision !== currentRevision.current) return;
+                        editing.current = value;
+                        setEditorOpen(value);
+                    }}
+                />
+            )}
             <text height={1} flexShrink={0} fg={theme.muted} wrapMode="none">
                 {editorOpen
                     ? ' Editing · Esc cancel · Ctrl+S stage · Ctrl+N NULL'
-                    : ' Enter edit · Ctrl+D reset values · F5/F6 scenarios · r reset · q quit'}
+                    : scenario.explorer
+                      ? ' Arrows navigate · Enter select · Tab focus · F5/F6 scenarios · r reset · q quit'
+                      : ' Enter edit · Ctrl+D reset values · F5/F6 scenarios · r reset · q quit'}
             </text>
         </box>
     );

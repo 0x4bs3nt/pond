@@ -30,7 +30,7 @@ bun install
 bun run dev
 ```
 
-The development app opens the [PostgreSQL connection manager](docs/connections.md). Save non-secret profiles, connect with a prompted password, and disconnect with Ctrl+D. Ctrl+C quits; F2 opens the mock demo while disconnected. Development mode debounces source saves and waits for terminal cleanup before restarting. If a save introduces a startup error, it restores the terminal and waits for the next change so you can fix it without restarting the command.
+The development app opens the [PostgreSQL connection manager](docs/connections.md). Save non-secret profiles and connect with a prompted password to explore real schemas, tables, views, and column metadata. Select a relation with Enter or a click, use Tab to inspect its metadata grid, and F5 to refresh. Real row browsing is still upcoming. Ctrl+D disconnects; Ctrl+C quits; F2 opens the mock demo while disconnected. Development mode debounces source saves and waits for terminal cleanup before restarting. If a save introduces a startup error, it restores the terminal and waits for the next change so you can fix it without restarting the command.
 
 To run a persistent local PostgreSQL 17 database in a separate terminal:
 

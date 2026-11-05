@@ -1,6 +1,6 @@
 # Component gallery
 
-Run Pond's reusable grid and editors independently of the workspace and database workflows:
+Run Pond's reusable explorer, grid and editors independently of the workspace and database workflows:
 
 ```sh
 bun run gallery
@@ -14,15 +14,17 @@ bun run gallery --scenario values --theme contrast
 
 ## Scenarios
 
-| ID            | What to exercise                                                                                                     |
-| ------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `wide`        | 250 rows and 24 columns, selection, paging, horizontal/vertical scrolling, fixed headers, and resizing.              |
-| `empty`       | Column headers with zero rows; navigation and Enter remain safe.                                                     |
-| `values`      | NULL versus empty text, CJK, Arabic, emoji, combining marks, multiline/long values, and exact numeric text.          |
-| `pending`     | Changed-cell decorations against selected and unselected backgrounds. Includes deliberately decorated fixture cells. |
-| `single-line` | Input editing, confirm/cancel, empty text, and staging NULL.                                                         |
-| `multiline`   | Newlines, mouse selection, confirm/cancel, and resizing an open editor.                                              |
-| `json`        | Invalid-JSON feedback and preservation of whitespace and large numeric literals.                                     |
+| ID              | What to exercise                                                                                                     |
+| --------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `wide`          | 250 rows and 24 columns, selection, paging, horizontal/vertical scrolling, fixed headers, and resizing.              |
+| `schemas`       | Grouped schemas, an empty schema, views, quoted names, scrolling, mouse selection, focus, and resizing.              |
+| `schemas-empty` | Empty catalog; keyboard and mouse input stay safe.                                                                   |
+| `empty`         | Column headers with zero rows; navigation and Enter remain safe.                                                     |
+| `values`        | NULL versus empty text, CJK, Arabic, emoji, combining marks, multiline/long values, and exact numeric text.          |
+| `pending`       | Changed-cell decorations against selected and unselected backgrounds. Includes deliberately decorated fixture cells. |
+| `single-line`   | Input editing, confirm/cancel, empty text, and staging NULL.                                                         |
+| `multiline`     | Newlines, mouse selection, confirm/cancel, and resizing an open editor.                                              |
+| `json`          | Invalid-JSON feedback and preservation of whitespace and large numeric literals.                                     |
 
 Additional stress scenarios added for #14: `stress` (100,000 rows × 256 columns) and `long-values` (1,000 rows × 32 columns with 65,536-unit cell values). See [grid performance](grid-performance.md) for repeatable measurements and validation results.
 
@@ -31,6 +33,7 @@ Additional stress scenarios added for #14: `stress` (100,000 rows × 256 columns
 - `F5` / `F6`, or click **Previous** / **Next**, to change scenarios. Each visit starts from its fixture.
 - `r`, or click **Reset**, to reset the current scenario, selection, and viewport.
 - Grid arrows, Page Up/Down, Home/End, mouse clicks, and wheel scrolling behave as in Pond. `Enter` opens the selected cell's editor.
+- In explorer scenarios, Up/Down moves the cursor, Enter or a click selects a relation, the wheel scrolls, and Tab changes focus.
 - In editor scenarios, press `Enter` or click **Open editor**.
 - `Enter` stages single-line input; multiline/JSON editors use `Ctrl+S`. `Ctrl+N` stages NULL. `Escape` cancels.
 - `Ctrl+D` restores fixture values and decorations. The `pending` fixture intentionally starts decorated, so those initial markers remain after reset.

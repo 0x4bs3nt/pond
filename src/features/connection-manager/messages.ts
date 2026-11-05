@@ -19,4 +19,7 @@ export const connectionMessages: Record<DatabaseError['code'], string> = {
     'unsupported-operation': 'This operation is not available yet.',
     cancelled: 'Connection cancelled.',
     closed: 'Connection closed. Reconnect to continue.',
+    'permission-denied': 'Permission denied. Check the database role permissions.',
+    'query-failed': 'Database request failed. Retry the operation.',
+    timeout: 'Database request timed out. Retry the operation.',
 };

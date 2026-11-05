@@ -9,6 +9,7 @@ import { profileMessages } from './messages';
 import { useConnectionActions } from './use-connection-actions';
 import { useConnectionKeyboard } from './use-connection-keyboard';
 import type { ConnectionManagerProps, ProfileDraft } from './types';
+import { DatabaseExplorer } from '../schema-explorer';
 
 const newDraft = (): ProfileDraft => ({
     id: crypto.randomUUID(),
@@ -31,7 +32,7 @@ const tlsModes = ['verify-full', 'require', 'disable'] as const;
 
 export const ConnectionManager = ({ onDemo, ...dependencies }: ConnectionManagerProps) => {
     const { width, height } = useTerminalDimensions();
-    const { store, save, connect, disconnect } = useConnectionActions(dependencies);
+    const { store, session, save, connect, disconnect } = useConnectionActions(dependencies);
 
     const profiles = useStore(store, (state) => state.profiles);
     const status = useStore(store, (state) => state.status);
@@ -114,6 +115,7 @@ export const ConnectionManager = ({ onDemo, ...dependencies }: ConnectionManager
     };
 
     useConnectionKeyboard({
+        enabled: !session,
         prompting: !!prompt,
         field,
         setField,
@@ -127,6 +129,18 @@ export const ConnectionManager = ({ onDemo, ...dependencies }: ConnectionManager
         onNext,
         onDemo: openDemo,
     });
+
+    if (session && active)
+        return (
+            <DatabaseExplorer
+                session={session}
+                databaseName={active.connection.database}
+                onError={dependencies.onError}
+                onDisconnect={() => {
+                    void disconnect();
+                }}
+            />
+        );
 
     return (
         <box

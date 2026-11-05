@@ -1,5 +1,16 @@
 import type { DatabaseError } from '../../../domain/database';
 
+export const queryError = (error: unknown): DatabaseError => {
+    const code = error && typeof error === 'object' && 'code' in error ? error.code : undefined;
+
+    if (code === '42501') return { code: 'permission-denied' };
+    if (code === '42P01' || code === '3F000') return { code: 'not-found' };
+    if (code === '57014' || code === '55P03') return { code: 'timeout' };
+    if (typeof code === 'string' && /^[0-9A-Z]{5}$/u.test(code)) return { code: 'query-failed' };
+
+    return connectionError(error);
+};
+
 export const connectionError = (error: unknown): DatabaseError => {
     const code = error && typeof error === 'object' && 'code' in error ? error.code : undefined;
 

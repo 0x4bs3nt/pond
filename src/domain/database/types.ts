@@ -16,7 +16,11 @@ export type DatabaseConnection = {
 // An empty path represents an engine without namespaces.
 export type DatabaseNamespace = readonly string[];
 export type TableReference = { readonly namespace: DatabaseNamespace; readonly name: string };
-export type DatabaseTable = TableReference & { readonly id: string; readonly kind: 'table' | 'view' };
+export type DatabaseTable = TableReference & {
+    readonly id: string;
+    readonly kind: 'table' | 'view' | 'materialized-view' | 'foreign-table';
+};
+export type CatalogNamespace = { readonly namespace: DatabaseNamespace; readonly tables: readonly DatabaseTable[] };
 
 export type DatabaseColumn = {
     readonly id: string;
@@ -25,6 +29,10 @@ export type DatabaseColumn = {
     readonly nativeType: string;
     readonly category: 'text' | 'integer' | 'decimal' | 'boolean' | 'json' | 'temporal' | 'binary' | 'other';
     readonly nullable: boolean;
+    // Expressions describe the catalog; they are never executed by consumers.
+    readonly defaultExpression: string | null;
+    readonly identity: 'always' | 'by-default' | null;
+    readonly generated: { readonly kind: 'stored' | 'virtual'; readonly expression: string } | null;
 };
 
 export type TableSchema = {
@@ -66,6 +74,9 @@ export type DatabaseError = {
         | 'unreachable'
         | 'tls'
         | 'connection-failed'
+        | 'permission-denied'
+        | 'query-failed'
+        | 'timeout'
         | 'cancelled';
 };
 export type DatabaseResult<T> =
