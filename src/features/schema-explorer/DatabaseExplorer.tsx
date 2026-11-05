@@ -11,6 +11,7 @@ import { schemaErrorMessage } from './messages';
 import type { DatabaseExplorerProps } from './types';
 
 export const DatabaseExplorer = (props: DatabaseExplorerProps) => {
+    const isActive = props.isActive ?? (() => true);
     const { width, height } = useTerminalDimensions();
 
     const { store, refresh, select } = useSchemaCatalog(props);
@@ -30,7 +31,7 @@ export const DatabaseExplorer = (props: DatabaseExplorerProps) => {
 
     const open = (index: number) => {
         const table = tables[index];
-        if (!table) return;
+        if (!isActive() || !table) return;
 
         cursorRef.current = index;
         setCursor(index);
@@ -40,7 +41,7 @@ export const DatabaseExplorer = (props: DatabaseExplorerProps) => {
     };
 
     const reload = () => {
-        if (catalog.status === 'loading') return;
+        if (!isActive() || catalog.status === 'loading') return;
 
         cursorRef.current = 0;
         setCursor(0);
@@ -50,6 +51,7 @@ export const DatabaseExplorer = (props: DatabaseExplorerProps) => {
 
     useExplorerKeyboard({
         focused,
+        isActive,
         moveCursor: (offset) => {
             cursorRef.current = Math.max(0, Math.min(tables.length - 1, cursorRef.current + offset));
             setCursor(cursorRef.current);
@@ -58,6 +60,8 @@ export const DatabaseExplorer = (props: DatabaseExplorerProps) => {
     });
 
     useCatalogKeyboard({
+        isActive,
+        onConnections: props.onConnections,
         onRefresh: reload,
         onDisconnect: props.onDisconnect,
         onToggleFocus: () => setFocused((value) => !value),
@@ -78,10 +82,33 @@ export const DatabaseExplorer = (props: DatabaseExplorerProps) => {
     return (
         <box width={width} height={height} flexDirection="column" backgroundColor={theme.background}>
             <text height={1} fg={theme.accent}>{` POND / Schema explorer · Connected to ${props.databaseName}`}</text>
-            <text height={1} fg={theme.muted} onMouseDown={reload}>
-                {' '}
-                F5 refresh · Ctrl+D disconnect · Ctrl+C quit
-            </text>
+            <box height={1} flexDirection="row">
+                {props.onConnections && (
+                    <text
+                        fg={theme.accent}
+                        onMouseDown={() => {
+                            if (isActive()) props.onConnections?.();
+                        }}
+                    >
+                        {' '}
+                        F2 Connections{' '}
+                    </text>
+                )}
+                <text fg={theme.muted} onMouseDown={reload}>
+                    {' '}
+                    F5 Refresh{' '}
+                </text>
+                <text
+                    fg={theme.muted}
+                    onMouseDown={() => {
+                        if (isActive()) props.onDisconnect();
+                    }}
+                >
+                    {' '}
+                    Ctrl+D Disconnect{' '}
+                </text>
+                <text fg={theme.muted}> Ctrl+C Quit </text>
+            </box>
             <box height={height - 3} flexDirection="row">
                 <ExplorerView
                     groups={groups.map((group) => ({
@@ -107,6 +134,7 @@ export const DatabaseExplorer = (props: DatabaseExplorerProps) => {
                             width={width - sidebarWidth}
                             height={height - 3}
                             focused={!focused}
+                            isActive={isActive}
                             onFocus={() => setFocused(false)}
                         />
                     ) : (

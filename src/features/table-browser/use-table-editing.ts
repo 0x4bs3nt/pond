@@ -12,6 +12,7 @@ export const useTableEditing = (table: TableView, store: TableSessionsStore, foc
     const diagnostics = useDiagnosticActions();
     const changes = useStore(store, (state) => state.changes[table.id] ?? emptyChanges);
     const setEditing = useWorkspace((state) => state.setEditing);
+    const isActive = useWorkspace((state) => state.isActive);
     const isEditing = useWorkspace((state) => state.isEditing);
 
     const [editor, setEditor] = useState<CellPosition | null>(null);
@@ -35,7 +36,7 @@ export const useTableEditing = (table: TableView, store: TableSessionsStore, foc
     );
 
     const open = (position: CellPosition) => {
-        if (isEditing() || !table.rows[position.row] || !table.columns[position.column]) return;
+        if (!isActive() || isEditing() || !table.rows[position.row] || !table.columns[position.column]) return;
         diagnostics.mark('editing');
 
         editorRef.current = position;
@@ -69,6 +70,7 @@ export const useTableEditing = (table: TableView, store: TableSessionsStore, foc
 
     useTableBrowserKeyboard({
         focused,
+        isActive,
         isEditing,
         onDiscard: () => store.getState().discard(table.id),
     });

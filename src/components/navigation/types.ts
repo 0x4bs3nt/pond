@@ -24,3 +24,12 @@ export type TabBarProps = {
     onActivate: (id: string) => void;
     onClose: (id: string) => void;
 };
+
+export type SelectableListProps = {
+    items: readonly { id: string; label: string; detail: string }[];
+    selectedId: string | null;
+    height: number;
+    disabled?: boolean;
+    message?: string;
+    onSelect: (id: string) => void;
+};

@@ -50,15 +50,12 @@ export const createFileProfiles = (directory = profileDirectory()): ProfileRepos
         }
     };
 
-    const save = async (profile: ConnectionProfile): Promise<ProfileResult<readonly ConnectionProfile[]>> => {
-        if (!isConnectionProfile(profile)) return { ok: false, error: 'invalid-profile' };
-
-        const clean = copyProfile(profile);
+    const update = (change: (profiles: readonly ConnectionProfile[]) => readonly ConnectionProfile[]) => {
         const write = writes.then(async (): Promise<ProfileResult<readonly ConnectionProfile[]>> => {
             const existing = await list();
             if (!existing.ok) return existing;
 
-            const profiles = [...existing.value.filter((item) => item.id !== clean.id), clean];
+            const profiles = change(existing.value);
             const temporary = join(directory, `.profiles-${crypto.randomUUID()}.tmp`);
 
             try {
@@ -83,5 +80,18 @@ export const createFileProfiles = (directory = profileDirectory()): ProfileRepos
         return write;
     };
 
-    return { list, save };
+    const save = async (profile: ConnectionProfile): Promise<ProfileResult<readonly ConnectionProfile[]>> => {
+        if (!isConnectionProfile(profile)) return { ok: false, error: 'invalid-profile' };
+        const clean = copyProfile(profile);
+
+        return update((profiles) =>
+            profiles.some((item) => item.id === clean.id)
+                ? profiles.map((item) => (item.id === clean.id ? clean : item))
+                : [...profiles, clean]
+        );
+    };
+
+    const remove = (id: string) => update((profiles) => profiles.filter((profile) => profile.id !== id));
+
+    return { list, save, remove };
 };

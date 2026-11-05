@@ -4,17 +4,19 @@ import { CellEditor } from '../../components/editors';
 import { theme } from '../../theme';
 import type { TableBrowserProps } from './types';
 import { useTableEditing } from './use-table-editing';
+import { useWorkspace } from '../workspace';
 import { useDiagnosticActions } from '../diagnostics';
 
 export const TableBrowser = ({ table, sessions, width, height, focused, onFocus }: TableBrowserProps) => {
     const [selection, setSelection] = useState<CellPosition>({ row: 0, column: 0 });
     const latestSelection = useRef(selection);
     latestSelection.current = selection;
+    const isActive = useWorkspace((state) => state.isActive);
     const editing = useTableEditing(table, sessions, focused);
     const diagnostics = useDiagnosticActions();
 
     const getGridInteraction = (): GridInteraction => {
-        if (editing.isEditing()) return 'disabled';
+        if (!isActive() || editing.isEditing()) return 'disabled';
 
         return focused ? 'focused' : 'unfocused';
     };

@@ -19,6 +19,7 @@ export type TableBrowserProps = {
 };
 
 export type TableBrowserKeyboardOptions = {
+    isActive: () => boolean;
     focused: boolean;
     isEditing: () => boolean;
     onDiscard: () => void;

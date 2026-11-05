@@ -5,7 +5,7 @@ export const profileMessages: Record<ProfileError, string> = {
     'invalid-profile': 'Enter a name, host, database, user and a port from 1 to 65535.',
     'invalid-file': 'profiles.json is invalid. Fix the file and retry; it has not been overwritten.',
     'unsupported-version': 'Unsupported profiles.json version. Use a compatible Pond version.',
-    'storage-unavailable': 'Cannot read or save profiles. Check your config directory permissions and disk space.',
+    'storage-unavailable': 'Cannot read or update profiles. Check your config directory permissions and disk space.',
 };
 
 export const connectionMessages: Record<DatabaseError['code'], string> = {

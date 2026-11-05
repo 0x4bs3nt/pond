@@ -5,10 +5,11 @@ import { useWorkspace } from './WorkspaceProvider';
 export const useWorkspaceKeyboard = (onConnections?: () => void) => {
     const renderer = useRenderer();
     const toggleFocus = useWorkspace((state) => state.toggleFocus);
+    const isActive = useWorkspace((state) => state.isActive);
     const isEditing = useWorkspace((state) => state.isEditing);
 
     useKeyboard((key) => {
-        if (isEditing() || key.defaultPrevented) return;
+        if (!isActive() || isEditing() || key.defaultPrevented) return;
         if (key.name === 'f2' && onConnections) {
             key.preventDefault();
             onConnections();

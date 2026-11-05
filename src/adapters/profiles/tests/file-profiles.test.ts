@@ -26,8 +26,8 @@ test('profiles round-trip without secrets, preserve other profiles, and use priv
         await repository.save({ ...profile, name: 'Renamed' });
         const loaded = await createFileProfiles(directory).list();
         expect(loaded.ok && loaded.value).toEqual([
-            { ...profile, id: 'second', name: 'Second' },
             { ...profile, name: 'Renamed' },
+            { ...profile, id: 'second', name: 'Second' },
         ]);
         const raw = await readFile(join(directory, 'profiles.json'), 'utf8');
         expect(raw).not.toContain(secret);
@@ -53,12 +53,30 @@ test('malformed, newer and unknown profile data cannot be silently overwritten',
             await writeFile(join(directory, 'profiles.json'), original);
             expect((await repository.list()).ok).toBe(false);
             expect((await repository.save(profile)).ok).toBe(false);
+            expect((await repository.remove(profile.id)).ok).toBe(false);
             expect(await readFile(join(directory, 'profiles.json'), 'utf8')).toBe(original);
         }
         const blocked = join(directory, 'not-a-directory');
         await writeFile(blocked, 'unchanged');
         expect(await createFileProfiles(blocked).save(profile)).toEqual({ ok: false, error: 'storage-unavailable' });
         expect(await readFile(blocked, 'utf8')).toBe('unchanged');
+    } finally {
+        await rm(directory, { recursive: true, force: true });
+    }
+});
+
+test('queued deletion preserves other profiles and persists across reopening, including the last profile', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'pond-profiles-'));
+    try {
+        const repository = createFileProfiles(directory);
+        await repository.save(profile);
+        const other = { ...profile, id: 'other', name: 'Other' };
+        await Promise.all([repository.remove(profile.id), repository.save(other)]);
+        expect(await createFileProfiles(directory).list()).toEqual({ ok: true, value: [other] });
+        expect(await repository.remove('missing')).toEqual({ ok: true, value: [other] });
+        await repository.remove(other.id);
+        expect(await createFileProfiles(directory).list()).toEqual({ ok: true, value: [] });
+        expect(await readdir(directory)).toEqual(['profiles.json']);
     } finally {
         await rm(directory, { recursive: true, force: true });
     }

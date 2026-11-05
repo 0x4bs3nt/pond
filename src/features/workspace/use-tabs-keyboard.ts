@@ -6,7 +6,7 @@ export const useTabsKeyboard = ({ onClose }: TabsKeyboardOptions) => {
     const store = useWorkspaceStore();
     useKeyboard((key) => {
         const state = store.getState();
-        if (state.editing || key.defaultPrevented || key.meta) return;
+        if (!state.isActive() || state.editing || key.defaultPrevented || key.meta) return;
         if (key.ctrl && key.name === 'w') {
             key.preventDefault();
             if (state.activeTableId) onClose(state.activeTableId);

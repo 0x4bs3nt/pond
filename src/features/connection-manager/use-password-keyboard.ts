@@ -20,6 +20,15 @@ export const usePasswordKeyboard = ({ onSubmit, onCancel }: PasswordPromptProps)
         setLength(Array.from(password.current).length);
     };
 
+    const finish = (submit: boolean) => {
+        if (finished.current) return;
+        finished.current = true;
+        const value = password.current;
+        password.current = '';
+        if (submit) onSubmit(value);
+        else onCancel();
+    };
+
     usePaste((event) => {
         event.preventDefault();
         if (!finished.current) append(new TextDecoder().decode(event.bytes));
@@ -31,11 +40,7 @@ export const usePasswordKeyboard = ({ onSubmit, onCancel }: PasswordPromptProps)
 
         if (finished.current) return;
         if (key.name === 'escape' || key.name === 'return') {
-            finished.current = true;
-            const value = password.current;
-            password.current = '';
-            if (key.name === 'escape') onCancel();
-            else onSubmit(value);
+            finish(key.name === 'return');
         } else if (key.ctrl && key.name === 'u') {
             password.current = '';
             setLength(0);
@@ -44,5 +49,5 @@ export const usePasswordKeyboard = ({ onSubmit, onCancel }: PasswordPromptProps)
             setLength(Array.from(password.current).length);
         } else if (!key.ctrl && !key.meta && !key.sequence.includes('\x1b')) append(key.sequence);
     });
-    return length;
+    return { length, submit: () => finish(true), cancel: () => finish(false) };
 };
