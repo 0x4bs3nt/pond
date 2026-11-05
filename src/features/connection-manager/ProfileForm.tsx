@@ -38,7 +38,7 @@ export const ProfileForm = ({ profile, enabled, isActive, onSave, onCancel }: Pr
 
     const onTLS = (reverse: boolean) => {
         if (!isActive()) return;
-    
+
         const current = draftRef.current;
         change({ ...current, tls: tlsModes[(tlsModes.indexOf(current.tls) + (reverse ? 2 : 1)) % 3]! });
     };
