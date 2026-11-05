@@ -4,8 +4,9 @@ import type { WorkspaceFocus, WorkspaceState } from './types';
 const panels: readonly WorkspaceFocus[] = ['grid', 'explorer', 'tabs'];
 
 // Create one store per workspace; importing this module never creates shared state.
-export const createWorkspaceStore = (initialTableId: string | null = null) =>
+export const createWorkspaceStore = (initialTableId: string | null = null, isActive: () => boolean = () => true) =>
     createStore<WorkspaceState>()((set, get) => ({
+        isActive,
         openTableIds: initialTableId ? [initialTableId] : [],
         activeTableId: initialTableId,
         focus: initialTableId ? 'grid' : 'explorer',
@@ -13,7 +14,7 @@ export const createWorkspaceStore = (initialTableId: string | null = null) =>
         isEditing: () => get().editing,
         setEditing: (editing) => set({ editing }),
         openTable: (tableId) => {
-            if (get().editing) return;
+            if (!isActive() || get().editing) return;
             set((state) => ({
                 openTableIds: state.openTableIds.includes(tableId)
                     ? state.openTableIds
@@ -23,10 +24,10 @@ export const createWorkspaceStore = (initialTableId: string | null = null) =>
             }));
         },
         activateTab: (tableId) => {
-            if (!get().editing && get().openTableIds.includes(tableId)) set({ activeTableId: tableId });
+            if (isActive() && !get().editing && get().openTableIds.includes(tableId)) set({ activeTableId: tableId });
         },
         closeTab: (tableId) => {
-            if (get().editing || !get().openTableIds.includes(tableId)) return;
+            if (!isActive() || get().editing || !get().openTableIds.includes(tableId)) return;
             set((state) => {
                 const index = state.openTableIds.indexOf(tableId);
                 const openTableIds = state.openTableIds.filter((id) => id !== tableId);
@@ -38,10 +39,10 @@ export const createWorkspaceStore = (initialTableId: string | null = null) =>
             });
         },
         focusPanel: (focus) => {
-            if (!get().editing && (focus !== 'grid' || get().activeTableId)) set({ focus });
+            if (isActive() && !get().editing && (focus !== 'grid' || get().activeTableId)) set({ focus });
         },
         toggleFocus: (reverse = false) => {
-            if (get().editing) return;
+            if (!isActive() || get().editing) return;
             const available = get().activeTableId ? panels : panels.filter((panel) => panel !== 'grid');
             const index = available.indexOf(get().focus);
             set({ focus: available[(index + (reverse ? -1 : 1) + available.length) % available.length]! });

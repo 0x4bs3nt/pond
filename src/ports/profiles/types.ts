@@ -6,4 +6,5 @@ export type ProfileResult<T> =
 export type ProfileRepository = {
     list: () => Promise<ProfileResult<readonly ConnectionProfile[]>>;
     save: (profile: ConnectionProfile) => Promise<ProfileResult<readonly ConnectionProfile[]>>;
+    remove: (id: string) => Promise<ProfileResult<readonly ConnectionProfile[]>>;
 };

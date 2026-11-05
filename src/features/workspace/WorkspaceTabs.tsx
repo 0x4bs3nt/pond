@@ -18,7 +18,7 @@ export const WorkspaceTabs = ({ tables, sessions, width }: WorkspaceTabsProps) =
 
     const activate = (id: string) => {
         const state = store.getState();
-        if (state.editing) return;
+        if (!state.isActive() || state.editing) return;
 
         state.activateTab(id);
         state.focusPanel('tabs');
@@ -27,7 +27,7 @@ export const WorkspaceTabs = ({ tables, sessions, width }: WorkspaceTabsProps) =
 
     const close = (id: string) => {
         const state = store.getState();
-        if (state.editing) return;
+        if (!state.isActive() || state.editing) return;
 
         if (Object.keys(sessions.getState().changes[id] ?? {}).length) {
             state.activateTab(id);

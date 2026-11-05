@@ -19,6 +19,44 @@ const values = [
 
 export const scenarios: readonly GalleryScenario[] = [
     {
+        id: 'connections',
+        label: 'Selectable connections',
+        description:
+            'Mock saved connections: arrows, click and wheel select; Tab changes focus. Resize to check long labels.',
+        columns: [],
+        rows: [],
+        list: {
+            items: Array.from({ length: 40 }, (_, index) => ({
+                id: String(index),
+                label: index === 0 ? 'Local development · connected' : `Test connection ${index + 1}`,
+                detail:
+                    index === 1
+                        ? 'A long non-secret connection detail '.repeat(8)
+                        : 'pond@localhost:5432/pond · TLS verify-full',
+            })),
+        },
+    },
+    {
+        id: 'connections-empty',
+        label: 'Empty connections',
+        description: 'Empty list with actionable guidance.',
+        columns: [],
+        rows: [],
+        list: { items: [], message: 'No saved connections. Create your first connection.' },
+    },
+    {
+        id: 'connections-busy',
+        label: 'Busy connections',
+        description: 'Selection stays disabled while an operation is pending.',
+        columns: [],
+        rows: [],
+        list: {
+            items: [{ id: 'local', label: 'Local development', detail: 'pond@localhost:5432/pond' }],
+            disabled: true,
+        },
+    },
+
+    {
         id: 'schemas',
         label: 'Schema explorer',
         description: 'Grouped schemas, views, empty schemas, scrolling, mouse selection and focus.',

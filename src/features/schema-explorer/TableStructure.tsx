@@ -12,7 +12,14 @@ const columns = [
     { id: 'generated', name: 'Generated', type: 'expression', width: 48 },
 ];
 
-export const TableStructure = ({ schema, width, height, focused, onFocus }: TableStructureProps) => {
+export const TableStructure = ({
+    schema,
+    width,
+    height,
+    focused,
+    onFocus,
+    isActive = () => true,
+}: TableStructureProps) => {
     const [selection, setSelection] = useState<CellPosition>({ row: 0, column: 0 });
 
     const rows = schema.columns.map((column) => ({
@@ -51,7 +58,7 @@ export const TableStructure = ({ schema, width, height, focused, onFocus }: Tabl
                 selection={selection}
                 onSelect={setSelection}
                 onFocus={onFocus}
-                getInteraction={() => (focused ? 'focused' : 'unfocused')}
+                getInteraction={() => (!isActive() ? 'disabled' : focused ? 'focused' : 'unfocused')}
             />
             <text height={3} flexShrink={0} fg={theme.text} wrapMode="char">
                 {rows.length

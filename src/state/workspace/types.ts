@@ -3,6 +3,7 @@ import type { createWorkspaceStore } from './workspace-store';
 export type WorkspaceFocus = 'explorer' | 'grid' | 'tabs';
 
 export type WorkspaceState = {
+    isActive: () => boolean;
     openTableIds: readonly string[];
     activeTableId: string | null;
     focus: WorkspaceFocus;

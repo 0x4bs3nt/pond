@@ -1,6 +1,6 @@
 import type { CellPosition, GridColumn, GridRow } from '../../src/components/data-grid';
 import type { theme } from '../../src/theme';
-import type { ExplorerGroup } from '../../src/components/navigation';
+import type { ExplorerGroup, SelectableListProps } from '../../src/components/navigation';
 
 export type GalleryScenario = {
     id: string;
@@ -9,6 +9,7 @@ export type GalleryScenario = {
     columns: readonly GridColumn[];
     rows: readonly GridRow[];
     editor?: { multiline: boolean; json: boolean };
+    list?: Pick<SelectableListProps, 'items' | 'message' | 'disabled'>;
     explorer?: { groups: readonly ExplorerGroup[]; message?: string };
 };
 export type GalleryProps = { initialScenario: string; palette: string };
@@ -47,3 +48,5 @@ export type ExplorerScenarioKeyboardOptions = {
 export type GalleryPalette = typeof theme;
 export type GalleryOptions = { scenario: string; theme: string; list?: boolean };
 export type BenchmarkOptions = { rows: number; columns: number; steps: number; rounds: number; valueLength: number };
+
+export type ListScenarioProps = Pick<SelectableListProps, 'items' | 'message' | 'disabled' | 'height'>;

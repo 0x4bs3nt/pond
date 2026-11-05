@@ -1,9 +1,9 @@
 import { useKeyboard } from '@opentui/react';
 import type { TableBrowserKeyboardOptions } from './types';
 
-export const useTableBrowserKeyboard = ({ focused, isEditing, onDiscard }: TableBrowserKeyboardOptions) => {
+export const useTableBrowserKeyboard = ({ focused, isActive, isEditing, onDiscard }: TableBrowserKeyboardOptions) => {
     useKeyboard((key) => {
-        if (!focused || isEditing() || key.defaultPrevented) return;
+        if (!isActive() || !focused || isEditing() || key.defaultPrevented) return;
         if (key.ctrl && key.name === 'd') {
             key.preventDefault();
             onDiscard();

@@ -3,6 +3,7 @@ import { useRef, useState } from 'react';
 import { theme } from '../../src/theme';
 import { scenarios } from './scenarios';
 import { Scenario } from './Scenario';
+import { ListScenario } from './ListScenario';
 import { ExplorerScenario } from './ExplorerScenario';
 import { useGalleryKeyboard } from './use-gallery-keyboard';
 import { useDiagnosticsReady } from '../../src/features/diagnostics';
@@ -90,7 +91,9 @@ export const Gallery = ({ initialScenario, palette }: GalleryProps) => {
                     ? ' Resize to at least 60 × 18. An open draft is preserved; Esc cancels.'
                     : ` ${scenario.description}`}
             </text>
-            {scenario.explorer ? (
+            {scenario.list ? (
+                <ListScenario key={`${scenario.id}:${revision}`} {...scenario.list} height={Math.max(13, height - 5)} />
+            ) : scenario.explorer ? (
                 <ExplorerScenario
                     key={`${scenario.id}:${revision}`}
                     {...scenario.explorer}
@@ -114,7 +117,7 @@ export const Gallery = ({ initialScenario, palette }: GalleryProps) => {
             <text height={1} flexShrink={0} fg={theme.muted} wrapMode="none">
                 {editorOpen
                     ? ' Editing · Esc cancel · Ctrl+S stage · Ctrl+N NULL'
-                    : scenario.explorer
+                    : scenario.explorer || scenario.list
                       ? ' Arrows navigate · Enter select · Tab focus · F5/F6 scenarios · r reset · q quit'
                       : ' Enter edit · Ctrl+D reset values · F5/F6 scenarios · r reset · q quit'}
             </text>

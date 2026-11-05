@@ -1,6 +1,6 @@
 # Component gallery
 
-Run Pond's reusable explorer, grid and editors independently of the workspace and database workflows:
+Run Pond's reusable list, explorer, grid and editors independently of the workspace and database workflows:
 
 ```sh
 bun run gallery
@@ -14,17 +14,20 @@ bun run gallery --scenario values --theme contrast
 
 ## Scenarios
 
-| ID              | What to exercise                                                                                                     |
-| --------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `wide`          | 250 rows and 24 columns, selection, paging, horizontal/vertical scrolling, fixed headers, and resizing.              |
-| `schemas`       | Grouped schemas, an empty schema, views, quoted names, scrolling, mouse selection, focus, and resizing.              |
-| `schemas-empty` | Empty catalog; keyboard and mouse input stay safe.                                                                   |
-| `empty`         | Column headers with zero rows; navigation and Enter remain safe.                                                     |
-| `values`        | NULL versus empty text, CJK, Arabic, emoji, combining marks, multiline/long values, and exact numeric text.          |
-| `pending`       | Changed-cell decorations against selected and unselected backgrounds. Includes deliberately decorated fixture cells. |
-| `single-line`   | Input editing, confirm/cancel, empty text, and staging NULL.                                                         |
-| `multiline`     | Newlines, mouse selection, confirm/cancel, and resizing an open editor.                                              |
-| `json`          | Invalid-JSON feedback and preservation of whitespace and large numeric literals.                                     |
+| ID                  | What to exercise                                                                                                     |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `connections`       | Selectable saved-connection fixtures: long labels, overflow, keyboard/mouse selection, focus and resizing.           |
+| `connections-empty` | Empty list with guidance.                                                                                            |
+| `connections-busy`  | Disabled list during an operation; input cannot change selection.                                                    |
+| `wide`              | 250 rows and 24 columns, selection, paging, horizontal/vertical scrolling, fixed headers, and resizing.              |
+| `schemas`           | Grouped schemas, an empty schema, views, quoted names, scrolling, mouse selection, focus, and resizing.              |
+| `schemas-empty`     | Empty catalog; keyboard and mouse input stay safe.                                                                   |
+| `empty`             | Column headers with zero rows; navigation and Enter remain safe.                                                     |
+| `values`            | NULL versus empty text, CJK, Arabic, emoji, combining marks, multiline/long values, and exact numeric text.          |
+| `pending`           | Changed-cell decorations against selected and unselected backgrounds. Includes deliberately decorated fixture cells. |
+| `single-line`       | Input editing, confirm/cancel, empty text, and staging NULL.                                                         |
+| `multiline`         | Newlines, mouse selection, confirm/cancel, and resizing an open editor.                                              |
+| `json`              | Invalid-JSON feedback and preservation of whitespace and large numeric literals.                                     |
 
 Additional stress scenarios added for #14: `stress` (100,000 rows × 256 columns) and `long-values` (1,000 rows × 32 columns with 65,536-unit cell values). See [grid performance](grid-performance.md) for repeatable measurements and validation results.
 

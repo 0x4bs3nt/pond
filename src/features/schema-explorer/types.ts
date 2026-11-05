@@ -6,6 +6,7 @@ export type SchemaExplorerProps = {
 
 export type ExplorerKeyboardOptions = {
     focused: boolean;
+    isActive?: () => boolean;
     moveCursor: (offset: number) => void;
     openSelected: () => void;
 };
@@ -15,15 +16,20 @@ import type { TableSchema } from '../../domain/database';
 export type DatabaseExplorerProps = {
     session: DatabaseSession;
     databaseName: string;
+    isActive?: () => boolean;
+    onConnections?: () => void;
     onDisconnect: () => void;
     onError: (error: unknown) => void;
 };
 export type CatalogKeyboardOptions = {
+    isActive?: () => boolean;
+    onConnections?: () => void;
     onRefresh: () => void;
     onDisconnect: () => void;
     onToggleFocus: () => void;
 };
 export type TableStructureProps = {
+    isActive?: () => boolean;
     schema: TableSchema;
     width: number;
     height: number;
