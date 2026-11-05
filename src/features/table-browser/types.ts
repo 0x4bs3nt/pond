@@ -1,12 +1,14 @@
 import type { GridColumn, GridRow } from '../../components/data-grid';
 import type { TableSessionsStore } from '../../state/table-sessions';
 
+export type TableViewRow = GridRow & { readOnlyColumns?: readonly string[] };
+
 export type TableView = {
     id: string;
     name: string;
     namespace: string;
     columns: readonly GridColumn[];
-    rows: readonly GridRow[];
+    rows: readonly TableViewRow[];
 };
 
 export type TableBrowserProps = {

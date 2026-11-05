@@ -41,6 +41,16 @@ The metadata grid preserves column order and native type modifiers. It shows cat
 
 Loading, empty, missing-relation, permission, and timeout states are separate from successful metadata. Catalog statements have a ten-second server timeout. A late result cannot replace a newer selection, refreshed catalog, or closed explorer. Metadata is descriptive and read-only; it does not yet establish write eligibility. Use a terminal at least 60 × 16 for this screen.
 
+## Exact PostgreSQL values
+
+#18 provides the adapter-internal value decoder for the upcoming row browser (#19). The connected workspace still shows schemas and column metadata; it does not fetch real row pages yet.
+
+The decoder preserves PostgreSQL's text output for integers (including 64-bit limits), exact numeric values, floating-point values and special values, booleans, text, JSON/JSONB, dates/times/intervals and UUIDs. It does not convert them to JavaScript numbers, dates or objects. SQL NULL, empty text, JSON null and JSON strings stay distinct. JSON whitespace, duplicate keys and numeric tokens are preserved for `json`; `jsonb` retains the server's normalized output, including exact numeric tokens. Timestamp microseconds remain intact. Date/time output follows the server session's timezone and formatting settings.
+
+Arrays, composite values, enums, ranges, binary values, money and other unfamiliar types retain their server text for inspection and are marked read-only. NULL values of unsupported types remain read-only too. The table presenter preserves these restrictions, displays a read-only hint on selection and refuses to open an editor for those cells. Supporting exact text does not establish database write eligibility; real PostgreSQL browsing remains read-only in Phase 2.
+
+Parsers are scoped to each value query, leaving catalog queries and other clients unchanged. Field OIDs and modifiers remain available alongside the catalog's native type names. Display truncation and whitespace formatting happen only in the grid, without rewriting the decoded value. PostgreSQL output may normalize the original input literal; preservation here means keeping the value returned by the server. See the [driver type-parsing documentation](https://node-postgres.com/features/types) for the default conversions this avoids.
+
 ## Profile files
 
 Profiles use `profiles.json` with schema version `1`. #79 will deliver the shared versioned TOML configuration and migration; this initial representation stays behind the profile port.
@@ -60,6 +70,8 @@ Saves and deletions use a serialized temporary-file replacement and preserve oth
 `bun run check` covers profile creation/editing/deletion across reloads, secret exclusion, damaged/newer-file preservation, draft recovery after validation/storage errors, active-profile reconnect and deletion failure ordering, session ownership and cancellation, masked typing/paste and retry, hidden-workspace input isolation, pending-edit preservation, safe error mapping, and bounded shutdown. A TCP fixture deliberately stalls authentication to verify that cancellation actually releases its socket.
 
 Connection-manager validation on Linux with PostgreSQL 17.11 exercised the real `bun run dev` terminal flow: create/edit/cancel/delete persistence, masked password entry, resizing, metadata navigation, active-profile editing without changing the backend PID, and active-profile deletion without changing database data. Exit restored the terminal and produced no fatal logs or exposed passwords. Headless interaction checks exercised mouse actions, loading/error/retry/empty states and drafts across 40 × 10, 60 × 20 and 100 × 24 sizes. The selectable-list gallery was checked with keyboard, mouse, scrolling, focus and resizing in all three preview palettes, including `bun run gallery` terminal smoke checks.
+
+Value tests use PostgreSQL 17.11 to verify 64-bit limits, high-precision decimals, numeric special values, Unicode, NULL/empty/JSON distinctions, JSON tokens, timestamp microseconds, domain metadata and read-only representations. A focused rendering test verifies that unsupported cells, including NULL, remain inspectable and cannot enter editing.
 
 Catalog adapter tests create a disposable PostgreSQL instance when `initdb` and `postgres` are on PATH and the user is not root; otherwise they skip. Run `bun test src/adapters/databases/postgres/tests` with those tools available. They cover quoted identifiers, dropped columns, exact native types, nested domains, defaults, identity/generated columns, composite-key order, relation kinds, visibility, and closed sessions. Explorer tests protect against stale responses and verify error recovery. Linux PostgreSQL 17.11 validation also exercised the real terminal connection/explorer flow, refresh after DDL, resize, disconnect/reconnect, connection loss, and terminal restoration.
 

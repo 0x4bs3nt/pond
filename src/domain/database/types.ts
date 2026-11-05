@@ -44,8 +44,9 @@ export type TableSchema = {
 
 // Exact adapter text avoids Number/Date/JSON coercion. Native meaning comes from the column.
 // Unsupported values are inspectable representations, not values safe to send back to a database.
+// NULL keeps a read-only marker when its native type is unsupported.
 export type DatabaseValue =
-    | { readonly kind: 'null' }
+    | { readonly kind: 'null'; readonly readOnly?: true }
     | { readonly kind: 'value'; readonly text: string }
     | { readonly kind: 'unsupported'; readonly text: string };
 

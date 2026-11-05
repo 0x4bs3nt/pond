@@ -71,7 +71,7 @@ export const TableBrowser = ({ table, sessions, width, height, focused, onFocus 
             />
             <text height={1} flexShrink={0} bg={theme.raised} fg={theme.accent} wrapMode="none">
                 {row
-                    ? ` Row ${selection.row + 1} / ${table.rows.length}  ·  ${column?.name}  ·  ${column?.type}`
+                    ? ` Row ${selection.row + 1} / ${table.rows.length}  ·  ${column?.name}  ·  ${column?.type}${editing.canEdit(selection) ? '' : ' · Read-only'}`
                     : ' 0 rows · No cell selected'}
             </text>
             <box height={2} flexShrink={0} paddingLeft={1} backgroundColor={theme.panel} overflow="hidden">

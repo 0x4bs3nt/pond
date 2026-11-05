@@ -35,8 +35,14 @@ export const useTableEditing = (table: TableView, store: TableSessionsStore, foc
         [table, changes]
     );
 
+    const canEdit = (position: CellPosition) => {
+        const row = table.rows[position.row];
+        const column = table.columns[position.column];
+        return !!row && !!column && !row.readOnlyColumns?.includes(column.id);
+    };
+
     const open = (position: CellPosition) => {
-        if (!isActive() || isEditing() || !table.rows[position.row] || !table.columns[position.column]) return;
+        if (!isActive() || isEditing() || !canEdit(position)) return;
         diagnostics.mark('editing');
 
         editorRef.current = position;
@@ -53,7 +59,7 @@ export const useTableEditing = (table: TableView, store: TableSessionsStore, foc
 
     const confirm = (value: string | null) => {
         const position = editorRef.current;
-        if (!position) return;
+        if (!position || !canEdit(position)) return;
 
         const row = table.rows[position.row];
         const column = table.columns[position.column];
@@ -75,5 +81,5 @@ export const useTableEditing = (table: TableView, store: TableSessionsStore, foc
         onDiscard: () => store.getState().discard(table.id),
     });
 
-    return { rows, count: Object.keys(changes).length, editor, open, cancel, confirm, isEditing };
+    return { rows, count: Object.keys(changes).length, editor, open, cancel, confirm, isEditing, canEdit };
 };
