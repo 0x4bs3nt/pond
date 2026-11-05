@@ -32,6 +32,22 @@ bun run dev
 
 The development app opens the [PostgreSQL connection manager](docs/connections.md). Save non-secret profiles, connect with a prompted password, and disconnect with Ctrl+D. Ctrl+C quits; F2 opens the mock demo while disconnected. Development mode debounces source saves and waits for terminal cleanup before restarting. If a save introduces a startup error, it restores the terminal and waits for the next change so you can fix it without restarting the command.
 
+To run a persistent local PostgreSQL 17 database in a separate terminal:
+
+```sh
+nix run path:./tools/postgres
+```
+
+Run `bun run dev` separately and connect to host `127.0.0.1`, port `5432`, database `postgres`, user `pond`, TLS `disable`, with an empty password. The database uses local trust authentication and requires a free port 5432 and a non-root user. It starts empty on the first run and keeps data in `$XDG_DATA_HOME/pond/dev-postgres`, falling back to `~/.local/share/pond/dev-postgres`. Ctrl+C stops PostgreSQL without deleting data; the next run opens the same database. There is no automatic seeding or profile setup.
+
+With PostgreSQL running, optionally seed a separate test database:
+
+```sh
+bun tools/scripts/seed_postgres/seed_postgres.ts
+```
+
+Connect to database `pond_dev` with the same settings. Its `pond_demo` schema contains 250 members, 120 events, projects, composite-key memberships, an empty audit log, a view, and a table with quoted identifiers. Fixtures include exact big integers and decimals, NULLs, empty and multiline text, Unicode, arrays, JSON, timestamps, UUIDs, and binary data. Seeding is transactional; rerunning the script leaves an existing `pond_demo` schema and your edits unchanged.
+
 ```sh
 bun run start        # Run without watching
 bun run typecheck    # Check TypeScript
