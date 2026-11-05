@@ -14,5 +14,11 @@ export const presentTable = (data: TableData, widths: Readonly<Record<string, nu
     rows: data.page.rows.map((row) => ({
         id: row.id,
         cells: row.values.map((value) => (value.kind === 'null' ? null : value.text)),
+        readOnlyColumns: data.schema.columns
+            .filter((_, index) => {
+                const value = row.values[index];
+                return value?.kind === 'unsupported' || (value?.kind === 'null' && value.readOnly);
+            })
+            .map((column) => column.id),
     })),
 });

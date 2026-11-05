@@ -93,7 +93,7 @@ export const postgresDatabaseAdapter: DatabaseAdapter = {
             options.signal?.removeEventListener('abort', abort);
         }
 
-        // Row decoding and browsing arrive in #18–#19.
+        // Exact value decoding is in values.ts; bounded row browsing arrives in #19.
         const unavailable = async (): Promise<DatabaseResult<never>> => ({
             ok: false,
             error: { code: closed ? 'closed' : 'unsupported-operation' },
