@@ -3,7 +3,7 @@ import type { ConnectionKeyboardOptions } from './types';
 
 export const useConnectionKeyboard = (options: ConnectionKeyboardOptions) => {
     useKeyboard((key) => {
-        if (options.prompting || key.defaultPrevented) return;
+        if (!options.enabled || options.prompting || key.defaultPrevented) return;
         if (key.name === 'tab') {
             key.preventDefault();
             options.setField((field) => (field + (key.shift ? 5 : 1)) % 6);

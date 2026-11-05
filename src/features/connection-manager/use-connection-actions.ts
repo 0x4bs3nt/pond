@@ -3,9 +3,11 @@ import { copyProfile, type ConnectionProfile } from '../../domain/connections';
 import { createConnectionStore } from '../../state/connections';
 import { connectionMessages, profileMessages } from './messages';
 import type { ConnectionDependencies } from './types';
+import type { DatabaseSession } from '../../ports/database';
 
 export const useConnectionActions = ({ profiles, credentials, connections, onError }: ConnectionDependencies) => {
     const [store] = useState(createConnectionStore);
+    const [session, setSession] = useState<DatabaseSession | null>(null);
 
     const alive = useRef(true);
     const request = useRef(0);
@@ -61,6 +63,7 @@ export const useConnectionActions = ({ profiles, credentials, connections, onErr
         const current = ++request.current;
 
         unsubscribe.current?.();
+        setSession(null);
         credentials.setPassword(profile.id, password);
         store.setState({ status: 'connecting', activeProfile: null, message: 'Connecting… Esc cancels.' });
 
@@ -77,12 +80,15 @@ export const useConnectionActions = ({ profiles, credentials, connections, onErr
             store.setState({
                 status: 'connected',
                 activeProfile: profile,
-                message: 'Connected. Table browsing is coming next.',
+                message: 'Connected.',
             });
+            setSession(result.value);
 
             unsubscribe.current = result.value.subscribeClose(() => {
-                if (alive.current && current === request.current)
+                if (alive.current && current === request.current) {
+                    setSession(null);
                     store.setState({ status: 'disconnected', activeProfile: null, message: connectionMessages.closed });
+                }
             });
         } catch (error) {
             onError(error);
@@ -94,6 +100,7 @@ export const useConnectionActions = ({ profiles, credentials, connections, onErr
 
         unsubscribe.current?.();
         unsubscribe.current = undefined;
+        setSession(null);
 
         store.setState({ status: 'disconnecting', activeProfile: null, message: 'Disconnecting…' });
 
@@ -106,5 +113,5 @@ export const useConnectionActions = ({ profiles, credentials, connections, onErr
         }
     };
 
-    return { store, save, connect, disconnect };
+    return { store, session, save, connect, disconnect };
 };

@@ -42,7 +42,7 @@ export const SchemaExplorer = ({ tables, width, height }: SchemaExplorerProps) =
 
     return (
         <SchemaExplorerView
-            tables={tables}
+            groups={[{ id: 'public', name: 'public', tables }]}
             activeId={activeTableId ?? ''}
             cursor={cursor}
             focused={focused}

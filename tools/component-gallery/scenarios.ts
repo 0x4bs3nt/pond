@@ -19,6 +19,36 @@ const values = [
 
 export const scenarios: readonly GalleryScenario[] = [
     {
+        id: 'schemas',
+        label: 'Schema explorer',
+        description: 'Grouped schemas, views, empty schemas, scrolling, mouse selection and focus.',
+        columns: [],
+        rows: [],
+        explorer: {
+            groups: [
+                { id: 'public', name: '"public"', tables: [{ id: 'view', name: 'Read view', kind: 'view' }] },
+                { id: 'empty', name: '"Empty schema"', tables: [] },
+                {
+                    id: 'odd',
+                    name: '"Mixed.Case"',
+                    tables: Array.from({ length: 40 }, (_, index) => ({
+                        id: `table-${index}`,
+                        name: index === 0 ? 'select' : `Table ${index + 1}`,
+                        kind: 'table',
+                    })),
+                },
+            ],
+        },
+    },
+    {
+        id: 'schemas-empty',
+        label: 'Empty explorer',
+        description: 'No accessible schemas; navigation and mouse input remain safe.',
+        columns: [],
+        rows: [],
+        explorer: { groups: [], message: 'No accessible schemas.' },
+    },
+    {
         id: 'wide',
         label: 'Wide table',
         description: '250 rows × 24 columns. Exercise selection, paging, wheel scrolling, and resizing.',

@@ -1,5 +1,29 @@
 import { useKeyboard, useRenderer } from '@opentui/react';
-import type { GalleryKeyboardOptions, ScenarioKeyboardOptions } from './types';
+import type { ExplorerScenarioKeyboardOptions, GalleryKeyboardOptions, ScenarioKeyboardOptions } from './types';
+
+export const useExplorerScenarioKeyboard = ({
+    onMove,
+    onOpen,
+    onToggleFocus,
+    focused,
+}: ExplorerScenarioKeyboardOptions) => {
+    useKeyboard((key) => {
+        if (key.defaultPrevented) return;
+        if (key.name === 'tab') {
+            key.preventDefault();
+            onToggleFocus();
+        } else if (focused && key.name === 'up') {
+            key.preventDefault();
+            onMove(-1);
+        } else if (focused && key.name === 'down') {
+            key.preventDefault();
+            onMove(1);
+        } else if (focused && key.name === 'return') {
+            key.preventDefault();
+            onOpen();
+        }
+    });
+};
 
 export const useGalleryKeyboard = ({ isEditing, onPrevious, onNext, onReset }: GalleryKeyboardOptions) => {
     const renderer = useRenderer();

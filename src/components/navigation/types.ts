@@ -1,5 +1,12 @@
+export type ExplorerTable = { id: string; name: string; kind?: string };
+export type ExplorerGroup = { id: string; name: string; tables: readonly ExplorerTable[] };
+export type ExplorerEntry = { id: string; label: string } | { id: string; table: ExplorerTable; index: number };
+
 export type SchemaExplorerProps = {
-    tables: readonly { id: string; name: string }[];
+    groups: readonly ExplorerGroup[];
+    databaseName?: string;
+    message?: string;
+    footer?: string;
     activeId: string;
     cursor: number;
     focused: boolean;

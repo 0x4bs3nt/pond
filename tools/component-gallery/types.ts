@@ -1,5 +1,6 @@
 import type { CellPosition, GridColumn, GridRow } from '../../src/components/data-grid';
 import type { theme } from '../../src/theme';
+import type { ExplorerGroup } from '../../src/components/navigation';
 
 export type GalleryScenario = {
     id: string;
@@ -8,6 +9,7 @@ export type GalleryScenario = {
     columns: readonly GridColumn[];
     rows: readonly GridRow[];
     editor?: { multiline: boolean; json: boolean };
+    explorer?: { groups: readonly ExplorerGroup[]; message?: string };
 };
 export type GalleryProps = { initialScenario: string; palette: string };
 export type ScenarioProps = {
@@ -29,6 +31,18 @@ export type ScenarioKeyboardOptions = {
     getSelection: () => CellPosition;
     onDiscard: () => void;
     editorOnly: boolean;
+};
+export type ExplorerScenarioProps = {
+    groups: readonly ExplorerGroup[];
+    message?: string;
+    width: number;
+    height: number;
+};
+export type ExplorerScenarioKeyboardOptions = {
+    onMove: (offset: number) => void;
+    onOpen: () => void;
+    onToggleFocus: () => void;
+    focused: boolean;
 };
 export type GalleryPalette = typeof theme;
 export type GalleryOptions = { scenario: string; theme: string; list?: boolean };

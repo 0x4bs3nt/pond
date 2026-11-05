@@ -1,16 +1,18 @@
 import type { DatabaseColumn, DatabaseRow } from '../../../domain/database';
 import type { MockTable } from './types';
 
-const memberColumns: readonly DatabaseColumn[] = [
-    { id: 'id', name: 'id', nativeType: 'int8', category: 'integer', nullable: false },
-    { id: 'name', name: 'name', nativeType: 'varchar(120)', category: 'text', nullable: false },
-    { id: 'email', name: 'email', nativeType: 'text', category: 'text', nullable: true },
-    { id: 'role', name: 'role', nativeType: 'varchar(20)', category: 'text', nullable: false },
-    { id: 'active', name: 'active', nativeType: 'bool', category: 'boolean', nullable: false },
-    { id: 'balance', name: 'balance', nativeType: 'numeric(20,2)', category: 'decimal', nullable: false },
-    { id: 'notes', name: 'notes', nativeType: 'text', category: 'text', nullable: false },
-    { id: 'settings', name: 'settings', nativeType: 'jsonb', category: 'json', nullable: false },
-];
+const memberColumns: readonly DatabaseColumn[] = (
+    [
+        { id: 'id', name: 'id', nativeType: 'int8', category: 'integer', nullable: false },
+        { id: 'name', name: 'name', nativeType: 'varchar(120)', category: 'text', nullable: false },
+        { id: 'email', name: 'email', nativeType: 'text', category: 'text', nullable: true },
+        { id: 'role', name: 'role', nativeType: 'varchar(20)', category: 'text', nullable: false },
+        { id: 'active', name: 'active', nativeType: 'bool', category: 'boolean', nullable: false },
+        { id: 'balance', name: 'balance', nativeType: 'numeric(20,2)', category: 'decimal', nullable: false },
+        { id: 'notes', name: 'notes', nativeType: 'text', category: 'text', nullable: false },
+        { id: 'settings', name: 'settings', nativeType: 'jsonb', category: 'json', nullable: false },
+    ] as const
+).map((column) => ({ ...column, defaultExpression: null, identity: null, generated: null }));
 
 const names = [
     'Mara Novak',
@@ -46,12 +48,14 @@ const members = Array.from({ length: 250 }, (_, index) =>
     ])
 );
 
-const eventColumns: readonly DatabaseColumn[] = [
-    { id: 'id', name: 'id', nativeType: 'int8', category: 'integer', nullable: false },
-    { id: 'event', name: 'event', nativeType: 'text', category: 'text', nullable: false },
-    { id: 'created', name: 'created_at', nativeType: 'timestamptz', category: 'temporal', nullable: false },
-    { id: 'metadata', name: 'metadata', nativeType: 'jsonb', category: 'json', nullable: false },
-];
+const eventColumns: readonly DatabaseColumn[] = (
+    [
+        { id: 'id', name: 'id', nativeType: 'int8', category: 'integer', nullable: false },
+        { id: 'event', name: 'event', nativeType: 'text', category: 'text', nullable: false },
+        { id: 'created', name: 'created_at', nativeType: 'timestamptz', category: 'temporal', nullable: false },
+        { id: 'metadata', name: 'metadata', nativeType: 'jsonb', category: 'json', nullable: false },
+    ] as const
+).map((column) => ({ ...column, defaultExpression: null, identity: null, generated: null }));
 
 export const mockTables: readonly MockTable[] = [
     {
