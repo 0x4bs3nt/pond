@@ -73,8 +73,8 @@ test('invalid pages stay bounded and closing a session prevents further reads wi
         }
         const end = await session.browsing.readPage({ ...request, offset: 249, limit: 2 });
         if (!end.ok) throw new Error('Mock page failed.');
-        expect(end.value.rows.map((row) => row.id)).toEqual(['member-250']);
-        expect(end.value.hasMore).toBe(false);
+        expect(end.value.page.rows.map((row) => row.id)).toEqual(['member-250']);
+        expect(end.value.page.hasMore).toBe(false);
         await session.close();
         await session.close();
         expect(await session.schema.listNamespaces()).toEqual({ ok: false, error: { code: 'closed' } });

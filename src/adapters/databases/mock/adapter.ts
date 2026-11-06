@@ -1,3 +1,4 @@
+import { isValidPageRange } from '../../../domain/database';
 import type { DatabaseResult, DatabaseNamespace, TableReference } from '../../../domain/database';
 import type { DatabaseAdapter } from '../../../ports/database';
 import { mockTables } from './tables';
@@ -46,13 +47,7 @@ export const mockDatabaseAdapter: DatabaseAdapter = {
                 browsing: {
                     readPage: (request) =>
                         read(() => {
-                            if (
-                                !Number.isSafeInteger(request.offset) ||
-                                request.offset < 0 ||
-                                !Number.isSafeInteger(request.limit) ||
-                                request.limit < 1 ||
-                                request.limit > 250
-                            )
+                            if (!isValidPageRange(request, 250))
                                 return { ok: false, error: { code: 'invalid-request' } };
 
                             const table = findTable(request.table);
@@ -61,8 +56,11 @@ export const mockDatabaseAdapter: DatabaseAdapter = {
                             return {
                                 ok: true,
                                 value: {
-                                    rows: table.rows.slice(request.offset, request.offset + request.limit),
-                                    hasMore: request.offset + request.limit < table.rows.length,
+                                    schema: table.schema,
+                                    page: {
+                                        rows: table.rows.slice(request.offset, request.offset + request.limit),
+                                        hasMore: request.offset + request.limit < table.rows.length,
+                                    },
                                 },
                             };
                         }),

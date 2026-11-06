@@ -22,6 +22,7 @@ export type DatabaseExplorerProps = {
     onError: (error: unknown) => void;
 };
 export type CatalogKeyboardOptions = {
+    onToggleStructure: () => void;
     isActive?: () => boolean;
     onConnections?: () => void;
     onRefresh: () => void;

@@ -54,7 +54,7 @@ Use monotonic `performance.now()` timestamps. Startup begins at an explicit boot
 
 Input arrival alone cannot establish which frame contains its effect. The probe demonstrates three key events producing one commit/frame, an ignored input producing none, and an unrelated render completing afterward.
 
-The app and gallery track grid selection changes, editor opening/closing, and actual native editor text changes. Navigation at a boundary that does not change selection creates no action. Explorer/tab navigation, editor cursor-only movements, and rejected validation are not currently correlated categories. Raw keys and edited text never enter the collector.
+The app and gallery track grid selection changes, editor opening/closing, and actual native editor text changes. PostgreSQL row navigation uses the same action tracking as the mock workspace and contributes React measurements to the `table-browser` region. Navigation at a boundary that does not change selection creates no action. Explorer/tab navigation, editor cursor-only movements, and rejected validation are not currently correlated categories. Raw keys and edited text never enter the collector.
 
 Supported actions receive opaque IDs. React state changes are acknowledged by a layout effect after the owning feature commits; native text edits are acknowledged by the editor's content-change callback. Only a frame whose attempt begins after acknowledgment is eligible (`frameId` greater than the ID observed at acknowledgment). An in-flight frame is conservatively excluded even if it might contain the change. No frame is forced for measurement, so ambiguous or unpresented actions can expire without a latency sample. This is a correlation proxy, not proof of pixel presentation.
 

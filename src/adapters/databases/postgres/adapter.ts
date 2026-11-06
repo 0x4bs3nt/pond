@@ -1,10 +1,10 @@
 import { Client } from 'pg';
 import { Socket } from 'node:net';
 import type { DatabaseAdapter } from '../../../ports/database';
-import type { DatabaseResult } from '../../../domain/database';
 import { isConnectionProfile } from '../../../domain/connections';
 import { connectionError } from './errors';
 import { createSchemaInspection } from './schema';
+import { createTableBrowsing, maximumPageSize } from './browsing';
 
 export const postgresDatabaseAdapter: DatabaseAdapter = {
     engineId: 'postgres',
@@ -93,18 +93,31 @@ export const postgresDatabaseAdapter: DatabaseAdapter = {
             options.signal?.removeEventListener('abort', abort);
         }
 
-        // Exact value decoding is in values.ts; bounded row browsing arrives in #19.
-        const unavailable = async (): Promise<DatabaseResult<never>> => ({
-            ok: false,
-            error: { code: closed ? 'closed' : 'unsupported-operation' },
-        });
+        // Keep transactions and catalog reads from interleaving on the single pg client.
+        let reads = Promise.resolve();
+        const read = <T extends unknown>(operation: () => Promise<T>): Promise<T> => {
+            const result = reads.then(operation);
+            reads = result.then(
+                () => {},
+                () => {}
+            );
+
+            return result;
+        };
+
+        const schema = createSchemaInspection(client, () => closed);
+        const browsing = createTableBrowsing(client, schema, () => closed);
 
         return {
             ok: true,
             value: {
-                capabilities: { namespaces: true, primaryKeys: true, maxPageSize: 0 },
-                schema: createSchemaInspection(client, () => closed),
-                browsing: { readPage: unavailable },
+                capabilities: { namespaces: true, primaryKeys: true, maxPageSize: maximumPageSize },
+                schema: {
+                    listNamespaces: () => read(schema.listNamespaces),
+                    listTables: (namespace) => read(() => schema.listTables(namespace)),
+                    describeTable: (table) => read(() => schema.describeTable(table)),
+                },
+                browsing: { readPage: (request) => read(() => browsing.readPage(request)) },
                 close,
                 subscribeClose: (listener) => {
                     listeners.add(listener);

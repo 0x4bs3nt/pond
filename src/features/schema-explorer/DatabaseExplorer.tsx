@@ -6,6 +6,8 @@ import { theme } from '../../theme';
 import { useSchemaCatalog } from './use-schema-catalog';
 import { useExplorerKeyboard } from './use-explorer-keyboard';
 import { useCatalogKeyboard } from './use-catalog-keyboard';
+import { DiagnosticBoundary } from '../diagnostics';
+import { ReadOnlyTable } from '../table-browser';
 import { TableStructure } from './TableStructure';
 import { schemaErrorMessage } from './messages';
 import type { DatabaseExplorerProps } from './types';
@@ -19,6 +21,17 @@ export const DatabaseExplorer = (props: DatabaseExplorerProps) => {
     const catalog = useStore(store, (state) => state.catalog);
     const selected = useStore(store, (state) => state.selected);
     const description = useStore(store, (state) => state.description);
+    const data = useStore(store, (state) => state.data);
+
+    const [showStructure, setShowStructure] = useState(false);
+    const structureRef = useRef(false);
+
+    const toggleStructure = () => {
+        if (!isActive()) return;
+
+        structureRef.current = !structureRef.current;
+        setShowStructure(structureRef.current);
+    };
 
     const [cursor, setCursor] = useState(0);
     const cursorRef = useRef(0);
@@ -63,6 +76,7 @@ export const DatabaseExplorer = (props: DatabaseExplorerProps) => {
         isActive,
         onConnections: props.onConnections,
         onRefresh: reload,
+        onToggleStructure: toggleStructure,
         onDisconnect: props.onDisconnect,
         onToggleFocus: () => setFocused((value) => !value),
     });
@@ -81,7 +95,10 @@ export const DatabaseExplorer = (props: DatabaseExplorerProps) => {
 
     return (
         <box width={width} height={height} flexDirection="column" backgroundColor={theme.background}>
-            <text height={1} fg={theme.accent}>{` POND / Schema explorer · Connected to ${props.databaseName}`}</text>
+            <text
+                height={1}
+                fg={theme.accent}
+            >{` POND / Database workspace · Connected to ${props.databaseName}`}</text>
             <box height={1} flexDirection="row">
                 {props.onConnections && (
                     <text
@@ -94,6 +111,10 @@ export const DatabaseExplorer = (props: DatabaseExplorerProps) => {
                         F2 Connections{' '}
                     </text>
                 )}
+                <text fg={theme.accent} onMouseDown={toggleStructure}>
+                    {' '}
+                    F4 {showStructure ? 'Rows' : 'Columns'}{' '}
+                </text>
                 <text fg={theme.muted} onMouseDown={reload}>
                     {' '}
                     F5 Refresh{' '}
@@ -118,7 +139,7 @@ export const DatabaseExplorer = (props: DatabaseExplorerProps) => {
                     }))}
                     databaseName={props.databaseName}
                     message={message}
-                    footer={'Enter inspect\nTab switch focus'}
+                    footer={'Enter browse\nTab switch focus'}
                     activeId={selected?.id ?? ''}
                     cursor={cursor}
                     focused={focused}
@@ -127,30 +148,55 @@ export const DatabaseExplorer = (props: DatabaseExplorerProps) => {
                     onOpen={open}
                 />
                 <box width={width - sidebarWidth} height={height - 3} flexDirection="column">
-                    {description.status === 'ready' ? (
-                        <TableStructure
-                            key={description.value.table.id}
-                            schema={description.value}
-                            width={width - sidebarWidth}
-                            height={height - 3}
-                            focused={!focused}
-                            isActive={isActive}
-                            onFocus={() => setFocused(false)}
-                        />
-                    ) : (
-                        <text fg={theme.muted}>
-                            {description.status === 'loading'
-                                ? 'Loading columns…'
-                                : description.status === 'error'
-                                  ? schemaErrorMessage(description.error)
-                                  : 'Select a table or view and press Enter to inspect its columns.'}
-                        </text>
-                    )}
+                    <box visible={!showStructure}>
+                        {data.status === 'ready' ? (
+                            <DiagnosticBoundary id="table-browser">
+                                <ReadOnlyTable
+                                    key={data.value.schema.table.id}
+                                    data={data.value}
+                                    width={width - sidebarWidth}
+                                    height={height - 3}
+                                    focused={!focused}
+                                    isActive={() => isActive() && !structureRef.current}
+                                    onFocus={() => setFocused(false)}
+                                />
+                            </DiagnosticBoundary>
+                        ) : (
+                            <text fg={theme.muted}>
+                                {data.status === 'loading'
+                                    ? 'Loading rows…'
+                                    : data.status === 'error'
+                                      ? schemaErrorMessage(data.error)
+                                      : 'Select a table or view and press Enter to browse its rows.'}
+                            </text>
+                        )}
+                    </box>
+                    <box visible={showStructure}>
+                        {description.status === 'ready' ? (
+                            <TableStructure
+                                key={description.value.table.id}
+                                schema={description.value}
+                                width={width - sidebarWidth}
+                                height={height - 3}
+                                focused={!focused}
+                                isActive={() => isActive() && structureRef.current}
+                                onFocus={() => setFocused(false)}
+                            />
+                        ) : (
+                            <text fg={theme.muted}>
+                                {description.status === 'loading'
+                                    ? 'Loading columns…'
+                                    : description.status === 'error'
+                                      ? schemaErrorMessage(description.error)
+                                      : 'Select a table or view to inspect its columns.'}
+                            </text>
+                        )}
+                    </box>
                 </box>
             </box>
             <text height={1} fg={theme.muted}>
                 {' '}
-                Arrows navigate · Enter inspect · Tab switch focus · F5 refresh
+                Arrows navigate · Enter browse · Tab switch focus · F4 rows/columns · F5 refresh
             </text>
         </box>
     );
