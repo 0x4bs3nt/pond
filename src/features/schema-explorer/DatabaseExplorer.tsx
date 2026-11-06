@@ -28,7 +28,7 @@ export const DatabaseExplorer = (props: DatabaseExplorerProps) => {
 
     const toggleStructure = () => {
         if (!isActive()) return;
-    
+
         structureRef.current = !structureRef.current;
         setShowStructure(structureRef.current);
     };
