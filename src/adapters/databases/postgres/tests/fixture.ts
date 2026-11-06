@@ -23,8 +23,18 @@ export const startPostgres = async () => {
         await rm(directory, { recursive: true, force: true });
     };
     try {
+        // This disposable cluster does not need crash-durable initialization.
         const init = Bun.spawn(
-            ['initdb', '-D', directory, '--username=pond', '--auth=trust', '--no-locale', '--encoding=UTF8'],
+            [
+                'initdb',
+                '-D',
+                directory,
+                '--username=pond',
+                '--auth=trust',
+                '--no-locale',
+                '--encoding=UTF8',
+                '--no-sync',
+            ],
             { stdout: 'ignore', stderr: 'ignore' }
         );
 
