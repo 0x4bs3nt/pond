@@ -1,3 +1,4 @@
+import type { TableData } from '../../domain/database';
 import type { GridColumn, GridRow } from '../../components/data-grid';
 import type { TableSessionsStore } from '../../state/table-sessions';
 
@@ -25,4 +26,13 @@ export type TableBrowserKeyboardOptions = {
     focused: boolean;
     isEditing: () => boolean;
     onDiscard: () => void;
+};
+
+export type ReadOnlyTableProps = {
+    data: TableData;
+    width: number;
+    height: number;
+    focused: boolean;
+    isActive: () => boolean;
+    onFocus: () => void;
 };

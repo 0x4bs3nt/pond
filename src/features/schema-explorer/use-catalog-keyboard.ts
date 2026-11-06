@@ -5,12 +5,16 @@ export const useCatalogKeyboard = ({
     isActive = () => true,
     onConnections,
     onRefresh,
+    onToggleStructure,
     onDisconnect,
     onToggleFocus,
 }: CatalogKeyboardOptions) => {
     useKeyboard((key) => {
         if (!isActive() || key.defaultPrevented) return;
-        if (key.name === 'f5') {
+        if (key.name === 'f4') {
+            key.preventDefault();
+            onToggleStructure();
+        } else if (key.name === 'f5') {
             key.preventDefault();
             onRefresh();
         } else if (onConnections && (key.name === 'escape' || key.name === 'f2')) {

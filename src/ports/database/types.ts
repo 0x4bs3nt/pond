@@ -4,7 +4,7 @@ import type {
     DatabaseResult,
     DatabaseTable,
     PageRequest,
-    RowPage,
+    TableData,
     TableReference,
     TableSchema,
 } from '../../domain/database';
@@ -22,8 +22,9 @@ export type SchemaInspection = {
 };
 
 export type TableBrowsing = {
+    // Return metadata and rows from the same read operation.
     // Reject invalid ranges or limits above maxPageSize; never fall back to an unbounded read.
-    readPage: (request: PageRequest) => Promise<DatabaseResult<RowPage>>;
+    readPage: (request: PageRequest) => Promise<DatabaseResult<TableData>>;
 };
 
 export type DatabaseSession = {

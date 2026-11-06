@@ -16,3 +16,4 @@ export type {
     DatabaseError,
     DatabaseResult,
 } from './types';
+export { isValidPageRange } from './page';

@@ -1,6 +1,6 @@
 # PostgreSQL connections
 
-Pond starts with the saved-connections list. It supports one PostgreSQL session at a time. Connecting opens the real schema explorer and column metadata. Real row decoding and browsing follow in #18–#19; connecting does not display demo rows as database data. The explicitly labelled **F2 Mock demo (development)** entry opens the mock workspace; F2 outside an editor returns. Switching views preserves the active connection, workspace selection and pending mock edits. Mock edits remain memory-only.
+Pond starts with the saved-connections list. It supports one PostgreSQL session at a time. Connecting opens the real schema explorer. Selecting a relation loads its first bounded page of PostgreSQL rows and accurate column metadata. The explicitly labelled **F2 Mock demo (development)** entry opens the mock workspace; F2 outside an editor returns. Switching views preserves the active connection, workspace selection and pending mock edits. Mock edits remain memory-only.
 
 ## Configure and connect
 
@@ -28,22 +28,29 @@ There is no opportunistic fallback to plaintext. Custom CA/client-certificate fi
 
 Authentication, unreachable-host, missing-database and TLS failures show fixed actionable messages; raw driver/server messages are not displayed or logged. A server-closed session becomes disconnected and can be reconnected manually.
 
-## Explore schemas and columns
+## Browse rows and inspect columns
 
 After connecting, the explorer lists non-system schemas available to the current role and relations with table-level or column-level SELECT access. Empty schemas remain visible. Regular and partitioned tables, views, materialized views, and foreign tables are supported; non-table kinds are labelled explicitly. Column-level access makes metadata visible but does not imply permission to read every column or to edit rows.
 
-- **Up/Down** selects a relation; **Enter** or a click loads its column definitions.
-- **Tab / Shift+Tab** switches between the explorer and the metadata grid. The grid supports arrow keys, paging, mouse selection, and scrolling. Its selected field is shown below the grid.
-- **F5** refreshes discovery and clears the selected description. Use it to retry a failed request or discover schema changes.
+- **Up/Down** selects a relation; **Enter** or a click asynchronously loads its first 100 rows.
+- **Tab / Shift+Tab** switches between the explorer and the grid. Arrow keys, Page Up/Down, mouse selection and scrolling navigate the loaded rows. The selected value and its native type appear below the grid.
+- **F4**, or the clickable Rows/Columns label, switches between rows and column definitions. Column metadata remains available when row access fails but catalog access is allowed.
+- **F5** refreshes discovery and clears the selected table. Use it to retry a failed request or discover schema changes.
 - **F2 / Esc** returns to the connection manager without disconnecting; **Ctrl+D** disconnects; **Ctrl+C** quits.
 
 The metadata grid preserves column order and native type modifiers. It shows catalog nullability, ordered primary-key positions, default expressions, identity modes, and stored/virtual generated expressions. Domain types retain their native names and inherited nullability/defaults. Dropped and internal columns are excluded. Names are kept as separate identifier parts, so spaces, case, dots, and reserved words are not reinterpreted as SQL.
 
-Loading, empty, missing-relation, permission, and timeout states are separate from successful metadata. Catalog statements have a ten-second server timeout. A late result cannot replace a newer selection, refreshed catalog, or closed explorer. Metadata is descriptive and read-only; it does not yet establish write eligibility. Use a terminal at least 60 × 16 for this screen.
+Rows are read-only: Enter and editing shortcuts never open an editor or stage changes. The view shows up to 100 rows and indicates whether more exist; controls for fetching subsequent pages are not part of this first slice. Empty results retain column headers.
+
+The browsing port accepts safe-integer offsets and limits from 1 to 250. The adapter fetches at most the requested limit plus one row to determine whether more exist, then returns only the requested page. Primary-key columns determine ordering when available; relations without keys have server-defined order. Separate requests do not share a snapshot, so concurrent writes can change page boundaries. Presentation row IDs are local to a result and are never write targets; real row identities remain unset until write eligibility is implemented.
+
+Each page reads metadata and values within a short read-only transaction. An initial zero-row SELECT acquires the relation lock before metadata is read, preventing concurrent DDL from mismatching names/types and values. Operations on the session client are serialized; failed transactions roll back before later reads. Read-only transactions also reject database-writing functions in views. A row-count bound does not bound the size of an individual value or the database work needed to compute a view.
+
+Loading, empty, missing-relation, permission, and timeout states are separate from successful results. Each database statement has a ten-second server timeout. A late result cannot replace a newer selection, refreshed catalog, or closed explorer. Only one table read runs at a time; repeated selections of the loading table are ignored, and other selections replace a single pending request. Refresh and unmount discard pending selections, while the active read finishes normally. Metadata is descriptive and read-only; it does not yet establish write eligibility. Use a terminal at least 60 × 16 for this screen.
 
 ## Exact PostgreSQL values
 
-#18 provides the adapter-internal value decoder for the upcoming row browser (#19). The connected workspace still shows schemas and column metadata; it does not fetch real row pages yet.
+The row browser uses the exact-value decoder introduced in #18.
 
 The decoder preserves PostgreSQL's text output for integers (including 64-bit limits), exact numeric values, floating-point values and special values, booleans, text, JSON/JSONB, dates/times/intervals and UUIDs. It does not convert them to JavaScript numbers, dates or objects. SQL NULL, empty text, JSON null and JSON strings stay distinct. JSON whitespace, duplicate keys and numeric tokens are preserved for `json`; `jsonb` retains the server's normalized output, including exact numeric tokens. Timestamp microseconds remain intact. Date/time output follows the server session's timezone and formatting settings.
 
@@ -72,6 +79,10 @@ Saves and deletions use a serialized temporary-file replacement and preserve oth
 Connection-manager validation on Linux with PostgreSQL 17.11 exercised the real `bun run dev` terminal flow: create/edit/cancel/delete persistence, masked password entry, resizing, metadata navigation, active-profile editing without changing the backend PID, and active-profile deletion without changing database data. Exit restored the terminal and produced no fatal logs or exposed passwords. Headless interaction checks exercised mouse actions, loading/error/retry/empty states and drafts across 40 × 10, 60 × 20 and 100 × 24 sizes. The selectable-list gallery was checked with keyboard, mouse, scrolling, focus and resizing in all three preview palettes, including `bun run gallery` terminal smoke checks.
 
 Value tests use PostgreSQL 17.11 to verify 64-bit limits, high-precision decimals, numeric special values, Unicode, NULL/empty/JSON distinctions, JSON tokens, timestamp microseconds, domain metadata and read-only representations. A focused rendering test verifies that unsupported cells, including NULL, remain inspectable and cannot enter editing.
+
+Browsing adapter tests cover bounded pages and lookahead, quoted identifiers, exact values, empty/zero-column relations, views, materialized views, concurrent DDL, read-only enforcement and recovery after permission/query failures. Feature tests cover loading, error recovery, empty results, disabled editing, structure switching and stale results.
+
+Linux PostgreSQL 17.11 validation exercised the real dev app with a 120-row table: the first 100 rows, more-results indicator, exact decimal inspection, blocked editing, rows/columns switching, resizing, refresh, manager/resume, disconnect and terminal restoration. Rendering checks covered keyboard and mouse selection and resizing with default, light and contrast palettes.
 
 Catalog adapter tests create a disposable PostgreSQL instance when `initdb` and `postgres` are on PATH and the user is not root; otherwise they skip. Run `bun test src/adapters/databases/postgres/tests` with those tools available. They cover quoted identifiers, dropped columns, exact native types, nested domains, defaults, identity/generated columns, composite-key order, relation kinds, visibility, and closed sessions. Explorer tests protect against stale responses and verify error recovery. Linux PostgreSQL 17.11 validation also exercised the real terminal connection/explorer flow, refresh after DDL, resize, disconnect/reconnect, connection loss, and terminal restoration.
 

@@ -10,8 +10,8 @@ export const schemaErrorMessage = (error: DatabaseError) => {
         case 'unreachable':
             return 'Connection closed. Disconnect and reconnect to continue.';
         case 'timeout':
-            return 'Catalog request timed out. Press F5 to retry.';
+            return 'Database request timed out. Press F5 to retry.';
         default:
-            return 'Could not load database metadata. Press F5 to retry.';
+            return 'Could not load database data. Press F5 to retry.';
     }
 };

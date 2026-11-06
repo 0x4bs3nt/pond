@@ -1,3 +1,4 @@
+import { isValidPageRange } from '../../domain/database';
 import type { DatabaseConnection, DatabaseResult, PageRequest, TableData } from '../../domain/database';
 import type { DatabaseRegistry, DatabaseSession } from '../../ports/database';
 
@@ -13,11 +14,8 @@ export const connectDatabase = async (
 };
 
 export const readTable = async (session: DatabaseSession, request: PageRequest): Promise<DatabaseResult<TableData>> => {
-    const schema = await session.schema.describeTable(request.table);
-    if (!schema.ok) return schema;
+    if (!isValidPageRange(request, session.capabilities.maxPageSize))
+        return { ok: false, error: { code: 'invalid-request' } };
 
-    const page = await session.browsing.readPage(request);
-    if (!page.ok) return page;
-
-    return { ok: true, value: { schema: schema.value, page: page.value } };
+    return session.browsing.readPage(request);
 };
